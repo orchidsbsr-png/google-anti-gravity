@@ -1,0 +1,42 @@
+===========================================
+LANDSCAPE IMAGE GUIDE
+===========================================
+
+Upload your landscape/mountain/valley image to this folder.
+
+IMAGE NAMING:
+===========================================
+Name your landscape image as one of these:
+- "landscape.jpg" (preferred)
+- "Landscape.jpg"
+- "landscape.png"
+- "mountain.jpg"
+- "valley.jpg"
+
+IMAGE REQUIREMENTS:
+===========================================
+- Landscape orientation (wider than tall)
+- High resolution (at least 1920x1080 for best quality)
+- JPG or PNG format
+- The image will be used as a full-width background
+- It will be cropped/positioned to center
+
+The app will automatically:
+- Use the image as a full-width hero background
+- Apply a smooth green overlay for text readability
+- Add smooth fade-in and slide-up animations
+- Make it responsive for all screen sizes
+
+SUPPORTED FORMATS:
+- .jpg / .jpeg
+- .png
+
+QUICK START:
+===========================================
+1. Take or download a beautiful landscape photo of mountains/valleys
+2. Name it "landscape.jpg"
+3. Place it in this folder (public/images/products/)
+4. The app will automatically use it on the landing page!
+
+NOTE: The image will have a subtle green overlay to ensure text remains readable.
+

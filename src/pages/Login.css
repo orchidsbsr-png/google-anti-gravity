@@ -1,0 +1,168 @@
+.login-minimal {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f3f0;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hide any unwanted UI elements on login page */
+.login-minimal .theme-toggle,
+.login-minimal .chat-toggle-btn,
+.login-minimal .chat-widget,
+.login-minimal .bottom-nav {
+    display: none !important;
+}
+
+.login-content-minimal {
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Apple Logo */
+.apple-logo {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1));
+    background: transparent;
+    border: none;
+    outline: none;
+}
+
+.apple-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: transparent;
+    border: none;
+    outline: none;
+    mix-blend-mode: multiply;
+    /* This helps blend the white background with the page */
+}
+
+/* Brand Title */
+.brand-title {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-size: 4rem;
+    font-weight: 400;
+    color: #1a3a1a;
+    margin: 0 0 30px 0;
+    letter-spacing: -1px;
+}
+
+/* Feature Badges */
+.features-badges {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+.badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    color: #2d2d2d;
+    font-weight: 500;
+}
+
+.badge-icon {
+    font-size: 1.3rem;
+}
+
+/* Error Message */
+.error-minimal {
+    background: #fee;
+    color: #c33;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* Google Button */
+.google-btn-minimal {
+    width: 100%;
+    max-width: 400px;
+    padding: 16px 30px;
+    background: white;
+    border: 2px solid #1a1a1a;
+    border-radius: 50px;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: #1a1a1a;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+    margin-bottom: 15px;
+}
+
+.google-btn-minimal:hover {
+    background: #f9f9f9;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.google-icon {
+    width: 24px;
+    height: 24px;
+}
+
+/* Guest Link */
+.guest-link {
+    background: none;
+    border: none;
+    color: #1a1a1a;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    padding: 10px;
+    margin-bottom: 60px;
+    transition: all 0.2s;
+}
+
+.guest-link:hover {
+    opacity: 0.7;
+}
+
+/* Secure Text */
+.secure-text {
+    color: #666;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin: 0;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .brand-title {
+        font-size: 3rem;
+    }
+
+    .apple-logo {
+        width: 100px;
+        height: 100px;
+    }
+
+    .features-badges {
+        flex-direction: column;
+        gap: 15px;
+    }
+}

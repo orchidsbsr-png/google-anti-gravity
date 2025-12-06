@@ -1,0 +1,468 @@
+/* ... (Previous styles remain) ... */
+
+.admin-page-new {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1rem;
+    font-family: 'Inter', sans-serif;
+    color: #333;
+}
+
+/* Header */
+.admin-header-new {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    margin-bottom: 1rem;
+}
+
+.status-section {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.status-label {
+    font-weight: 600;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.status-toggle-new {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+}
+
+.status-toggle-new.open {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.status-toggle-new.closed {
+    background-color: #e0e0e0;
+    color: #666;
+}
+
+.toggle-handle {
+    width: 12px;
+    height: 12px;
+    background: white;
+    border-radius: 50%;
+}
+
+.logout-btn-new {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid #ff4d4d;
+    color: #ff4d4d;
+    background: transparent;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.logout-btn-new:hover {
+    background: #fff0f0;
+}
+
+/* Search */
+.search-section {
+    margin-bottom: 1.5rem;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.search-icon {
+    color: #999;
+    margin-right: 0.5rem;
+}
+
+.search-bar input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 1rem;
+    color: #333;
+}
+
+/* Tabs */
+.admin-tabs-new {
+    display: flex;
+    gap: 2rem;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 1.5rem;
+}
+
+.tab-btn-new {
+    background: none;
+    border: none;
+    padding-bottom: 0.8rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #888;
+    cursor: pointer;
+    position: relative;
+}
+
+.tab-btn-new.active {
+    color: #4CAF50;
+}
+
+.tab-btn-new.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #4CAF50;
+    border-radius: 3px 3px 0 0;
+}
+
+/* Inventory Grid */
+.inventory-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Product Card */
+.product-card-new {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    border: 1px solid #f0f0f0;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1rem 0.5rem 1rem;
+}
+
+.card-header h3 {
+    margin: 0;
+    color: #388e3c;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.edit-btn {
+    background: #f1f8e9;
+    color: #33691e;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.edit-btn.save-mode {
+    background: #4CAF50;
+    color: white;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+    }
+}
+
+/* Status Row */
+.card-status-row {
+    display: flex;
+    gap: 1.5rem;
+    padding: 0 1rem 1rem 1rem;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: #666;
+    cursor: pointer;
+    user-select: none;
+}
+
+.status-indicator .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ccc;
+}
+
+.status-indicator .dot.active {
+    background: #4CAF50;
+}
+
+.status-indicator .star {
+    font-size: 1rem;
+    color: #ccc;
+}
+
+.status-indicator .star.active {
+    color: #ffa000;
+}
+
+.status-indicator .text.orange {
+    color: #ffa000;
+}
+
+/* Inputs */
+.stock-inputs-row {
+    display: flex;
+    gap: 1rem;
+    padding: 0 1rem 1rem 1rem;
+}
+
+.input-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.input-col label,
+.price-input-row label {
+    font-size: 0.8rem;
+    color: #888;
+    font-weight: 500;
+}
+
+.input-col input,
+.price-input-row input {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #333;
+    background: #f9f9f9;
+    transition: border-color 0.2s;
+}
+
+.input-col input:focus,
+.price-input-row input:focus {
+    border-color: #4CAF50;
+    background: white;
+    outline: none;
+}
+
+.price-input-row {
+    padding: 0 1rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+/* Footer */
+.card-footer {
+    background: #e8f5e9;
+    padding: 0.8rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    color: #2e7d32;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-top: 1px solid #c8e6c9;
+}
+
+/* Orders List New */
+.orders-list-new {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.order-card-new {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 1.2rem;
+    border: 1px solid #f0f0f0;
+}
+
+.order-header-new {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.order-id-new {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.status-badge {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.status-badge.delivered {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.status-badge.pending {
+    background-color: #fff8e1;
+    color: #f57f17;
+}
+
+.status-badge.cancelled {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+.order-info-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.info-item .icon {
+    color: #999;
+    font-size: 1rem;
+}
+
+.order-divider {
+    height: 1px;
+    background-color: #f0f0f0;
+    margin: 1rem 0;
+}
+
+.order-footer-new {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.total-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.total-section .label {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.total-section .amount {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #2e7d32;
+}
+
+.view-details-btn {
+    background-color: #f1f8e9;
+    color: #33691e;
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.view-details-btn:hover {
+    background-color: #dcedc8;
+}
+
+.order-items-expanded {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px dashed #ddd;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.order-items-expanded h4 {
+    margin: 0 0 0.8rem 0;
+    color: #333;
+    font-size: 1rem;
+}
+
+.expanded-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f9f9f9;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.customer-info-expanded {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #f9f9f9;
+    border-radius: 8px;
+}
+
+.customer-info-expanded p {
+    margin: 0.3rem 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.no-results {
+    text-align: center;
+    padding: 2rem;
+    color: #999;
+    font-style: italic;
+}

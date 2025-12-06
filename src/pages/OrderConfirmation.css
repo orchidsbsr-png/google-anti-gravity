@@ -1,0 +1,35 @@
+.confirmation-page {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.confirmation-card {
+    text-align: center;
+    padding: 3rem 2rem;
+    width: 100%;
+    max-width: 400px;
+}
+
+.success-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+}
+
+.confirmation-card h1 {
+    color: var(--primary-green);
+    margin-bottom: 1rem;
+}
+
+.confirmation-card p {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}

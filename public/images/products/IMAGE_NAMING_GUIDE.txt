@@ -1,0 +1,64 @@
+===========================================
+PRODUCT IMAGE NAMING GUIDE
+===========================================
+
+Upload your product images to this folder with names matching your products.
+
+SUPPORTED FILE FORMATS:
+- .jpg / .jpeg
+- .png
+- .webp
+- .gif
+
+EXACT PRODUCT NAMES (use these exactly):
+===========================================
+1. Red Apples
+   → Name your file: "Red Apples.jpg" (or .png, .webp, etc.)
+
+2. Orange Persimmons
+   → Name your file: "Orange Persimmons.jpg"
+
+3. Fuzzy Kiwis
+   → Name your file: "Fuzzy Kiwis.jpg"
+
+4. Peaches
+   → Name your file: "Peaches.jpg"
+
+5. Plums
+   → Name your file: "Plums.jpg"
+
+6. Premium Asian Pear (or Pears)
+   → Name your file: "Premium Asian Pear.jpg" or "Pears.jpg"
+
+FLEXIBLE NAMING:
+===========================================
+The app will also recognize these variations:
+- Spaces: "Red Apples.jpg"
+- Underscores: "Red_Apples.jpg"
+- Hyphens: "Red-Apples.jpg"
+- Lowercase: "red apples.jpg", "red_apples.jpg", "red-apples.jpg"
+
+EXAMPLES:
+===========================================
+✅ Good names:
+   - Red Apples.jpg
+   - Peaches.png
+   - Fuzzy Kiwis.webp
+   - Orange_Persimmons.jpg
+   - plums.jpg
+
+❌ Bad names:
+   - apple.jpg (missing "Red")
+   - fruit1.jpg (not matching product name)
+   - IMG_1234.jpg (not descriptive)
+
+QUICK START:
+===========================================
+1. Take photos of your fruits or download product images
+2. Name them exactly as your products (see list above)
+3. Place them in this folder
+4. Restart your dev server (npm run dev)
+5. The app will automatically use your images!
+
+NOTE: If an image is not found, the app will use online placeholder images as fallback.
+

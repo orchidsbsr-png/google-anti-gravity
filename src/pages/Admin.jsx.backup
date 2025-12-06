@@ -1,0 +1,200 @@
+import React, { useState, useEffect } from 'react';
+import { useInventory } from '../context/InventoryContext';
+import { useProduct } from '../context/ProductContext';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { db } from '../firebase';
+import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
+import AdminLogin from '../components/AdminLogin';
+import '../components/AdminLogin.css';
+import './Admin.css';
+
+const Admin = () => {
+    const { inventory, settings, updateInventory, updateShopStatus, loading: invLoading } = useInventory();
+    const { products, varieties, loading: prodLoading } = useProduct();
+    const { logout } = useAuth();
+    const navigate = useNavigate();
+    const [orders, setOrders] = useState([]);
+    const [activeTab, setActiveTab] = useState('inventory');
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    useEffect(() => {
+        if (sessionStorage.getItem('admin_auth') === 'true') {
+            setIsAuthenticated(true);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (!isAuthenticated) return;
+
+        const q = query(collection(db, 'orders'), orderBy('created_at', 'desc'));
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const loadedOrders = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            setOrders(loadedOrders);
+        });
+
+        return () => unsubscribe();
+    }, [isAuthenticated]);
+
+    const handleLogout = () => {
+        setIsAuthenticated(false);
+        sessionStorage.removeItem('admin_auth');
+    };
+
+    const handleStockUpdate = (varietyId, field, value) => {
+        const item = inventory.find(i => i.variety_id === varietyId) || {
+            stock_5kg: 0,
+            stock_10kg: 0,
+            is_active: true,
+            is_bestseller: false,
+            price_per_kg: varieties.find(v => v.id === varietyId)?.price_per_kg || 0
+        };
+
+        const stock5kg = field === 'stock_5kg' ? parseInt(value) || 0 : item.stock_5kg;
+        const stock10kg = field === 'stock_10kg' ? parseInt(value) || 0 : item.stock_10kg;
+        const isActive = field === 'is_active' ? value : item.is_active;
+        const isBestseller = field === 'is_bestseller' ? value : item.is_bestseller;
+        const pricePerKg = field === 'price_per_kg' ? parseFloat(value) || 0 : item.price_per_kg;
+
+        // Calculate 5kg and 10kg prices from price_per_kg
+        const price5kg = pricePerKg * 5;
+        const price10kg = pricePerKg * 10;
+
+        updateInventory(varietyId, stock5kg, stock10kg, isActive, isBestseller, price5kg, price10kg, pricePerKg);
+    };
+
+    if (!isAuthenticated) {
+        return <AdminLogin onLogin={() => setIsAuthenticated(true)} />;
+    }
+
+    return (
+        <div className="admin-page">
+            <div className="admin-header glass-strong">
+                <div className="header-top">
+                    <h1>Admin Dashboard</h1>
+                    <button onClick={handleLogout} className="logout-btn">Logout</button>
+                </div>
+                <div className="shop-status">
+                    <span>Shop Status: </span>
+                    <button
+                        className={`status-toggle ${settings.shop_open ? 'open' : 'closed'}`}
+                        onClick={() => updateShopStatus(!settings.shop_open)}
+                    >
+                        {settings.shop_open ? 'OPEN' : 'CLOSED'}
+                    </button>
+                </div>
+            </div>
+
+            <div className="admin-tabs">
+                <button
+                    className={`tab-btn ${activeTab === 'inventory' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('inventory')}
+                >
+                    Inventory
+                </button>
+                <button
+                    className={`tab-btn ${activeTab === 'orders' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('orders')}
+                >
+                    Recent Orders
+                </button>
+                <div className="toggles">
+                    <label className="switch-label">
+                        <span>Active</span>
+                        <label className="switch">
+                            <input
+                                type="checkbox"
+                                checked={invItem.is_active}
+                                onChange={(e) => handleStockUpdate(variety.id, 'is_active', e.target.checked)}
+                            />
+                            <span className="slider round"></span>
+                        </label>
+                    </label>
+                    <label className="switch-label">
+                        <span>Best Seller</span>
+                        <label className="switch">
+                            <input
+                                type="checkbox"
+                                checked={invItem.is_bestseller || false}
+                                onChange={(e) => handleStockUpdate(variety.id, 'is_bestseller', e.target.checked)}
+                            />
+                            <span className="slider round slider-gold"></span>
+                        </label>
+                    </label>
+                </div>
+            </div>
+
+            <div className="stock-inputs">
+                <div className="input-group">
+                    <label>5kg Stock</label>
+                    <input
+                        type="number"
+                        min="0"
+                        value={invItem.stock_5kg || 0}
+                        onChange={(e) => handleStockUpdate(variety.id, 'stock_5kg', e.target.value)}
+                    />
+                </div>
+                <div className="input-group">
+                    <label>10kg Stock</label>
+                    <input
+                        type="number"
+                        min="0"
+                        value={invItem.stock_10kg || 0}
+                        onChange={(e) => handleStockUpdate(variety.id, 'stock_10kg', e.target.value)}
+                    />
+                </div>
+                <div className="input-group">
+                    <label>Price per KG (₹)</label>
+                    <input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value={invItem.price_per_kg || variety.price_per_kg}
+                        onChange={(e) => handleStockUpdate(variety.id, 'price_per_kg', e.target.value)}
+                    />
+                </div>
+                <div className="price-preview">
+                    <small>5kg = ₹{((invItem.price_per_kg || variety.price_per_kg) * 5).toFixed(2)}</small>
+                    <small>10kg = ₹{((invItem.price_per_kg || variety.price_per_kg) * 10).toFixed(2)}</small>
+                </div>
+            </div>
+        </div>
+    );
+})}
+                </div >
+            )}
+
+{
+    activeTab === 'orders' && (
+        <div className="orders-list">
+            {orders.map(order => (
+                <div key={order.id} className="order-card glass">
+                    <div className="order-header">
+                        <span className="order-id">#{order.id}</span>
+                        <span className={`order-status ${order.status}`}>{order.status}</span>
+                    </div>
+                    <div className="order-details">
+                        <p><strong>Customer:</strong> {order.customer_details.name}</p>
+                        <p><strong>Total:</strong> ₹{order.total_price}</p>
+                        <p><strong>Date:</strong> {new Date(order.created_at).toLocaleDateString()}</p>
+                    </div>
+                    <div className="order-items">
+                        {order.cart_items.map((item, idx) => (
+                            <div key={idx} className="order-item">
+                                {item.productName} ({item.varietyName}) - {item.quantityKg}kg x {item.quantity}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            ))}
+        </div>
+    )
+}
+        </div >
+    );
+};
+
+export default Admin;

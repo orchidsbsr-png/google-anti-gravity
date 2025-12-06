@@ -1,0 +1,247 @@
+.payment-page {
+    padding: 2rem 1rem;
+    padding-bottom: 200px;
+    /* Increased space for footer + nav */
+    background: #f4f4f4;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+}
+
+.payment-page h1 {
+    font-family: 'Merriweather', serif;
+    /* Or similar serif font */
+    font-size: 2rem;
+    color: #3a4a1e;
+    /* Dark olive green */
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+}
+
+.section {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.section h2,
+.section-header h2 {
+    font-size: 1.2rem;
+    color: #1a1a1a;
+    margin: 0;
+    font-weight: 700;
+}
+
+.btn-text {
+    background: none;
+    border: none;
+    color: #4a5d23;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+/* Address Card */
+.address-card {
+    border: 1px solid transparent;
+    border-radius: 12px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.address-card.selected {
+    /* In the design, the address card doesn't look explicitly 'selected' with a border, 
+       but we keep the logic. The design shows just one address. */
+}
+
+.address-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.address-type {
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: 0.2rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.address-name {
+    font-weight: 600;
+    color: #333;
+}
+
+.address-card p {
+    color: #666;
+    font-size: 0.95rem;
+    margin: 0.3rem 0;
+    line-height: 1.4;
+}
+
+/* Payment Methods */
+.payment-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.payment-option {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    background: white;
+}
+
+.payment-option.selected {
+    border: 2px solid #556b2f;
+    /* Dark olive border */
+    background: #fff;
+}
+
+.payment-option input[type="radio"] {
+    accent-color: #556b2f;
+    width: 20px;
+    height: 20px;
+    margin-right: 1rem;
+}
+
+.payment-option span {
+    font-weight: 500;
+    color: #333;
+    font-size: 1rem;
+}
+
+/* Card Form */
+.card-form {
+    margin-top: 1rem;
+    padding-top: 0.5rem;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.input-field {
+    width: 100%;
+    padding: 1rem;
+    background: #f0f2f5;
+    border: none;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    color: #333;
+    outline: none;
+}
+
+.input-field:focus {
+    background: #e8eaf0;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Footer */
+.payment-footer {
+    position: fixed;
+    bottom: 70px;
+    /* Height of BottomNav */
+    left: 0;
+    right: 0;
+    background: white;
+    padding: 1.5rem;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+    z-index: 900;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.total-row span:first-child {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.total-row span:last-child {
+    color: #1a1a1a;
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.pay-btn {
+    width: 100%;
+    background: #4a5d23;
+    /* Dark olive */
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.pay-btn:hover {
+    background: #3a4a1e;
+}
+
+.pay-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* Address Form Modal/Inline */
+.address-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.btn-secondary {
+    background: #f0f0f0;
+    color: #333;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}

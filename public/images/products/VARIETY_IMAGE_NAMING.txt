@@ -1,0 +1,94 @@
+===========================================
+VARIETY IMAGE NAMING GUIDE
+===========================================
+
+Upload your variety images to this folder with the exact names below.
+
+APPLE VARIETIES:
+===========================================
+1. Red Delicious
+   → Name your file: "Red Delicious.jpg" (or .png, .webp, etc.)
+   → Alternative: "Red_Delicious.jpg" or "red-delicious.jpg"
+
+2. Granny Smith
+   → Name your file: "Granny Smith.jpg"
+   → Alternative: "Granny_Smith.jpg" or "granny-smith.jpg"
+
+3. Gala
+   → Name your file: "Gala.jpg"
+   → Alternative: "gala.jpg"
+
+4. Golden Delicious
+   → Name your file: "Golden Delicious.jpg"
+   → Alternative: "Golden_Delicious.jpg" or "golden-delicious.jpg"
+
+PEAR VARIETIES:
+===========================================
+1. Nashpati Pear
+   → Name your file: "Nashpati Pear.jpg"
+   → Alternative: "Nashpati_Pear.jpg" or "nashpati-pear.jpg"
+
+2. Bosc Pear
+   → Name your file: "Bosc Pear.jpg"
+   → Alternative: "Bosc_Pear.jpg" or "bosc-pear.jpg"
+
+3. Concorde Pear
+   → Name your file: "Concorde Pear.jpg"
+   → Alternative: "Concorde_Pear.jpg" or "concorde-pear.jpg"
+
+4. French Butter Pear
+   → Name your file: "French Butter Pear.jpg"
+   → Alternative: "French_Butter_Pear.jpg" or "french-butter-pear.jpg"
+
+KIWI:
+===========================================
+1. Fuzzy Kiwis
+   → Name your file: "Fuzzy Kiwis.jpg"
+   → Alternative: "Fuzzy_Kiwis.jpg" or "fuzzy-kiwis.jpg"
+   → Or simply: "Kiwi.jpg" or "kiwi.jpg"
+
+PERSIMMON:
+===========================================
+1. Orange Persimmons
+   → Name your file: "Orange Persimmons.jpg"
+   → Alternative: "Orange_Persimmons.jpg" or "orange-persimmons.jpg"
+   → Or simply: "Persimmon.jpg" or "persimmon.jpg"
+
+CHERRY:
+===========================================
+1. Cherries
+   → Name your file: "Cherries.jpg"
+   → Alternative: "Cherry.jpg" or "cherries.jpg" or "cherry.jpg"
+
+PLUMS:
+===========================================
+1. Plums
+   → Name your file: "Plums.jpg"
+   → Alternative: "Plum.jpg" or "plums.jpg" or "plum.jpg"
+
+IMAGE CROPPING:
+===========================================
+All images will be automatically cropped to center and cover.
+Make sure your images are:
+- Square or close to square (1:1 ratio) for best results
+- High quality (at least 400x400 pixels)
+- Well-lit and clear
+
+The app uses object-fit: cover with object-position: center
+to ensure all images display evenly, cropping excess if needed.
+
+SUPPORTED FORMATS:
+- .jpg / .jpeg
+- .png
+- .webp
+- .gif
+
+QUICK START:
+===========================================
+1. Take photos of each variety or download product images
+2. Name them exactly as shown above
+3. Place them in this folder (public/images/products/)
+4. The app will automatically detect and use them!
+
+NOTE: If an image is not found, the app will use online placeholder images as fallback.
+

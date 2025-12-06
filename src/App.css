@@ -1,0 +1,51 @@
+.App {
+    min-height: 100vh;
+    background-color: var(--background);
+    color: var(--text-primary);
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* Desktop Optimization */
+@media (min-width: 1024px) {
+    .App {
+        /* No fixed width, let it breathe */
+        max-width: 100%;
+        box-shadow: none;
+        background: var(--background);
+        /* Use page bg, not white box */
+    }
+
+    /* Floating Bottom Nav for Desktop (Mac-dock style) */
+    .bottom-nav {
+        max-width: 500px;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 30px;
+        border-radius: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Position Chat Widget nicely */
+    .chat-widget {
+        right: 40px;
+        bottom: 100px;
+    }
+
+    .chat-toggle-btn {
+        right: 40px;
+        bottom: 30px;
+    }
+
+    /* Cart Summary fixed bar should also float or be less obtrusive */
+    .cart-summary,
+    .payment-footer {
+        max-width: 800px;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 100px;
+        /* Above nav */
+        border-radius: 20px;
+    }
+}

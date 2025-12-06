@@ -1,0 +1,109 @@
+:root {
+  --primary-green: #2d5016;
+  --secondary-green: #4a7c2a;
+  --light-green: #7fb347;
+  --background: #f0f0f0;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --glass-strong-bg: rgba(255, 255, 255, 0.85);
+  --text-primary: #2d5016;
+  --text-secondary: #666;
+  --error: #d32f2f;
+  --success: #4a7c2a;
+  --card-bg: #ffffff;
+  --border-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] {
+  --primary-green: #7fb347;
+  --secondary-green: #6a9d3f;
+  --light-green: #a0d468;
+  --background: #0f1a0d;
+  --glass-bg: rgba(20, 35, 15, 0.7);
+  --glass-border: rgba(127, 179, 71, 0.18);
+  --glass-strong-bg: rgba(20, 35, 15, 0.85);
+  --text-primary: #e8f5e9;
+  --text-secondary: #a5d6a7;
+  --error: #ef5350;
+  --success: #7fb347;
+  --card-bg: #1a2817;
+  --border-color: rgba(127, 179, 71, 0.2);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--background);
+  color: var(--text-primary);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Glassmorphism utility class */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+}
+
+.glass-strong {
+  background: var(--glass-strong-bg);
+  backdrop-filter: blur(50px);
+  -webkit-backdrop-filter: blur(50px);
+}
+
+/* Common Button Styles */
+.btn-primary {
+  background: var(--primary-green);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: var(--secondary-green);
+  transform: translateY(-2px);
+}
+
+.btn-primary:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 2px solid var(--primary-green);
+  color: var(--primary-green);
+  border-radius: 12px;
+  padding: 0.8rem 1.8rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+  background: var(--primary-green);
+  color: white;
+}
