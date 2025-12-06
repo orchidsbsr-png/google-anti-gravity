@@ -1,15 +1,43 @@
+/* Floating Capsule Bottom Nav */
 .bottom-nav {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    bottom: 20px;
+    /* Floating above bottom */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 400px;
+    /* Capsule width limit */
     height: 70px;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
+    /* Even spacing within capsule */
     align-items: center;
     z-index: 1000;
-    border-top: 1px solid var(--border-color);
-    padding-bottom: env(safe-area-inset-bottom);
+
+    /* Glassmorphism Capsule Style */
+    background: rgba(255, 255, 255, 0.75);
+    /* Translucent white */
+    backdrop-filter: blur(20px);
+    /* Frosted glass effect */
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 35px;
+    /* High border-radius for pill shape */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    /* Floating shadow */
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    /* Subtle border */
+
+    padding: 0 20px;
+    padding-bottom: 0;
+    /* Override safe-area if needed, or adjust padding */
+}
+
+/* Dark Mode Adaptation */
+[data-theme='dark'] .bottom-nav {
+    background: rgba(30, 30, 30, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
 }
 
 .nav-item {
@@ -18,50 +46,79 @@
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    color: var(--text-secondary);
-    font-size: 0.8rem;
-    transition: all 0.3s;
-    width: 100%;
-    height: 100%;
+    color: #8e8e93;
+    /* iOS inactive gray */
+    font-size: 0.75rem;
+    font-weight: 500;
+    transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+    width: auto;
+    /* Don't stretch */
+    height: auto;
     background: none;
     border: none;
     cursor: pointer;
+    flex: 1;
+    position: relative;
+    padding: 8px 0;
+}
+
+[data-theme='dark'] .nav-item {
+    color: #8e8e93;
 }
 
 .nav-item.active {
-    color: var(--primary-green);
-}
-
-.theme-toggle {
-    color: var(--text-secondary);
-}
-
-.theme-toggle:hover {
-    color: var(--primary-green);
-    transform: scale(1.05);
+    color: #ff3b30;
+    /* Nature's Candy Red or similar active color */
+    /* Or keep the primary green if preferred: var(--primary-green) */
+    color: var(--primary-green, #2e7d32);
+    transform: translateY(-2px);
+    /* Subtle lift for active item */
 }
 
 .nav-item .icon {
-    font-size: 1.5rem;
-    margin-bottom: 4px;
+    font-size: 1.6rem;
+    margin-bottom: 3px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.05));
+    transition: transform 0.2s ease;
+}
+
+.nav-item:active .icon {
+    transform: scale(0.9);
 }
 
 .icon-wrapper {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .badge {
     position: absolute;
-    top: -5px;
+    top: -6px;
     right: -8px;
-    background: var(--error);
+    background: #ff3b30;
+    /* iOS red badge */
     color: white;
-    font-size: 0.7rem;
-    width: 18px;
+    font-size: 0.65rem;
+    min-width: 18px;
     height: 18px;
-    border-radius: 50%;
+    border-radius: 9px;
+    /* Pill badge */
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
+    font-weight: 600;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 0 4px;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    /* Border stroke to separate from icon */
 }
+
+/* Hide theme toggle text if icon only is preferred, or style it */
+.theme-toggle .icon {
+    font-size: 1.4rem;
+}
+
+/* Ensure content behind nav isn't blocked by a hidden full-width box */
+/* (The floating nav doesn't block clicks outside it) */
