@@ -17,26 +17,42 @@ export const getProductImage = (productName, { variety } = {}) => {
 
     // Map known products/varieties to their specific files if needed
     const imageMap = {
-        'Apples': 'Red Delicious.png', // Default for Apples product
-        'Red Apples': 'Red Delicious.png', // Fallback or specific
+        'Apples': 'Red Delicious.png',
+        'Red Apples': 'Red Delicious.png',
         'Red Delicious': 'Red Delicious.png',
         'Granny Smith': 'Granny Smith.jpg',
         'Gala': 'Gala.jpg',
         'Golden Delicious': 'Golden Delicious.jpg',
-        'Orange Persimmons': 'Orange Persimmons.png',
-        'Fuzzy Kiwis': 'Fuzzy Kiwis.png',
-        'Plums': 'Plums.png',
-        'Pears': 'French Butter Pear.png', // Default for Pears category
-        'Nashpati Pear': 'Nashpati Pear.png',
+
+        'Pears': 'French Butter Pear.png',
+        'Nashpati': 'Nashpati.png',
+        'Nashpati Pear': 'Nashpati Pear.png', // Handle both variations
         'Bosc Pear': 'Bosc Pear.png',
+        'Bosc': 'Bosc Pear.png',
         'Concorde Pear': 'Concorde Pear.png',
+        'Concorde': 'Concorde Pear.png',
         'French Butter Pear': 'French Butter Pear.png',
         'Red Max': 'Red Max Pear.png',
-        'Cherries': 'Cherries.png'
+        'Red Max Pear': 'Red Max Pear.png',
+
+        'Cherries': 'Cherries.png',
+        'Dark Sweet Cherries': 'Cherries.png',
+
+        'Kiwis': 'Fuzzy Kiwis.png',
+        'Fuzzy Kiwis': 'Fuzzy Kiwis.png',
+
+        'Persimmons': 'Orange Persimmons.png',
+        'Orange Persimmons': 'Orange Persimmons.png',
+
+        'Plums': 'Plums.png',
+        'Red Plums': 'Plums.png'
     };
 
-    if (imageMap[filename]) {
-        return `${basePath}${imageMap[filename]}`;
+    // Case-insensitive lookup
+    const mapKey = Object.keys(imageMap).find(key => key.toLowerCase() === filename.toLowerCase());
+
+    if (mapKey) {
+        return `${basePath}${imageMap[mapKey]}`;
     }
 
     // Default fallback if not in map, try to use the name directly
