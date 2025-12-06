@@ -52,9 +52,9 @@ export const getProductImage = (productName, { variety } = {}) => {
     const mapKey = Object.keys(imageMap).find(key => key.toLowerCase() === filename.toLowerCase());
 
     if (mapKey) {
-        return `${basePath}${imageMap[mapKey]}`;
+        return encodeURI(`${basePath}${imageMap[mapKey]}`);
     }
 
     // Default fallback if not in map, try to use the name directly
-    return `${basePath}${filename}.png`;
+    return encodeURI(`${basePath}${filename}.png`);
 };
