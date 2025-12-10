@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import axios from 'axios';
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -16,22 +17,19 @@ export default async function handler(req, res) {
     const sha256 = crypto.createHash('sha256').update(stringToHash).digest('hex');
     const checksum = sha256 + "###" + KEY_INDEX;
 
-    const options = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-VERIFY': checksum,
-            'X-MERCHANT-ID': MERCHANT_ID,
-            'accept': 'application/json'
-        }
-    };
-
     try {
-        const response = await fetch(`https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/${MERCHANT_ID}/${transactionId}`, options);
-        const data = await response.json();
+        const response = await axios.get(`https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/${MERCHANT_ID}/${transactionId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-VERIFY': checksum,
+                'X-MERCHANT-ID': MERCHANT_ID,
+                'accept': 'application/json'
+            }
+        });
 
-        return res.status(200).json(data);
+        return res.status(200).json(response.data);
     } catch (error) {
+        console.error("Status Check Error:", error.response ? error.response.data : error.message);
         return res.status(500).json({ error: error.message });
     }
 }

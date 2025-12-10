@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import axios from 'axios';
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -19,10 +20,10 @@ export default async function handler(req, res) {
             merchantId: MERCHANT_ID,
             merchantTransactionId: transactionId,
             merchantUserId: "MUID" + Date.now(),
-            amount: amount * 100, // Amount in paise (e.g. 1000 = 10 INR)
+            amount: amount * 100, // Amount in paise
             redirectUrl: `https://fresh-farm-himachal.vercel.app/order-confirmation?transactionId=${transactionId}`,
             redirectMode: "REDIRECT",
-            callbackUrl: `https://fresh-farm-himachal.vercel.app/api/status`, // Optional webhook
+            callbackUrl: `https://fresh-farm-himachal.vercel.app/api/status`,
             mobileNumber: mobile || "9999999999",
             paymentInstrument: {
                 type: "PAY_PAGE"
@@ -32,37 +33,40 @@ export default async function handler(req, res) {
         // Encode Payload to Base64
         const base64Payload = Buffer.from(JSON.stringify(payload)).toString('base64');
 
-        // Checksum Calculation: SHA256(base64Payload + "/pg/v1/pay" + saltKey) + "###" + keyIndex
+        // Checksum
         const stringToHash = base64Payload + "/pg/v1/pay" + SALT_KEY;
         const sha256 = crypto.createHash('sha256').update(stringToHash).digest('hex');
         const checksum = sha256 + "###" + KEY_INDEX;
 
-        // Make API Call to PhonePe
+        // Make API Call to PhonePe using Axios
         const options = {
-            method: 'POST',
+            method: 'post',
+            url: TARGET_URL,
             headers: {
                 'Content-Type': 'application/json',
                 'X-VERIFY': checksum,
                 'accept': 'application/json'
             },
-            body: JSON.stringify({
+            data: {
                 request: base64Payload
-            })
+            }
         };
 
-        const response = await fetch(TARGET_URL, options);
-        const data = await response.json();
+        const response = await axios.request(options);
+        const data = response.data;
 
         if (data.success) {
-            // Return the PhonePe payment page URL
             const url = data.data.instrumentResponse.redirectInfo.url;
             return res.status(200).json({ success: true, url: url });
         } else {
-            return res.status(400).json({ success: false, error: data.message || "Payment initiation failed" });
+            return res.status(400).json({ success: false, error: data.message || "Payment initiation failed at Gateway" });
         }
 
     } catch (error) {
-        console.error("PhonePe Error:", error);
-        return res.status(500).json({ success: false, error: error.message });
+        console.error("PhonePe Error:", error.response ? error.response.data : error.message);
+        return res.status(500).json({
+            success: false,
+            error: error.response?.data?.message || error.message
+        });
     }
 }
