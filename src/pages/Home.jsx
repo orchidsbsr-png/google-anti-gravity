@@ -18,7 +18,8 @@ const Home = () => {
             <section className="hero-section">
                 <div
                     className="hero-background"
-                    style={{ transform: `translateY(${offset * 0.5}px)` }}
+                // Temporarily removed parallax to debug visibility
+                // style={{ transform: `translateY(${offset * 0.5}px)` }}
                 ></div>
                 <div className="hero-content">
                     <h1 className="hero-headline">Taste the Difference<br />Thin Air Makes.</h1>
