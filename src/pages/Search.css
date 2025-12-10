@@ -1,70 +1,155 @@
+/* Swiss Style Gallery Reset */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
 .search-page {
-    padding: 1rem;
-    padding-bottom: 80px;
+    /* Canvas & Background */
+    background-color: #F2F0EB;
+    min-height: 100vh;
+    padding: 60px 80px;
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    position: relative;
+    /* Subtle Grain Overlay */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
 }
 
-.search-header {
-    position: sticky;
-    top: 10px;
-    z-index: 100;
-    padding: 1rem;
-    border-radius: 16px;
-    margin-bottom: 1.5rem;
+/* Minimalist Search Header */
+.search-header-minimal {
+    margin-bottom: 60px;
+    display: flex;
+    justify-content: flex-end;
 }
 
-.search-input {
-    width: 100%;
-    padding: 1rem;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
-    font-size: 1.1rem;
-    background: rgba(255, 255, 255, 0.9);
+.search-input-minimal {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #1a1a1a;
+    width: 300px;
+    padding: 10px 0;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    outline: none;
+    letter-spacing: 1px;
 }
 
-.product-grid {
+.search-input-minimal::placeholder {
+    color: rgba(0, 0, 0, 0.3);
+}
+
+/* Strict Swiss Grid */
+.gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 40px;
+    row-gap: 60px;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
-.product-card {
-    display: block;
+/* Pantone Card Component */
+.pantone-card {
+    display: flex;
+    flex-direction: column;
+    background: #FFFFFF;
     text-decoration: none;
     color: inherit;
-    overflow: hidden;
-    transition: transform 0.3s;
+    /* Aspect Ratio for Vertical Rectangle (approx 2:3) */
+    aspect-ratio: 2 / 3.2;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    /* 10% opacity, large blur */
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    /* Sharp ease-out */
+    will-change: transform;
 }
 
-.product-card:hover {
+/* Motion Behavior */
+.pantone-card:hover {
     transform: translateY(-5px);
 }
 
-.product-image-wrapper {
-    height: 160px;
+/* Visual Container (75%) */
+.card-visual {
+    height: 75%;
     width: 100%;
+    overflow: hidden;
+    position: relative;
+    background: #f8f8f8;
 }
 
-.product-info {
-    padding: 1rem;
+.product-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    mix-blend-mode: multiply;
+    /* Helps blend white backgrounds if any */
 }
 
-.product-info h3 {
-    font-size: 1.1rem;
-    margin-bottom: 0.3rem;
-    color: var(--primary-green);
+/* Data Container (25%) */
+.card-data {
+    height: 25%;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    border-top: 1px solid rgba(0, 0, 0, 0.03);
+    /* Extremely subtle separator */
 }
 
-.product-category {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    text-transform: capitalize;
+/* Typography */
+.product-name {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #000000;
+    margin: 0;
+    letter-spacing: 0.5px;
 }
 
+.color-code {
+    font-size: 10px;
+    font-weight: 400;
+    color: #888888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Loading State */
 .loading {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 50vh;
-    font-size: 1.2rem;
-    color: var(--primary-green);
+    min-height: 80vh;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-size: 14px;
+    color: #1a1a1a;
+    background-color: #F2F0EB;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        column-gap: 30px;
+    }
+
+    .search-page {
+        padding: 40px;
+    }
+}
+
+@media (max-width: 600px) {
+    .gallery-grid {
+        grid-template-columns: 1fr;
+        row-gap: 40px;
+    }
+
+    .search-page {
+        padding: 20px;
+    }
 }

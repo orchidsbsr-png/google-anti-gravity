@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useProduct } from '../context/ProductContext';
-import ProductImage from '../components/ProductImage';
 import './Search.css';
 
 const Search = () => {
@@ -12,29 +11,52 @@ const Search = () => {
         product.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    if (loading) return <div className="loading">Loading fresh fruits...</div>;
+    // Mock TCX codes for the aesthetic
+    const getTCXCode = (id) => {
+        const codes = {
+            1: '18-1664 TCX', // Apple Red
+            2: '16-1364 TCX', // Persimmon Orange
+            3: '14-0452 TCX', // Kiwi Green
+            4: '19-3632 TCX', // Plum Purple
+            5: '14-0755 TCX', // Pear Green
+            6: '19-1930 TCX'  // Cherry Red
+        };
+        return codes[id] || '00-0000 TCX';
+    };
+
+    if (loading) return <div className="loading">LOADING COLLECTION...</div>;
 
     return (
         <div className="search-page">
-            <div className="search-header glass-strong">
+            <div className="search-header-minimal">
                 <input
                     type="text"
-                    placeholder="Search for fruits..."
+                    placeholder="SEARCH ARCHIVE..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="search-input"
+                    className="search-input-minimal"
                 />
             </div>
 
-            <div className="product-grid">
+            <div className="gallery-grid">
                 {filteredProducts.map(product => (
-                    <Link to={`/product/${product.id}`} key={product.id} className="product-card glass">
-                        <div className="product-image-wrapper">
-                            <ProductImage productName={product.name} alt={product.name} />
+                    <Link to={`/product/${product.id}`} key={product.id} className="pantone-card">
+                        <div className="card-visual">
+                            {/* Video Placeholder - User to upload files later */}
+                            <video
+                                className="product-video"
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                                poster={product.image_path} // Fallback to current image
+                            >
+                                <source src={`/videos/${product.name.toLowerCase().replace(/ /g, '-')}.mp4`} type="video/mp4" />
+                            </video>
                         </div>
-                        <div className="product-info">
-                            <h3>{product.name}</h3>
-                            <p className="product-category">{product.category}</p>
+                        <div className="card-data">
+                            <h2 className="product-name">{product.name} •</h2>
+                            <span className="color-code">{getTCXCode(product.id)}</span>
                         </div>
                     </Link>
                 ))}
