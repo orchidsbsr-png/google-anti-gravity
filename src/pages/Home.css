@@ -35,7 +35,7 @@
     left: 0;
     width: 100%;
     /* Taller for parallax */
-    background-image: url('/images/products/landscape.jpg');
+    background-image: url('/images/products/landing_image.jpg');
     /* Use existing landscape */
     background-size: cover;
     background-position: center;
@@ -427,7 +427,7 @@
 .footer-cta-section {
     padding: 120px 20px;
     text-align: center;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/products/landscape.jpg');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/products/landing_image.jpg');
     /* Reuse */
     background-size: cover;
     background-position: center;
