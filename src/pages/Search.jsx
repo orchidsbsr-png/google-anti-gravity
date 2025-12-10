@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useProduct } from '../context/ProductContext';
+import LazyVideo from '../components/LazyVideo';
 import './Search.css';
 
 const Search = () => {
@@ -42,17 +43,11 @@ const Search = () => {
                 {filteredProducts.map(product => (
                     <Link to={`/product/${product.id}`} key={product.id} className="pantone-card">
                         <div className="card-visual">
-                            {/* Video Placeholder - User to upload files later */}
-                            <video
+                            <LazyVideo
+                                src={`/videos/${product.name.toLowerCase().replace(/ /g, '-')}.mp4`}
+                                poster={product.image_path}
                                 className="product-video"
-                                autoPlay
-                                loop
-                                muted
-                                playsInline
-                                poster={product.image_path} // Fallback to current image
-                            >
-                                <source src={`/videos/${product.name.toLowerCase().replace(/ /g, '-')}.mp4`} type="video/mp4" />
-                            </video>
+                            />
                         </div>
                         <div className="card-data">
                             <h2 className="product-name">{product.name} •</h2>
