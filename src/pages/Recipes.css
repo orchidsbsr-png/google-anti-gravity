@@ -276,6 +276,70 @@
     }
 }
 
+
+/* TYPOGRAPHY CLASSES - Distinct Personality for Each Card */
+.font-playfair h3 {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+}
+
+.font-cormorant h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    letter-spacing: 0.5px;
+}
+
+.font-montserrat h3 {
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.8rem;
+}
+
+.font-merriweather h3 {
+    font-family: 'Merriweather', serif;
+    font-style: italic;
+    color: #d35400;
+}
+
+.font-cinzel h3 {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: #2c3e50;
+}
+
+.font-vibes h3 {
+    font-family: 'Great Vibes', cursive;
+    font-size: 1.8rem;
+    color: #c0392b;
+    transform: rotate(-2deg);
+    margin-top: -5px;
+}
+
+.font-lato h3 {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+
+/* ORGANIC ASYMMETRY - Offsets */
+/* Push the second item in flows down to create staggering */
+.recipe-card:nth-child(2n) {
+    margin-top: 3rem;
+}
+
+.recipe-card:nth-child(3n) {
+    margin-top: -1.5rem;
+    /* Pull some up */
+}
+
+.recipe-card:nth-child(5n) {
+    margin-left: 1rem;
+    /* Slight horizontal drift */
+}
+
 /* Aspect Ratio Modifiers */
 .portrait-card .card-media {
     aspect-ratio: 9 / 16;
@@ -288,6 +352,10 @@
 
 .landscape-card .card-media {
     aspect-ratio: 16 / 9;
+}
+
+.square-card .card-media {
+    aspect-ratio: 1 / 1;
 }
 
 /* Ensure steam effect only triggers on relevant hero cards or hovered hot items */

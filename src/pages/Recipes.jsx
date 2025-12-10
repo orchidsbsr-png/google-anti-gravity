@@ -54,16 +54,28 @@ const Recipes = () => {
 
                     {/* STANDARD CARDS */}
                     {otherRecipes.map((recipe, index) => {
-                        // Apply custom layout specific to the "Antigravity Kitchen" prompt
+                        // Apply custom layout & typography specific to the "Antigravity Kitchen" prompt
                         let cardStyle = "standard-card";
+                        let fontStyle = "font-playfair"; // Default
+
+                        // Layout Logic
                         if (recipe.title.includes("Kiwi Juice")) cardStyle = "portrait-card";
                         if (recipe.title.includes("Apple Crisp")) cardStyle = "landscape-card";
+                        if (recipe.title.includes("Plum Torte")) cardStyle = "square-card";
+
+                        // Typography Logic (Distinct Beautiful Fonts)
+                        if (recipe.title.includes("Apple")) fontStyle = "font-cormorant";
+                        if (recipe.title.includes("Kiwi")) fontStyle = "font-montserrat";
+                        if (recipe.title.includes("Pear")) fontStyle = "font-merriweather";
+                        if (recipe.title.includes("Plum")) fontStyle = "font-cinzel";
+                        if (recipe.title.includes("Jam")) fontStyle = "font-vibes";
+                        if (recipe.title.includes("Salad")) fontStyle = "font-lato";
 
                         return (
                             <Link
                                 to={`/recipes/${recipe.id}`}
                                 key={recipe.id}
-                                className={`recipe-card ${cardStyle} float-animation delay-${index % 3}`}
+                                className={`recipe-card ${cardStyle} ${fontStyle} float-animation delay-${index % 3}`}
                             >
                                 <div className="card-media">
                                     <LazyVideo
