@@ -10,7 +10,7 @@ export default async function handler(req, res) {
 
     const SALT_KEY = "96434309-7796-489d-8924-ab56988a6076";
     const KEY_INDEX = 1;
-    const MERCHANT_ID = merchantId || "PGTESTPAYUAT";
+    const MERCHANT_ID = merchantId || "PGTESTPAYUAT86";
 
     // SHA256("/pg/v1/status/{merchantId}/{merchantTransactionId}" + saltKey) + "###" + keyIndex
     const stringToHash = `/pg/v1/status/${MERCHANT_ID}/${transactionId}` + SALT_KEY;

@@ -10,9 +10,9 @@ export default async function handler(req, res) {
         // Use client provided ID (Firestore ID) or generate one
         const transactionId = clientTxnId || "TXN" + Date.now();
 
-        // 1. Credentials
-        const MERCHANT_ID = "PGTESTPAYUAT";
-        const SALT_KEY = "099eb0cd-02cf-4e2a-8aca-3e6c6aff0399";
+        // 1. Credentials (Alternate Sandbox)
+        const MERCHANT_ID = "PGTESTPAYUAT86";
+        const SALT_KEY = "96434309-7796-489d-8924-ab56988a6076";
         const SALT_INDEX = 1;
         const API_ENDPOINT = "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay";
 
