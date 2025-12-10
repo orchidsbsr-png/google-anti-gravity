@@ -71,21 +71,27 @@ const Payment = () => {
                         body: JSON.stringify({
                             amount: total,
                             mobile: selectedAddress.phone,
-                            transactionId: docRef.id // Use Order ID as Transaction ID
+                            transactionId: docRef.id
                         })
                     });
 
-                    const data = await response.json();
+                    const text = await response.text();
+                    let data;
+                    try {
+                        data = JSON.parse(text);
+                    } catch (e) {
+                        console.error("Server returned non-JSON:", text);
+                        throw new Error(`Server Error: ${response.status} ${response.statusText}. Response: ${text.substring(0, 100)}...`);
+                    }
 
                     if (data.success) {
-                        // Redirect user to PhonePe Gateway
                         window.location.href = data.url;
                     } else {
                         throw new Error(data.error || 'Payment initiation failed');
                     }
                 } catch (err) {
                     console.error('Payment Error:', err);
-                    alert('Failed to initiate payment. Please try again or use COD.');
+                    alert(`Payment Attempt Failed: ${err.message}`);
                     setIsProcessing(false);
                 }
             } else {
