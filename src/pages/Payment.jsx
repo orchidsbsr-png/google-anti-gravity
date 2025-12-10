@@ -8,6 +8,7 @@ import { collection, addDoc, updateDoc, doc } from 'firebase/firestore';
 // Removed: import { initiateCashfreePayment } from '../services/cashfree';
 import AddressForm from '../components/AddressForm';
 import { sendOrderConfirmationEmail } from '../services/emailService';
+import { saveOrderToBaserow } from '../services/baserow';
 import './Payment.css';
 
 const Payment = () => {
@@ -61,6 +62,9 @@ const Payment = () => {
 
             const docRef = await addDoc(collection(db, 'orders'), orderData);
             console.log('📦 Order created:', docRef.id);
+
+            // Save to Baserow
+            await saveOrderToBaserow({ ...orderData, id: docRef.id });
 
             // If online payment selected, initiate PhonePe (Standard Checkout)
             if (paymentMethod === 'online') {
