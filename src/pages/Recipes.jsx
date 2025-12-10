@@ -9,12 +9,7 @@ const Recipes = () => {
     const heroRecipe = recipes.find(r => r.id === 'cherry-clafoutis-hero');
     const otherRecipes = recipes.filter(r => r.id !== 'cherry-clafoutis-hero');
 
-    const handleAddBundle = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        // Mock "Scenario 3" Action
-        alert("🍒 Mountain Cherry Bundle added to your cart! ($12.50)");
-    };
+
 
     useEffect(() => {
         // Floating animation effect on scroll could be enhanced here
@@ -52,16 +47,7 @@ const Recipes = () => {
                                 <h2>{heroRecipe.title}</h2>
                                 <p className="chef-name">by {heroRecipe.chef}</p>
 
-                                {/* Scenario 3 UI Module */}
-                                <div className="bundle-module glass">
-                                    <div className="bundle-icon">🍒</div>
-                                    <div className="bundle-text">
-                                        <span>Needs ~1kg Mountain Cherries</span>
-                                        <button onClick={handleAddBundle} className="btn-apricot">
-                                            Add Bundle • $12.50
-                                        </button>
-                                    </div>
-                                </div>
+
                             </div>
                         </Link>
                     )}
