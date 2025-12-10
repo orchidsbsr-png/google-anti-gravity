@@ -21,6 +21,8 @@ const Admin = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [expandedOrderId, setExpandedOrderId] = useState(null);
 
+    const [orderStatusFilter, setOrderStatusFilter] = useState('All');
+
     useEffect(() => {
         if (sessionStorage.getItem('admin_auth') === 'true') {
             setIsAuthenticated(true);
@@ -139,6 +141,12 @@ const Admin = () => {
     });
 
     const filteredOrders = orders.filter(order => {
+        // 1. Filter by Status Tab
+        if (orderStatusFilter !== 'All' && order.status !== orderStatusFilter) {
+            return false;
+        }
+
+        // 2. Filter by Search Term
         const searchLower = searchTerm.toLowerCase();
         if (searchLower === 'cancellation_requested') {
             return order.cancellation_requested && order.status !== 'cancelled';
@@ -309,6 +317,31 @@ const Admin = () => {
 
             {activeTab === 'orders' && (
                 <div className="orders-list-new">
+                    {/* Filter Tabs Row */}
+                    <div className="order-filters" style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
+                        {['All', 'order_placed', 'accepted', 'processing', 'out_for_delivery', 'delivered', 'cancelled'].map(status => (
+                            <button
+                                key={status}
+                                onClick={() => setOrderStatusFilter(status)}
+                                style={{
+                                    padding: '0.5rem 1rem',
+                                    borderRadius: '20px',
+                                    border: '1px solid #ddd',
+                                    background: orderStatusFilter === status ? '#2c3e50' : 'white',
+                                    color: orderStatusFilter === status ? 'white' : '#666',
+                                    whiteSpace: 'nowrap',
+                                    cursor: 'pointer',
+                                    fontSize: '0.9rem',
+                                    textTransform: 'capitalize',
+                                    transition: 'all 0.2s',
+                                    boxShadow: orderStatusFilter === status ? '0 2px 5px rgba(0,0,0,0.2)' : 'none'
+                                }}
+                            >
+                                {status === 'All' ? 'All Orders' : status.replace(/_/g, ' ')}
+                            </button>
+                        ))}
+                    </div>
+
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
                         <button
                             onClick={handleClearAllOrders}
