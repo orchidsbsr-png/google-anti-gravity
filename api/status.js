@@ -8,7 +8,7 @@ export default async function handler(req, res) {
 
     const { transactionId, merchantId } = req.body;
 
-    const SALT_KEY = "099eb0cd-02cf-4e2a-8aca-3e6c6aff0399";
+    const SALT_KEY = "96434309-7796-489d-8924-ab56988a6076";
     const KEY_INDEX = 1;
     const MERCHANT_ID = merchantId || "PGTESTPAYUAT";
 

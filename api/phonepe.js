@@ -9,7 +9,7 @@ export default async function handler(req, res) {
 
     // PHONEPE TEST CREDENTIALS
     const MERCHANT_ID = "PGTESTPAYUAT";
-    const SALT_KEY = "099eb0cd-02cf-4e2a-8aca-3e6c6aff0399";
+    const SALT_KEY = "96434309-7796-489d-8924-ab56988a6076";
     const KEY_INDEX = 1;
     const TARGET_URL = "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay";
 
