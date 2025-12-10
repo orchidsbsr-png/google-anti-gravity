@@ -57,7 +57,7 @@ const Home = () => {
                         </div>
                         <div className="image-block altitude-shot">
                             {/* Placeholder for Mountain/Altitude Shot */}
-                            <img src="/images/products/landing_image.jpg" alt="High Altitude Farm" />
+                            <img src="/hero.jpg" alt="High Altitude Farm" />
                         </div>
                     </div>
                 </div>
