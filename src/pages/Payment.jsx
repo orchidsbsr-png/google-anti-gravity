@@ -62,36 +62,33 @@ const Payment = () => {
             const docRef = await addDoc(collection(db, 'orders'), orderData);
             console.log('📦 Order created:', docRef.id);
 
-            // If online payment selected, initiate PhonePe
+            // If online payment selected, initiate PhonePe (Standard Checkout)
             if (paymentMethod === 'online') {
                 try {
-                    const response = await fetch('/api/phonepe', {
+                    const response = await fetch('/api/initiate_payment', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             amount: total,
                             mobile: selectedAddress.phone,
+                            // We pass the Firestore ID so we can track it. 
+                            // The backend will use this (or generate one if we didn't send it).
                             transactionId: docRef.id
                         })
                     });
 
-                    const text = await response.text();
-                    let data;
-                    try {
-                        data = JSON.parse(text);
-                    } catch (e) {
-                        console.error("Server returned non-JSON:", text);
-                        throw new Error(`Server Error: ${response.status} ${response.statusText}. Response: ${text.substring(0, 100)}...`);
-                    }
+                    const data = await response.json();
 
                     if (data.success) {
+                        // Redirect to PhonePe
                         window.location.href = data.url;
                     } else {
+                        console.error("Payment Init Failed:", data);
                         throw new Error(data.error || 'Payment initiation failed');
                     }
                 } catch (err) {
                     console.error('Payment Error:', err);
-                    alert(`Payment Attempt Failed: ${err.message}`);
+                    alert(`Error: ${err.message}`);
                     setIsProcessing(false);
                 }
             } else {
