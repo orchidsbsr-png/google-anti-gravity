@@ -45,6 +45,7 @@ export default async function handler(req, res) {
             headers: {
                 'Content-Type': 'application/json',
                 'X-VERIFY': checksum,
+                'X-MERCHANT-ID': MERCHANT_ID,
                 'accept': 'application/json'
             },
             data: {
