@@ -22,6 +22,7 @@ import Admin from './pages/Admin'
 import Login from './pages/Login'
 import MyOrders from './pages/MyOrders'
 import OrderSummary from './pages/OrderSummary'
+import Legal from './pages/Legal'
 import './App.css'
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
                                         <Routes>
                                             <Route path="/login" element={<Login />} />
                                             <Route path="/" element={<Home />} />
+                                            <Route path="/legal" element={<Legal />} />
                                             <Route path="/search" element={<Search />} />
                                             <Route path="/product/:id" element={<ProductDetail />} />
                                             <Route path="/health-benefits" element={<HealthBenefits />} />

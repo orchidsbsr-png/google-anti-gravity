@@ -177,6 +177,20 @@ const Home = () => {
                     </div>
                 </div>
             </section>
+
+            {/* 7. LEGAL LINKS FOOTER */}
+            <footer className="home-legal-footer">
+                <div className="legal-links">
+                    <Link to="/legal">Terms & Conditions</Link>
+                    <span className="separator">|</span>
+                    <Link to="/legal">Privacy Policy</Link>
+                    <span className="separator">|</span>
+                    <Link to="/legal">Refund Policy</Link>
+                    <span className="separator">|</span>
+                    <Link to="/legal">Shipping Policy</Link>
+                </div>
+                <p className="copyright">© 2025 Farm Fresh. All rights reserved.</p>
+            </footer>
         </div>
     );
 };

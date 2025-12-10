@@ -1,0 +1,80 @@
+.legal-page {
+    padding: 100px 20px 40px;
+    /* Top padding for navbar */
+    background-color: #F9F7F2;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+    color: #333;
+}
+
+.legal-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.legal-container h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: #1a3a1a;
+    text-align: center;
+}
+
+.legal-container h2 {
+    font-size: 1.8rem;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    color: #27C46B;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+.legal-container h3 {
+    font-size: 1.2rem;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: #444;
+}
+
+.legal-container p {
+    line-height: 1.6;
+    margin-bottom: 15px;
+    color: #555;
+    font-size: 0.95rem;
+    text-align: justify;
+}
+
+.legal-container ul {
+    margin-bottom: 20px;
+    padding-left: 20px;
+}
+
+.legal-container li {
+    margin-bottom: 10px;
+    line-height: 1.6;
+    color: #555;
+}
+
+.legal-container strong {
+    color: #1a1a1a;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 30px 0;
+}
+
+@media (max-width: 768px) {
+    .legal-container {
+        padding: 20px;
+    }
+
+    .legal-container h1 {
+        font-size: 2rem;
+    }
+}
