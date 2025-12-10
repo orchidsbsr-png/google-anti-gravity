@@ -34,7 +34,6 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 120%;
     /* Taller for parallax */
     background-image: url('/images/products/landscape.jpg');
     /* Use existing landscape */
@@ -254,7 +253,7 @@
     /* Hide scrollbar Firefox */
     -ms-overflow-style: none;
     /* Hide scrollbar IE */
-    scroll-item-align: center;
+    scroll-snap-align: center;
 }
 
 .fruit-carousel::-webkit-scrollbar {
