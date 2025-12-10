@@ -27,6 +27,7 @@ const Home = () => {
                         100% Organic fruit, hand-plucked at 2,600 meters and delivered straight from our mountain farm to your door.
                     </p>
                     <Link to="/search" className="cta-button primary">Shop the Harvest</Link>
+                    <Link to="/recipes" className="cta-button secondary" style={{ marginLeft: '1rem', background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(5px)' }}>The Kitchen</Link>
                 </div>
                 <div className="scroll-indicator">
                     <span>Descend into the orchard</span>

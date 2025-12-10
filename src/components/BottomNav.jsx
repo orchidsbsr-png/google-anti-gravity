@@ -16,6 +16,11 @@ const BottomNav = () => {
                 <span className="label">Home</span>
             </NavLink>
 
+            <NavLink to="/recipes" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
+                <span className="icon">🍳</span>
+                <span className="label">Kitchen</span>
+            </NavLink>
+
             <NavLink to="/search" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
                 <span className="icon">🔍</span>
                 <span className="label">Search</span>
