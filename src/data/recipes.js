@@ -256,5 +256,67 @@ export const recipes = [
             { text: "Season generously with freshly cracked salt and pepper." },
             { text: "Toss gently to combine. Serve immediately or let sit for 15 mins to let flavors meld." }
         ]
+    },
+    {
+        id: 'cherry-clafoutis-hero',
+        title: 'Warm Cherry Clafoutis',
+        fruitType: 'Cherry',
+        chef: 'Alpine Kitchen',
+        description: 'A rustic French dessert where fresh mountain cherries are baked in a thick, flan-like batter. Served warm, dusted with powdered-sugar "snow".',
+        image: '/images/recipes/cherry_clafoutis.png', // Placeholder
+        prepTime: '15 mins',
+        cookTime: '35 mins',
+        yields: '8 Servings',
+        calories: '210 kcal',
+        difficulty: 'Medium',
+        videoUrl: 'https://youtu.be/example1', // Placeholder
+        secret: 'Do not pit the cherries too early or they lose their juice. Authentication tradition leave pits in, but we recommend pitting for ease of eating!',
+        ingredients: {
+            "Grocery List": [
+                "1 kg Mountain Cherries (pitted)",
+                "1/2 cup Sugar",
+                "3 Eggs",
+                "1 1/4 cups Milk",
+                "1 tsp Vanilla Extract",
+                "1/2 cup All-Purpose Flour"
+            ]
+        },
+        instructions: [
+            { text: "Preheat oven to 350°F (175°C). Butter a baking dish." },
+            { text: "Whisk eggs and sugar until pale. Add flour, milk, and vanilla." },
+            { text: "Arrange cherries in the dish. Pour batter over them." },
+            { text: "Bake for 35-40 minutes until golden and puffed." }
+        ]
+    },
+    {
+        id: 'plum-torte-08',
+        title: 'Legendary Plum Torte',
+        fruitType: 'Plum',
+        chef: 'NYT Cooking',
+        description: 'The most requested recipe in New York Times history. Halved plums bake into the buttery cake, turning into jammy pockets of sweet-tart perfection.',
+        image: '/images/recipes/plum_torte.png',
+        prepTime: '20 mins',
+        cookTime: '45 mins',
+        yields: '8 Servings',
+        calories: '290 kcal',
+        difficulty: 'Easy',
+        videoUrl: 'https://youtu.be/example2',
+        secret: 'The batter is very stiff—don’t worry! It rises up around the plums as they sink, creating the signature dimpled look.',
+        ingredients: {
+            "Grocery List": [
+                "1 cup Sugar",
+                "1/2 cup Unsalted Butter (softened)",
+                "1 cup Flour",
+                "1 tsp Baking Powder",
+                "2 Eggs",
+                "12 Purple Plums (halved, pitted)"
+            ]
+        },
+        instructions: [
+            { text: "Cream butter and sugar. Add eggs, then dry ingredients." },
+            { text: "Spread stiff batter into springform pan." },
+            { text: "Place plum halves skin-side up on top." },
+            { text: "Bake at 350°F (175°C) for 45-50 mins." }
+        ]
     }
 ];
