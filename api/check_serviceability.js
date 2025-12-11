@@ -27,12 +27,19 @@ export default async function handler(req, res) {
 
         // Response format: { "delivery_codes": [ { "postal_code": "110001", ... } ] }
         const codes = serviceData.delivery_codes || [];
-        const pinData = codes.find(c => c.postal_code.toString() === pincode.toString());
+
+        // Since we filtered by specific pincode, the first result should be efficient.
+        // We try to find exact match, or fallback to first item if it exists.
+        let pinData = codes.find(c => c.postal_code == pincode);
+
+        if (!pinData && codes.length > 0) {
+            pinData = codes[0]; // Fallback
+        }
 
         if (!pinData) {
             return res.status(200).json({
                 is_serviceable: false,
-                message: `Pincode ${pincode} not serviceable (Not found in Delhivery DB)`
+                message: `Pincode ${pincode} not serviceable (Not found in Delhivery DB). Debug: Count ${codes.length}`
             });
         }
 
