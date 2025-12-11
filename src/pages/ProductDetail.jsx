@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useProduct } from '../context/ProductContext';
 import { useCart } from '../context/CartContext';
 import { useInventory } from '../context/InventoryContext';
+import { useAuth } from '../context/AuthContext';
 import ProductImage from '../components/ProductImage';
 import VarietySelector from '../components/VarietySelector';
 import './ProductDetail.css';
@@ -13,6 +14,7 @@ const ProductDetail = () => {
     const { getProductById, getVarietiesByProductId, loading } = useProduct();
     const { addToCart } = useCart();
     const { isInStock, getStock, settings, inventory } = useInventory();
+    const { user } = useAuth(); // Get user
 
     const [product, setProduct] = useState(null);
     const [varieties, setVarieties] = useState([]);
@@ -38,6 +40,12 @@ const ProductDetail = () => {
     if (loading || !product) return <div className="loading">Loading...</div>;
 
     const handleAddToCart = async () => {
+        if (!user) {
+            alert("Please login to add items to the cart");
+            navigate('/login');
+            return;
+        }
+
         if (!selectedVariety) return;
         const success = await addToCart(product, selectedVariety, selectedSize, quantity, inventory);
         if (success) {
