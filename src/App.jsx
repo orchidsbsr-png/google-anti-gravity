@@ -6,7 +6,6 @@ import { InventoryProvider } from './context/InventoryContext'
 import { AuthProvider } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
 import BottomNav from './components/BottomNav'
-import AIChat from './components/AIChat'
 import ProtectedRoute from './components/ProtectedRoute'
 import Home from './pages/Home'
 import Search from './pages/Search'
@@ -79,7 +78,6 @@ function App() {
                                             } />
                                         </Routes>
                                         <BottomNav />
-                                        <AIChat />
                                     </div>
                                 </Router>
                             </AddressProvider>
