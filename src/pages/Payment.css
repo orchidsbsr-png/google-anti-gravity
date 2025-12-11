@@ -59,8 +59,10 @@
 }
 
 .address-card.selected {
-    /* In the design, the address card doesn't look explicitly 'selected' with a border, 
-       but we keep the logic. The design shows just one address. */
+    border: 2px solid #556b2f;
+    /* Dark olive border */
+    background: #fdfefc;
+    box-shadow: 0 4px 12px rgba(85, 107, 47, 0.15);
 }
 
 .address-header {
