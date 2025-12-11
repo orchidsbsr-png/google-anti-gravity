@@ -85,9 +85,9 @@ async function handleShipmentCreation(orderId, amount) {
             "format": "json",
             "data": JSON.stringify({
                 "pickup_location": {
-                    "name": "FarmFresh_Warehouse", // Must be registered
-                    "add": "Himachal Pradesh, India",
-                    "pin": "171001" // Example, user should update
+                    "name": process.env.PICKUP_NAME || "FarmFresh_Warehouse", // Must match registered warehouse name
+                    "add": process.env.PICKUP_ADDRESS || "Himachal Pradesh, India",
+                    "pin": process.env.PICKUP_PINCODE || "171001"
                 },
                 "shipments": [{
                     "waybill": "", // Empty for auto-gen
