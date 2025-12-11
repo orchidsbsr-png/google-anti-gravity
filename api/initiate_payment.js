@@ -11,8 +11,9 @@ export default async function handler(req, res) {
         const transactionId = clientTxnId || "TXN" + Date.now();
 
         // 1. Credentials (Alternate Sandbox)
-        const MERCHANT_ID = "PGTESTPAYUAT86";
-        const SALT_KEY = "96434309-7796-489d-8924-ab56988a6076";
+        // 1. Credentials (Alternate Sandbox)
+        const MERCHANT_ID = process.env.PHONEPE_MERCHANT_ID;
+        const SALT_KEY = process.env.PHONEPE_SALT_KEY;
         const SALT_INDEX = 1;
         const API_ENDPOINT = "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay";
 
