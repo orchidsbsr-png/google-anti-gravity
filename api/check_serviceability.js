@@ -25,21 +25,29 @@ export default async function handler(req, res) {
 
         const serviceData = await serviceResponse.json();
 
-        // Response format: { "delivery_codes": [ { "postal_code": "110001", ... } ] }
+        // Response format is subtle:
+        // { "delivery_codes": [ { "postal_code": { "pin": 171206, "pre_paid": "Y", ... } } ] }
+        // The API returns an item where the key is 'postal_code' (literal string) OR sometimes the key IS the pincode itself.
+        // My debug showed keys: ["postal_code"]. value type: object. keys of value: ["max_weight", "city", "cod", "pre_paid"...]
+
         const codes = serviceData.delivery_codes || [];
 
-        // Since we filtered by specific pincode, the first result should be efficient.
-        // We try to find exact match, or fallback to first item if it exists.
-        let pinData = codes.find(c => c.postal_code == pincode);
-
-        if (!pinData && codes.length > 0) {
-            pinData = codes[0]; // Fallback
-        }
-
-        if (!pinData) {
+        if (codes.length === 0) {
             return res.status(200).json({
                 is_serviceable: false,
-                message: `Pincode ${pincode} not serviceable (Not found in Delhivery DB). Debug: Count ${codes.length}`
+                message: `Pincode ${pincode} not found in Delhivery DB.`
+            });
+        }
+
+        // Access the first item
+        const firstItem = codes[0];
+        // Based on debug, the data is inside the 'postal_code' property of this item.
+        const details = firstItem.postal_code;
+
+        if (!details) {
+            return res.status(200).json({
+                is_serviceable: false,
+                message: "Invalid response structure from Delhivery API (Missing 'postal_code' key)"
             });
         }
 
@@ -47,21 +55,18 @@ export default async function handler(req, res) {
         // API returns "Y" or "N"
         // Frontend sends "COD" or "Prepaid"
         const isCod = payment_mode === 'COD';
-        const supported = isCod ? (pinData.cod === 'Y') : (pinData.pre_paid === 'Y');
+        const supported = isCod ? (details.cod === 'Y') : (details.pre_paid === 'Y');
 
         if (!supported) {
             return res.status(200).json({
                 is_serviceable: false,
                 message: `${payment_mode} not available for ${pincode}. Try Online Payment.`,
-                debug: pinData
+                debug: details
             });
         }
 
         // 2. Calculate Shipping Cost
-        // Since Rate Calculator API is complex to integrate without correct endpoint/access,
-        // we use a logic that approximates the "Surface" rate (approx 300 INR for 1kg from HP to Delhi).
-        // Formula: Base 200 + (Weight * 100)
-
+        // Formula: Base 190 + (Weight * 90)
         const weightInKg = parseFloat(weight);
         const shipping_cost = 190 + (Math.ceil(weightInKg) * 90);
 
@@ -69,9 +74,9 @@ export default async function handler(req, res) {
             is_serviceable: true,
             shipping_cost: shipping_cost,
             estimated_delivery_date: "3-5 Business Days",
-            district: pinData.district,
-            state: pinData.state_code,
-            debug_mode: payment_mode // Return what we received to verify
+            district: details.district,
+            state: details.state_code,
+            debug_mode: payment_mode
         });
 
     } catch (error) {
