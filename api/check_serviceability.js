@@ -65,10 +65,42 @@ export default async function handler(req, res) {
             });
         }
 
-        // 2. Calculate Shipping Cost
-        // Formula: Base 190 + (Weight * 90)
+        // 2. Calculate Shipping Cost (Zone-based Estimation)
+        // Origin: Himachal Pradesh (HP)
+        // Rate Card Approximation:
+        // Zone A (Intra-State): HP
+        // Zone B (North Region): DL, PB, HR, CH, JK, UK (Uttarakhand)
+        // Zone C (Metros/Rest of India): MH, KA, TN, WB, GJ, RJ, etc.
+
         const weightInKg = parseFloat(weight);
-        const shipping_cost = 190 + (Math.ceil(weightInKg) * 90);
+        const chargeableWeight = Math.ceil(weightInKg); // Charge per 1kg slab
+        const destState = details.state_code;
+
+        let baseRate = 0;
+        let perKgRate = 0;
+
+        // Origin State
+        const ORIGIN_STATE = 'HP';
+
+        if (destState === ORIGIN_STATE) {
+            // Local (Intra-State)
+            baseRate = 60;
+            perKgRate = 50;
+        } else if (['DL', 'PB', 'HR', 'CH', 'JK', 'UK'].includes(destState)) {
+            // Regional (North)
+            baseRate = 100;
+            perKgRate = 70;
+        } else if (['MH', 'KA', 'TN', 'WB', 'GJ', 'TG', 'AP'].includes(destState)) {
+            // National (Metros/South/West)
+            baseRate = 140;
+            perKgRate = 100;
+        } else {
+            // Rest of India (North East/Remote)
+            baseRate = 160;
+            perKgRate = 120;
+        }
+
+        const shipping_cost = baseRate + (chargeableWeight * perKgRate);
 
         return res.status(200).json({
             is_serviceable: true,
