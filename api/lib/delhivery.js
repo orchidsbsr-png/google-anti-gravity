@@ -6,10 +6,6 @@ const BASEROW_TOKEN = process.env.BASEROW_API_TOKEN;
 const BASEROW_TABLE_ID = process.env.BASEROW_TABLE_ID;
 const DELHIVERY_TOKEN = process.env.DELHIVERY_API_TOKEN;
 
-if (!BASEROW_TABLE_ID) throw new Error("Server Config Error: BASEROW_TABLE_ID is missing.");
-if (!BASEROW_TOKEN) throw new Error("Server Config Error: BASEROW_API_TOKEN is missing.");
-if (!DELHIVERY_TOKEN) throw new Error("Server Config Error: DELHIVERY_API_TOKEN is missing.");
-
 // Production URLs
 const DELHIVERY_CREATE_URL = "https://track.delhivery.com/api/cmu/create.json";
 const DELHIVERY_FETCH_WAYBILL_URL = "https://track.delhivery.com/waybill/api/fetch/json/";
@@ -25,6 +21,10 @@ async function fetchWaybill() {
 }
 
 export async function createDelhiveryShipment(orderId) {
+    if (!BASEROW_TABLE_ID) throw new Error("Server Config Error: BASEROW_TABLE_ID is missing in Vercel Env Vars.");
+    if (!BASEROW_TOKEN) throw new Error("Server Config Error: BASEROW_API_TOKEN is missing in Vercel Env Vars.");
+    if (!DELHIVERY_TOKEN) throw new Error("Server Config Error: DELHIVERY_API_TOKEN is missing in Vercel Env Vars.");
+
     console.log(`Starting Shipment Creation for Order: ${orderId}`);
 
     // Normalize Order ID to Short Format (8 chars uppercase) to match Baserow/Admin
