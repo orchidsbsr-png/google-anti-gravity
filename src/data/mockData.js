@@ -97,9 +97,6 @@ export const VARIETIES = [
     {
         id: 5,
         product_id: 5,
-    {
-        id: 5,
-        product_id: 5,
         name: 'Nashpati Pear',
         price_per_kg: 149,
         description: 'The Indian Pear, known for its crunch and refreshing quality.',
