@@ -1,6 +1,6 @@
 import crypto from 'crypto';
-import { createDelhiveryShipment } from './lib/delhivery.js';
-import { db } from './lib/firebase_admin.js';
+import { createDelhiveryShipment } from './_lib/delhivery.js';
+import { db } from './_lib/firebase_admin.js';
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {

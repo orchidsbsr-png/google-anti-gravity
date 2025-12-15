@@ -1,4 +1,4 @@
-import { createDelhiveryShipment } from './lib/delhivery.js';
+import { createDelhiveryShipment } from './_lib/delhivery.js';
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
