@@ -94,11 +94,20 @@ const Admin = () => {
 
     const handleStatusUpdate = async (orderId, newStatus) => {
         try {
+            // 1. Update Firestore
             const orderRef = doc(db, 'orders', orderId);
             await updateDoc(orderRef, {
                 status: newStatus,
                 updated_at: new Date().toISOString()
             });
+
+            // 2. Sync to Google Sheet (Fire and Forget)
+            fetch('/api/update_sheet_status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ orderId, status: newStatus })
+            }).catch(err => console.error("Sheet Status Sync Failed:", err));
+
         } catch (error) {
             console.error("Error updating status:", error);
             alert("Failed to update status");
