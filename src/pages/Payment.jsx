@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAddress } from '../context/AddressContext';
@@ -21,59 +21,13 @@ const Payment = () => {
     const [isProcessing, setIsProcessing] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState('online');
 
-    // Shipping State
-    const [shippingCost, setShippingCost] = useState(50); // Fallback
-    const [isServiceable, setIsServiceable] = useState(true);
-    const [serviceError, setServiceError] = useState('');
-    const [checkingServiceability, setCheckingServiceability] = useState(false);
+    // Fixed Shipping Cost
+    const shippingCost = 50;
 
     const subtotal = getCartTotal();
     const total = subtotal + shippingCost;
 
-    // Effect to check serviceability when address changes
-    useEffect(() => {
-        const checkShipping = async () => {
-            const address = addresses.find(a => a.id === selectedAddressId);
-            if (!address || !address.pincode) return;
-
-            setCheckingServiceability(true);
-            setServiceError('');
-            setIsServiceable(true);
-
-            try {
-                // Determine cart weight (approx 1kg per item if not specified)
-                const totalWeight = cartItems.reduce((acc, item) => acc + (parseFloat(item.quantityKg) || 0.5) * item.quantity, 0);
-
-                const query = new URLSearchParams({
-                    pincode: address.pincode,
-                    weight: totalWeight,
-                    payment_mode: paymentMethod === 'cod' ? 'COD' : 'Prepaid',
-                    cart_value: subtotal
-                });
-
-                const res = await fetch(`/api/check_serviceability?${query}`);
-                const data = await res.json();
-
-                if (data.is_serviceable) {
-                    setShippingCost(data.shipping_cost);
-                    setIsServiceable(true);
-                } else {
-                    setIsServiceable(false);
-                    setServiceError(data.message || 'Location not serviceable');
-                    setShippingCost(0);
-                }
-            } catch (err) {
-                console.error("Serviceability Check Failed:", err);
-                // Fallback to standard rate if API fails
-            } finally {
-                setCheckingServiceability(false);
-            }
-        };
-
-        if (selectedAddressId) {
-            checkShipping();
-        }
-    }, [selectedAddressId, paymentMethod, subtotal, cartItems, addresses]);
+    // Removed useEffect for serviceability check completely
 
     const handleAddressSave = (newAddress) => {
         addAddress(newAddress);
@@ -166,7 +120,7 @@ const Payment = () => {
                                     razorpay_order_id: response.razorpay_order_id,
                                     razorpay_payment_id: response.razorpay_payment_id,
                                     razorpay_signature: response.razorpay_signature,
-                                    orderId: docRef.id // Passing Firestore ID for shipment creation
+                                    orderId: docRef.id
                                 })
                             });
 
@@ -324,20 +278,18 @@ const Payment = () => {
             <div className="payment-footer">
                 <div className="total-row">
                     <span>Shipping</span>
-                    <span>{checkingServiceability ? '...' : `₹${shippingCost}`}</span>
+                    <span>₹{shippingCost}</span>
                 </div>
                 <div className="total-row">
                     <span>Total to Pay</span>
                     <span>₹{total}</span>
                 </div>
-                {serviceError && <p className="error-text" style={{ color: 'red', textAlign: 'right' }}>{serviceError}</p>}
                 <button
                     className="pay-btn"
                     onClick={handlePlaceOrder}
-                    disabled={isProcessing || !selectedAddressId || !isServiceable || checkingServiceability}
-                    style={{ opacity: (!isServiceable || checkingServiceability) ? 0.5 : 1 }}
+                    disabled={isProcessing || !selectedAddressId}
                 >
-                    {isProcessing ? 'Processing...' : checkingServiceability ? 'Calculating...' : `Pay ₹${total}`}
+                    {isProcessing ? 'Processing...' : `Pay ₹${total}`}
                 </button>
             </div>
         </div>
