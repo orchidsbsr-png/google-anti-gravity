@@ -34,7 +34,10 @@ export async function createDelhiveryShipment(orderId) {
         headers: { 'Authorization': `Token ${BASEROW_TOKEN}` }
     });
 
-    if (!searchRes.ok) throw new Error("Failed to fetch order from DB");
+    if (!searchRes.ok) {
+        const errText = await searchRes.text();
+        throw new Error(`Baserow Fetch Failed (${searchRes.status}): ${errText}`);
+    }
 
     const searchData = await searchRes.json();
     if (searchData.count === 0) {
