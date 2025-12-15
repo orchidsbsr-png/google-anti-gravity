@@ -52,13 +52,9 @@ export default async function handler(req, res) {
             awb_number: ""
         };
 
-        // 1. Check if exists (SheetDB Search)
-        const searchRes = await fetch(`${SHEETDB_URL}/search?id=${payload.id}`);
-        const searchData = await searchRes.json();
+        // OPTIMIZATION: Blind Write (1 Call) - Skip Search check to save API quota.
+        // Risk: Duplicates if called multiple times.
 
-        if (Array.isArray(searchData) && searchData.length > 0) {
-            return res.status(200).json({ success: true, message: 'Order already in Sheet', id: payload.id });
-        }
 
         // 2. Create if not exists
         const createRes = await fetch(SHEETDB_URL, {
