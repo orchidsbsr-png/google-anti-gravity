@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAddress } from '../context/AddressContext';
@@ -21,50 +21,11 @@ const Payment = () => {
     const [isProcessing, setIsProcessing] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState('online');
 
-    // Dynamic Shipping State
-    const [shippingCost, setShippingCost] = useState(0);
-    const [isServiceable, setIsServiceable] = useState(false);
-    const [isChecking, setIsChecking] = useState(false);
-    const [serviceError, setServiceError] = useState('');
+    // Fixed Shipping Cost - Fallback mode
+    const shippingCost = 50;
 
     const subtotal = getCartTotal();
     const total = subtotal + shippingCost;
-
-    // Effect to check serviceability when address changes
-    useEffect(() => {
-        const checkShipping = async () => {
-            const address = addresses.find(a => a.id === selectedAddressId);
-            if (!address || !address.pincode) return;
-
-            setIsChecking(true);
-            setServiceError('');
-            setIsServiceable(false);
-            setShippingCost(0);
-
-            try {
-                // Using the new Delhivery endpoint
-                const res = await fetch(`/api/check_serviceability?pincode=${address.pincode}`);
-                const data = await res.json();
-
-                if (data.is_serviceable) {
-                    setShippingCost(data.shipping_cost);
-                    setIsServiceable(true);
-                } else {
-                    setIsServiceable(false);
-                    setServiceError('Location not serviceable by Delhivery');
-                }
-            } catch (err) {
-                console.error("Serviceability Check Failed:", err);
-                setServiceError('Could not verify serviceability');
-            } finally {
-                setIsChecking(false);
-            }
-        };
-
-        if (selectedAddressId) {
-            checkShipping();
-        }
-    }, [selectedAddressId]);
 
     const handleAddressSave = (newAddress) => {
         addAddress(newAddress);
@@ -315,21 +276,18 @@ const Payment = () => {
             <div className="payment-footer">
                 <div className="total-row">
                     <span>Shipping</span>
-                    <span>{isChecking ? '...' : isServiceable ? `₹${shippingCost}` : '-'}</span>
+                    <span>₹{shippingCost}</span>
                 </div>
                 <div className="total-row">
                     <span>Total to Pay</span>
-                    <span>{isChecking ? '...' : isServiceable ? `₹${total}` : '-'}</span>
+                    <span>₹{total}</span>
                 </div>
-                {serviceError && <p className="error-text" style={{ color: 'red', textAlign: 'right', fontSize: '0.9rem' }}>{serviceError}</p>}
-
                 <button
                     className="pay-btn"
                     onClick={handlePlaceOrder}
-                    disabled={isProcessing || !selectedAddressId || !isServiceable || isChecking}
-                    style={{ opacity: (!isServiceable || isChecking) ? 0.5 : 1 }}
+                    disabled={isProcessing || !selectedAddressId}
                 >
-                    {isProcessing ? 'Processing...' : isChecking ? 'Checking location...' : `Pay ₹${total}`}
+                    {isProcessing ? 'Processing...' : `Pay ₹${total}`}
                 </button>
             </div>
         </div>
