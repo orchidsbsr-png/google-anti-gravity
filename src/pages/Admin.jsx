@@ -467,14 +467,14 @@ const Admin = () => {
                                             <button
                                                 onClick={async () => {
                                                     try {
-                                                        const res = await fetch('/api/sync_to_baserow', {
+                                                        const res = await fetch('/api/sync_to_sheets', {
                                                             method: 'POST',
                                                             headers: { 'Content-Type': 'application/json' },
                                                             body: JSON.stringify({ order: order })
                                                         });
                                                         const data = await res.json();
                                                         if (!res.ok) throw new Error(data.error);
-                                                        alert("✅ Synced to Baserow Successfully!");
+                                                        alert("✅ Synced to Google Sheet Successfully!");
                                                     } catch (e) {
                                                         alert(`Sync Failed: ${e.message}`);
                                                     }
@@ -483,14 +483,14 @@ const Admin = () => {
                                                     flex: 1,
                                                     padding: '0.6rem',
                                                     background: '#fff',
-                                                    border: '1px solid #3f51b5',
-                                                    color: '#3f51b5',
+                                                    border: '1px solid #0f9d58', // Google Green
+                                                    color: '#0f9d58',
                                                     borderRadius: '6px',
                                                     cursor: 'pointer',
                                                     fontWeight: 'bold'
                                                 }}
                                             >
-                                                ☁️ Push to DB
+                                                ☁️ Push to Google Sheet
                                             </button>
 
                                             <button
