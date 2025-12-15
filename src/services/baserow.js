@@ -33,8 +33,11 @@ export const saveOrderToBaserow = async (order) => {
         const customerDetails = `${customerName} - ${addressStr}`;
 
         // Prepare Payload
+        // Sync Order ID format with Admin/Email (First 8 chars, uppercase)
+        const shortOrderId = order.id ? order.id.slice(0, 8).toUpperCase() : order.id;
+
         const payload = {
-            "Order ID": order.id,
+            "Order ID": shortOrderId,
             "Customer Details": customerDetails,
             "Order Status": "Pending", // Matches Single Select "Pending"
             "Items": itemsList,

@@ -23,9 +23,13 @@ async function fetchWaybill() {
 export async function createDelhiveryShipment(orderId) {
     console.log(`Starting Shipment Creation for Order: ${orderId}`);
 
+    // Normalize Order ID to Short Format (8 chars uppercase) to match Baserow/Admin
+    const startOrderIdRaw = String(orderId);
+    const shortOrderId = startOrderIdRaw.length > 8 ? startOrderIdRaw.slice(0, 8).toUpperCase() : startOrderIdRaw.toUpperCase();
+
     // 1. Fetch Order from Baserow
-    // We search by Order ID (which is stored in a text field, hopefully unique)
-    const searchUrl = `https://api.baserow.io/api/database/rows/table/${BASEROW_TABLE_ID}/?user_field_names=true&search=${orderId}`;
+    // We search by Short Order ID
+    const searchUrl = `https://api.baserow.io/api/database/rows/table/${BASEROW_TABLE_ID}/?user_field_names=true&search=${shortOrderId}`;
     const searchRes = await fetch(searchUrl, {
         headers: { 'Authorization': `Token ${BASEROW_TOKEN}` }
     });
@@ -34,7 +38,7 @@ export async function createDelhiveryShipment(orderId) {
 
     const searchData = await searchRes.json();
     if (searchData.count === 0) {
-        throw new Error(`Order ${orderId} not found in Baserow`);
+        throw new Error(`Order ${shortOrderId} not found in Baserow`);
     }
 
     const orderRow = searchData.results[0];
@@ -42,7 +46,7 @@ export async function createDelhiveryShipment(orderId) {
 
     // Check if already shipped to avoid duplicates (optional but good safety)
     if (orderRow["AWB Number"] && orderRow["AWB Number"].length > 5) {
-        console.log(`Order ${orderId} already has AWB: ${orderRow["AWB Number"]}`);
+        console.log(`Order ${shortOrderId} already has AWB: ${orderRow["AWB Number"]}`);
         return { success: true, awb: orderRow["AWB Number"], message: "Already shipped" };
     }
 
@@ -91,7 +95,7 @@ export async function createDelhiveryShipment(orderId) {
                 "state": orderRow["State"] || "Delhi",
                 "country": "India",
                 "phone": phone,
-                "order": orderId,
+                "order": shortOrderId,
                 "payment_mode": "Prepaid",
                 "products_desc": orderRow["Items"] || "Farm Fresh Apples",
                 "shipping_mode": "Surface",
