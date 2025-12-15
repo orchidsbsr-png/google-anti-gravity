@@ -7,7 +7,7 @@ import { db } from '../firebase';
 import { collection, addDoc, updateDoc, doc } from 'firebase/firestore';
 import AddressForm from '../components/AddressForm';
 import { sendOrderConfirmationEmail } from '../services/emailService';
-import { saveOrderToBaserow } from '../services/baserow';
+import { saveOrderToSheet } from '../services/sheetService';
 import './Payment.css';
 
 const Payment = () => {
