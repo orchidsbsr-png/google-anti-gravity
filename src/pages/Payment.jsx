@@ -94,6 +94,11 @@ const Payment = () => {
             return;
         }
 
+        // Recalculate total to ensure it's fresh
+        const currentSubtotal = getCartTotal();
+        const currentShipping = Number(shippingCost) || 0; // Ensure number
+        const currentTotal = currentSubtotal + currentShipping;
+
         setIsProcessing(true);
 
         const selectedAddress = addresses.find(a => a.id === selectedAddressId);
@@ -109,7 +114,7 @@ const Payment = () => {
                     address: selectedAddress
                 },
                 cart_items: cartItems,
-                total_price: total,
+                total_price: currentTotal, // Use recalculated total
                 status: 'pending',
                 payment_status: 'pending',
                 created_at: new Date().toISOString(),
@@ -136,9 +141,9 @@ const Payment = () => {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        amount: total,
+                        amount: currentTotal, // Use recalculated total
                         mobile: selectedAddress.phone,
-                        transactionId: docRef.id // Passing docRef.id as receipt
+                        transactionId: docRef.id
                     })
                 });
 
