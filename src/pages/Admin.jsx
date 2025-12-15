@@ -22,6 +22,7 @@ const Admin = () => {
     const [expandedOrderId, setExpandedOrderId] = useState(null);
 
     const [orderStatusFilter, setOrderStatusFilter] = useState('All');
+    const [pushedOrderIds, setPushedOrderIds] = useState(new Set());
 
     useEffect(() => {
         if (sessionStorage.getItem('admin_auth') === 'true') {
@@ -465,6 +466,7 @@ const Admin = () => {
 
                                         <div style={{ display: 'flex', gap: '0.5rem' }}>
                                             <button
+                                                disabled={pushedOrderIds.has(order.id)}
                                                 onClick={async () => {
                                                     try {
                                                         const res = await fetch('/api/sync_to_sheets', {
@@ -474,6 +476,9 @@ const Admin = () => {
                                                         });
                                                         const data = await res.json();
                                                         if (!res.ok) throw new Error(data.error);
+
+                                                        // Mark as pushed locally
+                                                        setPushedOrderIds(prev => new Set(prev).add(order.id));
                                                         alert("✅ Synced to Google Sheet Successfully!");
                                                     } catch (e) {
                                                         alert(`Sync Failed: ${e.message}`);
@@ -482,15 +487,16 @@ const Admin = () => {
                                                 style={{
                                                     flex: 1,
                                                     padding: '0.6rem',
-                                                    background: '#fff',
-                                                    border: '1px solid #0f9d58', // Google Green
-                                                    color: '#0f9d58',
+                                                    background: pushedOrderIds.has(order.id) ? '#e0e0e0' : '#fff',
+                                                    border: pushedOrderIds.has(order.id) ? '1px solid #999' : '1px solid #0f9d58',
+                                                    color: pushedOrderIds.has(order.id) ? '#666' : '#0f9d58',
                                                     borderRadius: '6px',
-                                                    cursor: 'pointer',
-                                                    fontWeight: 'bold'
+                                                    cursor: pushedOrderIds.has(order.id) ? 'not-allowed' : 'pointer',
+                                                    fontWeight: 'bold',
+                                                    opacity: pushedOrderIds.has(order.id) ? 0.7 : 1
                                                 }}
                                             >
-                                                ☁️ Push to Google Sheet
+                                                {pushedOrderIds.has(order.id) ? "✅ Pushed!" : "☁️ Push to Google Sheet"}
                                             </button>
 
                                             <button
