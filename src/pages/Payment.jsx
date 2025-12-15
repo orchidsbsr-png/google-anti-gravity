@@ -42,8 +42,15 @@ const Payment = () => {
             setShippingCost(0);
 
             try {
-                // Call the new serviceability endpoint
-                const res = await fetch(`/api/check_serviceability?pincode=${address.pincode}`);
+                // Calculate Total Weight
+                const totalWeightGrams = cartItems.reduce((acc, item) => {
+                    const weightKg = item.quantityKg || 5; // Default to 5kg if missing
+                    const qty = item.quantity || 1;
+                    return acc + (weightKg * qty * 1000);
+                }, 0);
+
+                // Call the new serviceability endpoint with weight
+                const res = await fetch(`/api/check_serviceability?pincode=${address.pincode}&weight=${totalWeightGrams}`);
                 const data = await res.json();
 
                 if (data.is_serviceable) {
