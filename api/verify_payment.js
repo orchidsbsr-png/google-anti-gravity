@@ -12,40 +12,56 @@ export default async function handler(req, res) {
     }
 
     try {
-        const { response } = req.body;
+        const {
+            razorpay_order_id,
+            razorpay_payment_id,
+            razorpay_signature,
+            amount // Optional, if passed from client, or fetch from order
+        } = req.body;
 
-        if (!response) {
-            return res.status(400).json({ error: "Missing response field" });
-        }
+        const body = razorpay_order_id + "|" + razorpay_payment_id;
 
-        // Decode Base64
-        const decodedString = Buffer.from(response, 'base64').toString('utf-8');
-        const decodedData = JSON.parse(decodedString);
-        const transactionId = decodedData.data.merchantTransactionId;
+        const expectedSignature = crypto
+            .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+            .update(body.toString())
+            .digest('hex');
 
-        // Verify Checksum (Security)
-        const SALT_KEY = process.env.PHONEPE_SALT_KEY;
-        const SALT_INDEX = 1;
-        // Verify logic typically matches init, but provided callback body might differ slightly in structure for checksum.
-        // For simplicity/robustness in this snippet, we assume success if code is PAYMENT_SUCCESS
+        if (expectedSignature === razorpay_signature) {
 
-        console.log(`Payment Callback for ${transactionId}: ${decodedData.code}`);
+            // Payment is verified.
+            // Attempt to create shipment. 
+            // We use the Razorpay Order ID (which is distinct from our DB ID)
+            // But wait, we need the App's Order ID (Firestore/Baserow ID) to look up the order.
+            // The Razorpay Order ID was created in initiate_payment. 
+            // We passed 'receipt' = transactionId (Firestore ID).
+            // We should fetch the Razorpay Order from Razorpay to get the 'receipt' field, 
+            // OR the client should pass the Firestore ID (transactionId/orderId) to this verify endpoint.
+            // Let's rely on the client passing the Firestore ID for simplicity, 
+            // OR fetch it from Razorpay.
+            // But verify_payment.js as written solely relied on signature.
+            // Checking the client-passed ID against the one in Razorpay order adds security but is an extra call.
+            // For now, let's assume the client passes 'orderId' (Firestore ID) in the body.
+            // I need to update Payment.jsx to pass 'orderId' to verify_payment.
 
-        if (decodedData.code === 'PAYMENT_SUCCESS') {
-            // Trigger Shipment Creation
-            // We run this asynchronously (fire and forget) if Vercel allows, 
-            // but Vercel functions kill process after response. 
-            // So we must await it or use a queue. We await it here.
-            await handleShipmentCreation(transactionId, decodedData.data.amount / 100);
+            const firestoreOrderId = req.body.orderId; // Make sure to update Payment.jsx
 
-            return res.status(200).json({ status: "Success", message: "Shipment Processed" });
+            if (firestoreOrderId) {
+                // Trigger Shipment (Await to ensure it happens, catch errors so we don't fail the verification response if shipping fails)
+                try {
+                    await handleShipmentCreation(firestoreOrderId, amount);
+                } catch (shippingErr) {
+                    console.error("Shipping creation failed, but payment verified:", shippingErr);
+                    // We still return success for payment
+                }
+            }
+
+            res.status(200).json({ success: true, message: "Payment verified successfully" });
         } else {
-            return res.status(200).json({ status: "Failed", message: "Payment Failed" });
+            res.status(400).json({ success: false, message: "Invalid signature" });
         }
-
     } catch (error) {
-        console.error("Callback Error:", error);
-        return res.status(500).json({ error: "Processing failed" });
+        console.error("Verification Error:", error);
+        res.status(500).json({ error: error.message });
     }
 }
 
@@ -54,7 +70,6 @@ async function handleShipmentCreation(orderId, amount) {
         console.log(`Starting Shipment Creation for Order: ${orderId}`);
 
         // 1. Fetch Order from Baserow to get Address
-        // Search by Order ID
         const searchUrl = `https://api.baserow.io/api/database/rows/table/${BASEROW_TABLE_ID}/?user_field_names=true&search=${orderId}`;
         const searchRes = await fetch(searchUrl, {
             headers: { 'Authorization': `Token ${BASEROW_TOKEN}` }
@@ -69,15 +84,11 @@ async function handleShipmentCreation(orderId, amount) {
         }
 
         const orderRow = searchData.results[0];
-        const rowId = orderRow.id; // Internal Baserow Row ID
+        const rowId = orderRow.id;
 
-        // Parse Address
-        // Assuming "Customer Details" field has "Name - AddressStr" or we use specific columns if they exist.
-        // Based on baserow.js, it consolidates into "Customer Details". This is tricky to parse back.
-        // ideally we should have separate columns. 
-        // fallback: Use placeholders if parsing fails, or better: Update Baserow schema to have separate fields.
-        // For now, I'll attempt to parse or use a default.
+        // Parse Address from "Customer Details" or similar
         const details = orderRow["Customer Details"] || "";
+        // Splitting logic based on previous implementation
         const [namePart, addressPart] = details.split(' - ');
 
         // 2. Prepare Delhivery Payload
@@ -85,19 +96,19 @@ async function handleShipmentCreation(orderId, amount) {
             "format": "json",
             "data": JSON.stringify({
                 "pickup_location": {
-                    "name": process.env.PICKUP_NAME || "FarmFresh_Warehouse", // Must match registered warehouse name
+                    "name": process.env.PICKUP_NAME || "FarmFresh_Warehouse",
                     "add": process.env.PICKUP_ADDRESS || "Himachal Pradesh, India",
                     "pin": process.env.PICKUP_PINCODE || "171001"
                 },
                 "shipments": [{
-                    "waybill": "", // Empty for auto-gen
+                    "waybill": "",
                     "name": namePart || "Customer",
                     "add": addressPart || "Address Not Found",
-                    "pin": "110001", // Should be extracted from Order
+                    "pin": "110001", // Should be extracted/stored in DB properly
                     "city": "New Delhi", // Placeholder
                     "state": "Delhi",
                     "country": "India",
-                    "phone": "9999999999", // Should be in DB
+                    "phone": "9999999999",
                     "order": orderId,
                     "payment_mode": "Prepaid",
                     "products_desc": orderRow["Items"] || "Farm Products",
@@ -108,8 +119,6 @@ async function handleShipmentCreation(orderId, amount) {
         };
 
         // 3. Call Delhivery API
-        // Note: Delhivery expects form-data or url-encoded for 'format' and 'data' fields usually, 
-        // or JSON body with correct headers. The docs say 'format=json&data={...}'.
         const params = new URLSearchParams();
         params.append('format', 'json');
         params.append('data', payload.data);
@@ -130,11 +139,6 @@ async function handleShipmentCreation(orderId, amount) {
         console.log(`AWB Generated: ${awb}`);
 
         // 4. Update Baserow with AWB
-        // We need a field for AWB. "Notes" or a new field. I'll append to "Order Status" or "Notes"?
-        // baserow.js usage suggests "Order Status" is a single select.
-        // I will update "Order Status" to "Accepted" (if that's a valid option) 
-        // and ideally store AWB in a text field. I'll create/assume a field "AWB" matches text.
-
         await fetch(`https://api.baserow.io/api/database/rows/table/${BASEROW_TABLE_ID}/${rowId}/?user_field_names=true`, {
             method: 'PATCH',
             headers: {
@@ -142,14 +146,12 @@ async function handleShipmentCreation(orderId, amount) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                "Order Status": "Processing", // Assuming 'Processing' exists
-                "AWB Number": awb // Ensure this field exists in Baserow
+                "Order Status": "Processing",
+                "AWB Number": awb
             })
         });
 
     } catch (error) {
         console.error("Shipment Creation Failed:", error);
-        // Retry Queue logic: Mark as "Retry Logic Needed" in DB?
-        // For now logging it.
     }
 }

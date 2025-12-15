@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAddress } from '../context/AddressContext';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase';
 import { collection, addDoc, updateDoc, doc } from 'firebase/firestore';
-// Removed: import { initiateCashfreePayment } from '../services/cashfree';
 import AddressForm from '../components/AddressForm';
 import { sendOrderConfirmationEmail } from '../services/emailService';
 import { saveOrderToBaserow } from '../services/baserow';
@@ -29,10 +28,10 @@ const Payment = () => {
     const [checkingServiceability, setCheckingServiceability] = useState(false);
 
     const subtotal = getCartTotal();
-    const total = subtotal + shippingCost; // Use dynamic shipping cost
+    const total = subtotal + shippingCost;
 
     // Effect to check serviceability when address changes
-    React.useEffect(() => {
+    useEffect(() => {
         const checkShipping = async () => {
             const address = addresses.find(a => a.id === selectedAddressId);
             if (!address || !address.pincode) return;
@@ -42,7 +41,7 @@ const Payment = () => {
             setIsServiceable(true);
 
             try {
-                // Determine cart weight (approx 1kg per item if not specified, or use item.quantityKg)
+                // Determine cart weight (approx 1kg per item if not specified)
                 const totalWeight = cartItems.reduce((acc, item) => acc + (parseFloat(item.quantityKg) || 0.5) * item.quantity, 0);
 
                 const query = new URLSearchParams({
@@ -65,8 +64,7 @@ const Payment = () => {
                 }
             } catch (err) {
                 console.error("Serviceability Check Failed:", err);
-                // Fallback to standard rate if API fails (optional, or block checkout)
-                // For now, we block or warn. 
+                // Fallback to standard rate if API fails
             } finally {
                 setCheckingServiceability(false);
             }
@@ -82,6 +80,15 @@ const Payment = () => {
         setShowAddressForm(false);
     };
 
+    const loadRazorpay = () => {
+        return new Promise((resolve) => {
+            const script = document.createElement('script');
+            script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+            script.onload = () => resolve(true);
+            script.onerror = () => resolve(false);
+            document.body.appendChild(script);
+        });
+    };
 
     const handlePlaceOrder = async () => {
         if (!selectedAddressId) {
@@ -117,35 +124,98 @@ const Payment = () => {
             // Save to Baserow
             await saveOrderToBaserow({ ...orderData, id: docRef.id });
 
-            // If online payment selected, initiate PhonePe (Standard Checkout)
             if (paymentMethod === 'online') {
-                try {
-                    const response = await fetch('/api/initiate_payment', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            amount: total,
-                            mobile: selectedAddress.phone,
-                            // We pass the Firestore ID so we can track it. 
-                            // The backend will use this (or generate one if we didn't send it).
-                            transactionId: docRef.id
-                        })
-                    });
+                const res = await loadRazorpay();
 
-                    const data = await response.json();
-
-                    if (data.success) {
-                        // Redirect to PhonePe
-                        window.location.href = data.url;
-                    } else {
-                        console.error("Payment Init Failed:", data);
-                        throw new Error(data.error || 'Payment initiation failed');
-                    }
-                } catch (err) {
-                    console.error('Payment Error:', err);
-                    alert(`Error: ${err.message}`);
+                if (!res) {
+                    alert('Razorpay SDK failed to load. Are you online?');
                     setIsProcessing(false);
+                    return;
                 }
+
+                // Initiate Payment
+                const response = await fetch('/api/initiate_payment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        amount: total,
+                        mobile: selectedAddress.phone,
+                        transactionId: docRef.id // Passing docRef.id as receipt
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Payment initiation failed');
+                }
+
+                const options = {
+                    key: data.key,
+                    amount: data.amount,
+                    currency: data.currency,
+                    name: "Fresh Farm Himachal",
+                    description: "Order Payment",
+                    order_id: data.id,
+                    handler: async function (response) {
+                        try {
+                            const verifyRes = await fetch('/api/verify_payment', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_signature: response.razorpay_signature,
+                                    orderId: docRef.id // Passing Firestore ID for shipment creation
+                                })
+                            });
+
+                            const verifyData = await verifyRes.json();
+
+                            if (verifyData.success) {
+                                // Payment Successful
+                                await updateDoc(doc(db, 'orders', docRef.id), {
+                                    status: 'confirmed',
+                                    payment_status: 'paid',
+                                    payment_details: {
+                                        razorpay_order_id: response.razorpay_order_id,
+                                        razorpay_payment_id: response.razorpay_payment_id
+                                    }
+                                });
+
+                                console.log('💳 Payment Verified. Order confirmed.');
+
+                                if (user?.email) {
+                                    sendOrderConfirmationEmail({ id: docRef.id, ...orderData }, user.email);
+                                }
+
+                                clearCart();
+                                navigate('/order-confirmation', { state: { orderId: docRef.id } });
+                            } else {
+                                alert("Payment verification failed. Please contact support.");
+                            }
+                        } catch (err) {
+                            console.error("Verification Error:", err);
+                            alert("Payment verification error.");
+                        }
+                    },
+                    prefill: {
+                        name: selectedAddress.name,
+                        email: user?.email || '',
+                        contact: selectedAddress.phone
+                    },
+                    theme: {
+                        color: "#3399cc"
+                    }
+                };
+
+                const paymentObject = new window.Razorpay(options);
+                paymentObject.on('payment.failed', function (response) {
+                    alert(response.error.description);
+                    setIsProcessing(false);
+                });
+                paymentObject.open();
+
             } else {
                 // COD - No payment needed
                 await updateDoc(doc(db, 'orders', docRef.id), {
@@ -153,9 +223,8 @@ const Payment = () => {
                     payment_status: 'cod'
                 });
 
-                console.log('💳 COD Order confirmed. User email:', user?.email);
+                console.log('💳 COD Order confirmed.');
 
-                // Send confirmation email
                 if (user?.email) {
                     sendOrderConfirmationEmail({ id: docRef.id, ...orderData }, user.email);
                 }
@@ -167,7 +236,7 @@ const Payment = () => {
 
         } catch (err) {
             console.error('Error placing order:', err);
-            alert('Failed to place order. Please try again.');
+            alert(`Failed to place order: ${err.message}`);
             setIsProcessing(false);
         }
     };
@@ -236,7 +305,7 @@ const Payment = () => {
                             onChange={() => setPaymentMethod('online')}
                         />
                         <span>Online Payment (UPI, Cards, NetBanking)</span>
-                        <span className="badge">PhonePe Protected</span>
+                        <span className="badge">Secured by Razorpay</span>
                     </label>
 
                     <label className={`payment-option ${paymentMethod === 'cod' ? 'selected' : ''}`}>
