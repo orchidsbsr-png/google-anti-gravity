@@ -209,6 +209,7 @@ const Admin = () => {
                 <button onClick={handleLogout} className="logout-btn-new">
                     <span className="icon">↪</span> Logout
                 </button>
+                <span style={{ position: 'absolute', bottom: '5px', right: '10px', fontSize: '0.7rem', color: '#888' }}>v1.1 (Sync Added)</span>
             </div>
 
             <div className="search-section">
