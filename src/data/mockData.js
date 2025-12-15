@@ -97,8 +97,11 @@ export const VARIETIES = [
     {
         id: 5,
         product_id: 5,
+    {
+        id: 5,
+        product_id: 5,
         name: 'Nashpati Pear',
-        price_per_kg: 449,
+        price_per_kg: 149,
         description: 'The Indian Pear, known for its crunch and refreshing quality.',
         taste_profile: 'Mildly sweet and refreshing',
         texture_profile: 'Very crunchy and gritty'
@@ -107,7 +110,7 @@ export const VARIETIES = [
         id: 6,
         product_id: 5,
         name: 'Bosc Pear',
-        price_per_kg: 479,
+        price_per_kg: 399,
         description: 'An elegant pear with a long neck and russet skin.',
         taste_profile: 'Sweet with notes of wood and spice',
         texture_profile: 'Dense, crisp, and smooth'
@@ -116,7 +119,7 @@ export const VARIETIES = [
         id: 7,
         product_id: 5,
         name: 'Concorde Pear',
-        price_per_kg: 499,
+        price_per_kg: 379,
         description: 'A long, narrow pear that is excellent for cooking and salads.',
         taste_profile: 'Sweet and aromatic with a hint of vanilla',
         texture_profile: 'Firm and dense, holds shape well'
@@ -125,7 +128,7 @@ export const VARIETIES = [
         id: 8,
         product_id: 5,
         name: 'Red Max',
-        price_per_kg: 529,
+        price_per_kg: 449,
         description: 'A delicious red pear variety.',
         taste_profile: 'Sweet and juicy',
         texture_profile: 'Crisp'
