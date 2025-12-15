@@ -124,8 +124,8 @@ const Payment = () => {
             const docRef = await addDoc(collection(db, 'orders'), orderData);
             console.log('📦 Order created:', docRef.id);
 
-            // Save to Baserow
-            await saveOrderToBaserow({ ...orderData, id: docRef.id });
+            // Save to Google Sheet
+            await saveOrderToSheet({ ...orderData, id: docRef.id });
 
             if (paymentMethod === 'online') {
                 const res = await loadRazorpay();
