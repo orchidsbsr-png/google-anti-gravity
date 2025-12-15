@@ -11,6 +11,7 @@ import { saveOrderToSheet } from '../services/sheetService';
 import './Payment.css';
 
 const Payment = () => {
+    // Vercel Rebuild Trigger: v1.2
     const navigate = useNavigate();
     const { cartItems, getCartTotal, clearCart } = useCart();
     const { addresses, getDefaultAddress, addAddress } = useAddress();
