@@ -19,7 +19,7 @@ async function fetchWaybill() {
     return data;
 }
 
-export async function createDelhiveryShipment(orderId) {
+export async function createDelhiveryShipment(orderId, providedOrder = null) {
     if (!SHEETDB_URL) throw new Error("Server Config Error: SHEETDB_URL is missing in Vercel Env Vars.");
     if (!DELHIVERY_TOKEN) throw new Error("Server Config Error: DELHIVERY_API_TOKEN is missing in Vercel Env Vars.");
 
@@ -29,20 +29,56 @@ export async function createDelhiveryShipment(orderId) {
     const startOrderIdRaw = String(orderId);
     const shortOrderId = startOrderIdRaw.length > 8 ? startOrderIdRaw.slice(0, 8).toUpperCase() : startOrderIdRaw.toUpperCase();
 
-    // 1. Fetch Order from Google Sheet via SheetDB
-    const searchRes = await fetch(`${SHEETDB_URL}/search?id=${shortOrderId}`);
-    const searchData = await searchRes.json();
+    let shipmentDetails = {};
 
-    if (!Array.isArray(searchData) || searchData.length === 0) {
-        throw new Error(`Order ${shortOrderId} not found in Google Sheet`);
-    }
+    // OPTIMIZATION: Use provided order data (from Admin Panel) to save 1 SheetDB Call
+    if (providedOrder) {
+        console.log("Using provided order data (Skipping SheetDB Read)");
+        const c = providedOrder.customer_details || {};
+        const addr = c.address || {};
 
-    const orderRow = searchData[0];
+        // Flatten Items
+        const itemsList = (providedOrder.cart_items || []).map(item => {
+            const name = item.productName || item.varietyName || "Unknown Item";
+            const qty = item.quantity || 1;
+            const weight = item.quantityKg ? `${item.quantityKg}kg` : '';
+            return `${qty}x ${name} ${weight}`.trim();
+        }).join(", ");
 
-    // Check if already shipped
-    if (orderRow.awb_number && orderRow.awb_number.length > 5) {
-        console.log(`Order ${shortOrderId} already has AWB: ${orderRow.awb_number}`);
-        return { success: true, awb: orderRow.awb_number, message: "Already shipped" };
+        shipmentDetails = {
+            name: c.name || "Customer",
+            add: (typeof addr === 'object') ? `${addr.addressLine1 || ''}, ${addr.addressLine2 || ''}` : String(addr),
+            pin: addr.pincode || "110001",
+            city: addr.city || "Unknown",
+            state: addr.state || "Unknown",
+            phone: c.phone || "9999999999",
+            items: itemsList
+        };
+    } else {
+        // Fallback: Fetch from SheetDB (Costs 1 API Call)
+        const searchRes = await fetch(`${SHEETDB_URL}/search?id=${shortOrderId}`);
+        const searchData = await searchRes.json();
+
+        if (!Array.isArray(searchData) || searchData.length === 0) {
+            throw new Error(`Order ${shortOrderId} not found in Google Sheet`);
+        }
+        const orderRow = searchData[0];
+
+        // Check if already shipped (Only possible if we fetched from sheet)
+        if (orderRow.awb_number && orderRow.awb_number.length > 5) {
+            console.log(`Order ${shortOrderId} already has AWB: ${orderRow.awb_number}`);
+            return { success: true, awb: orderRow.awb_number, message: "Already shipped" };
+        }
+
+        shipmentDetails = {
+            name: orderRow.customer_name || "Customer",
+            add: orderRow.address || "Address Not Found",
+            pin: orderRow.pincode || "110001",
+            city: "Unknown",
+            state: "Unknown",
+            phone: orderRow.phone || "9999999999",
+            items: orderRow.items || "Farm Fresh Goods"
+        };
     }
 
     // 2. Fetch a Waybill
@@ -64,16 +100,16 @@ export async function createDelhiveryShipment(orderId) {
             },
             "shipments": [{
                 "waybill": waybill,
-                "name": orderRow.customer_name || "Customer",
-                "add": orderRow.address || "Address Not Found",
-                "pin": orderRow.pincode || "110001",
-                "city": "Unknown", // Sheet might not have city split, let Delhivery handle pincode
-                "state": "Unknown",
+                "name": shipmentDetails.name,
+                "add": shipmentDetails.add,
+                "pin": shipmentDetails.pin,
+                "city": shipmentDetails.city,
+                "state": shipmentDetails.state,
                 "country": "India",
-                "phone": orderRow.phone || "9999999999",
+                "phone": shipmentDetails.phone,
                 "order": shortOrderId,
                 "payment_mode": "Prepaid",
-                "products_desc": orderRow.items || "Farm Fresh Apples",
+                "products_desc": shipmentDetails.items,
                 "shipping_mode": "Surface",
                 "total_amount": "0"
             }]
@@ -101,7 +137,7 @@ export async function createDelhiveryShipment(orderId) {
 
     const finalAwb = delhiveryData.packages && delhiveryData.packages[0] ? delhiveryData.packages[0].waybill : waybill;
 
-    // 5. Update Google Sheet
+    // 5. Update Google Sheet (Costs 1 API Call)
     // SheetDB Update: PATCH /api/v1/{api_id}/id/{id}
     await fetch(`${SHEETDB_URL}/id/${shortOrderId}`, {
         method: 'PATCH',

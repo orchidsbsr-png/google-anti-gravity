@@ -500,7 +500,7 @@ const Admin = () => {
                                                         const res = await fetch('/api/manual_ship', {
                                                             method: 'POST',
                                                             headers: { 'Content-Type': 'application/json' },
-                                                            body: JSON.stringify({ orderId: order.id })
+                                                            body: JSON.stringify({ orderId: order.id, order: order })
                                                         });
                                                         const data = await res.json();
                                                         if (!res.ok) throw new Error(data.error);
