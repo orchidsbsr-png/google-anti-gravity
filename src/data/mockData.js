@@ -79,7 +79,7 @@ export const VARIETIES = [
         id: 3,
         product_id: 1,
         name: 'Gala',
-        price_per_kg: 449,
+        price_per_kg: 399,
         description: 'A popular snacking apple with a yellow-orange skin and red striping.',
         taste_profile: 'Sweet, aromatic, and vanilla-like',
         texture_profile: 'Fine-grained, crisp, and juicy'
@@ -88,7 +88,7 @@ export const VARIETIES = [
         id: 4,
         product_id: 1,
         name: 'Golden Delicious',
-        price_per_kg: 419,
+        price_per_kg: 329,
         description: 'A versatile yellow apple that is great for both eating fresh and cooking.',
         taste_profile: 'Sweet and mellow, honey-like',
         texture_profile: 'Crisp flesh that resists browning'

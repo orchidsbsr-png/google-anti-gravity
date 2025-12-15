@@ -140,6 +140,34 @@ const Admin = () => {
         return fullName.includes(searchTerm.toLowerCase());
     });
 
+    // New: Sync Prices from MockData
+    const handleSyncPrices = async () => {
+        if (!window.confirm("This will reset all prices to the defaults in mockData.js. Continue?")) return;
+
+        const { VARIETIES } = await import('../data/mockData');
+        let count = 0;
+
+        for (const v of VARIETIES) {
+            const item = inventory.find(i => i.variety_id === v.id);
+            if (item) {
+                // Keep stock, update price
+                const pKg = v.price_per_kg;
+                await updateInventory(
+                    v.id,
+                    item.stock_5kg,
+                    item.stock_10kg,
+                    item.is_active,
+                    item.is_bestseller,
+                    pKg * 5,
+                    pKg * 10,
+                    pKg
+                );
+                count++;
+            }
+        }
+        alert(`Synced prices for ${count} items.`);
+    };
+
     const filteredOrders = orders.filter(order => {
         // 1. Filter by Status Tab
         if (orderStatusFilter !== 'All' && order.status !== orderStatusFilter) {
@@ -175,6 +203,9 @@ const Admin = () => {
                         <span className="toggle-text">{settings.shop_open ? 'OPEN' : 'CLOSED'}</span>
                     </button>
                 </div>
+                <button onClick={handleSyncPrices} className="logout-btn-new" style={{ marginRight: '1rem', background: '#e0f7fa', color: '#006064' }}>
+                    🔄 Sync Prices
+                </button>
                 <button onClick={handleLogout} className="logout-btn-new">
                     <span className="icon">↪</span> Logout
                 </button>
