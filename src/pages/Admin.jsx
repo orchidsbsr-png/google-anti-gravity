@@ -453,43 +453,76 @@ const Admin = () => {
                                         </div>
                                     )}
 
-                                    {/* Delhivery Shipment Trigger */}
-                                    <div className="shipping-actions" style={{ marginBottom: '1rem', padding: '1rem', background: '#e8eaf6', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                        <div>
-                                            <h4 style={{ margin: '0 0 0.5rem', color: '#1a237e' }}>🚚 Logistics</h4>
-                                            <p style={{ margin: 0, fontSize: '0.85rem', color: '#3949ab' }}>
-                                                Generate Delhivery AWB for this order.
-                                            </p>
+                                    {/* Baserow Sync & Logistics */}
+                                    <div className="shipping-actions" style={{ marginBottom: '1rem', padding: '1rem', background: '#e8eaf6', borderRadius: '8px', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                                            <div>
+                                                <h4 style={{ margin: '0 0 0.2rem', color: '#1a237e' }}>🚚 Logistics</h4>
+                                                <p style={{ margin: 0, fontSize: '0.85rem', color: '#3949ab' }}>Delivery & Database actions</p>
+                                            </div>
                                         </div>
-                                        <button
-                                            onClick={async () => {
-                                                if (!window.confirm(`Create Delhivery Shipment for Order #${order.id.slice(0, 8).toUpperCase()}?`)) return;
-                                                try {
-                                                    const res = await fetch('/api/manual_ship', {
-                                                        method: 'POST',
-                                                        headers: { 'Content-Type': 'application/json' },
-                                                        body: JSON.stringify({ orderId: order.id })
-                                                    });
-                                                    const data = await res.json();
-                                                    if (!res.ok) throw new Error(data.error);
-                                                    alert(`Shipment Created! AWB: ${data.awb}`);
-                                                } catch (e) {
-                                                    alert(`Failed: ${e.message}`);
-                                                }
-                                            }}
-                                            style={{
-                                                padding: '0.6rem 1.2rem',
-                                                background: '#673ab7',
-                                                color: 'white',
-                                                border: 'none',
-                                                borderRadius: '6px',
-                                                cursor: 'pointer',
-                                                fontWeight: 'bold',
-                                                boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-                                            }}
-                                        >
-                                            🚀 Create Shipment
-                                        </button>
+
+                                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                            <button
+                                                onClick={async () => {
+                                                    try {
+                                                        const res = await fetch('/api/sync_to_baserow', {
+                                                            method: 'POST',
+                                                            headers: { 'Content-Type': 'application/json' },
+                                                            body: JSON.stringify({ order: order })
+                                                        });
+                                                        const data = await res.json();
+                                                        if (!res.ok) throw new Error(data.error);
+                                                        alert("✅ Synced to Baserow Successfully!");
+                                                    } catch (e) {
+                                                        alert(`Sync Failed: ${e.message}`);
+                                                    }
+                                                }}
+                                                style={{
+                                                    flex: 1,
+                                                    padding: '0.6rem',
+                                                    background: '#fff',
+                                                    border: '1px solid #3f51b5',
+                                                    color: '#3f51b5',
+                                                    borderRadius: '6px',
+                                                    cursor: 'pointer',
+                                                    fontWeight: 'bold'
+                                                }}
+                                            >
+                                                ☁️ Push to DB
+                                            </button>
+
+                                            <button
+                                                onClick={async () => {
+                                                    if (!window.confirm(`Create Delhivery Shipment for Order #${order.id.slice(0, 8).toUpperCase()}?`)) return;
+                                                    try {
+                                                        const res = await fetch('/api/manual_ship', {
+                                                            method: 'POST',
+                                                            headers: { 'Content-Type': 'application/json' },
+                                                            body: JSON.stringify({ orderId: order.id })
+                                                        });
+                                                        const data = await res.json();
+                                                        if (!res.ok) throw new Error(data.error);
+                                                        alert(`Shipment Created! AWB: ${data.awb}`);
+                                                    } catch (e) {
+                                                        alert(`Shipment Failed: ${e.message}`);
+                                                    }
+                                                }}
+                                                style={{
+                                                    flex: 1,
+                                                    padding: '0.6rem',
+                                                    background: '#3f51b5',
+                                                    color: 'white',
+                                                    border: 'none',
+                                                    borderRadius: '6px',
+                                                    cursor: 'pointer',
+                                                    fontWeight: 'bold',
+                                                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                                                }}
+                                            >
+                                                🚀 Ship (Delhivery)
+                                            </button>
+                                        </div>
                                     </div>
 
                                     <div className="status-update-section" style={{ marginBottom: '1rem', padding: '1rem', background: '#f5f5f5', borderRadius: '8px' }}>
