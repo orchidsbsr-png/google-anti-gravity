@@ -8,10 +8,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@studio-freight/lenis": "^1.0.42",
     "@supabase/supabase-js": "^2.84.0",
     "axios": "^1.13.2",
     "firebase": "^12.6.0",
     "firebase-admin": "^13.6.0",
+    "gsap": "^3.14.2",
     "node-fetch": "^3.3.2",
     "razorpay": "^2.9.6",
     "react": "^18.2.0",

@@ -22,6 +22,7 @@ import Login from './pages/Login'
 import MyOrders from './pages/MyOrders'
 import OrderSummary from './pages/OrderSummary'
 import Legal from './pages/Legal'
+import FarmFresh from './pages/FarmFresh'
 import './App.css'
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
                                             <Route path="/health-benefits" element={<HealthBenefits />} />
                                             <Route path="/recipes" element={<Recipes />} />
                                             <Route path="/recipes/:id" element={<RecipeDetail />} />
+                                            <Route path="/farm-fresh" element={<FarmFresh />} />
 
                                             {/* Protected Routes */}
                                             <Route path="/cart" element={

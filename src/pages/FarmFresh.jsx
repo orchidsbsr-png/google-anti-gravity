@@ -1,21 +1,17 @@
 "use client";
-import React from 'react';
 import SmoothScroll from '../components/SmoothScroll';
 import Hero from '../components/Hero';
 import Origin from '../components/Origin';
 import ProductShowcase from '../components/ProductShowcase';
-import Reviews from '../components/Reviews';
 import Process from '../components/Process';
-import { Link } from 'react-router-dom';
 
-const Home = () => {
+export default function FarmFresh() {
     return (
         <SmoothScroll>
-            <main style={{ backgroundColor: '#f5f5f0' }}>
+            <main style={{ backgroundColor: '#2d3319' }}>
                 <Hero />
                 <Origin />
                 <ProductShowcase />
-                <Reviews />
                 <Process />
 
                 {/* Contact/Footer Section */}
@@ -27,13 +23,12 @@ const Home = () => {
                 }}>
                     <h2 style={{ fontSize: '3rem', marginBottom: '20px' }}>Join the Movement</h2>
                     <p style={{ fontSize: '1.2rem', opacity: 0.8, marginBottom: '40px' }}>Experience the purest flavors of Himachal.</p>
-                    <Link to="/search" style={{
-                        display: 'inline-block',
+                    <button style={{
                         padding: '15px 40px',
                         fontSize: '1.1rem',
                         backgroundColor: '#c44536', // Terracotta
                         color: '#fff',
-                        textDecoration: 'none',
+                        border: 'none',
                         borderRadius: '50px',
                         cursor: 'pointer',
                         transition: 'transform 0.3s ease'
@@ -42,26 +37,9 @@ const Home = () => {
                         onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
                     >
                         Shop Now
-                    </Link>
+                    </button>
                 </section>
-
-                {/* Legal Links Footer */}
-                <footer style={{
-                    padding: '40px 20px',
-                    textAlign: 'center',
-                    backgroundColor: '#242a14',
-                    color: 'rgba(245, 245, 240, 0.6)',
-                    fontSize: '0.9rem'
-                }}>
-                    <div style={{ marginBottom: '20px' }}>
-                        <Link to="/legal" style={{ color: 'inherit', textDecoration: 'none', margin: '0 10px' }}>Terms</Link>
-                        <Link to="/legal" style={{ color: 'inherit', textDecoration: 'none', margin: '0 10px' }}>Privacy</Link>
-                    </div>
-                    <p>© 2025 Farm Fresh. Pure Himachal.</p>
-                </footer>
             </main>
         </SmoothScroll>
     );
-};
-
-export default Home;
+}

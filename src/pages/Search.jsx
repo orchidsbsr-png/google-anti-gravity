@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useProduct } from '../context/ProductContext';
 import LazyVideo from '../components/LazyVideo';
 import './Search.css';
 
 const Search = () => {
     const { products, loading } = useProduct();
+    const [searchParams] = useSearchParams();
     const [searchTerm, setSearchTerm] = useState('');
+
+    useEffect(() => {
+        const query = searchParams.get('query');
+        if (query) {
+            setSearchTerm(query);
+        }
+    }, [searchParams]);
 
     const filteredProducts = products.filter(product =>
         product.name.toLowerCase().includes(searchTerm.toLowerCase())
