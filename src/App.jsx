@@ -23,6 +23,7 @@ import MyOrders from './pages/MyOrders'
 import OrderSummary from './pages/OrderSummary'
 import Legal from './pages/Legal'
 import FarmFresh from './pages/FarmFresh'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 import './App.css'
 
 function App() {
@@ -87,6 +88,7 @@ function App() {
                     </InventoryProvider>
                 </ProductProvider>
             </AuthProvider>
+            <SpeedInsights />
         </ThemeProvider>
     )
 }
