@@ -89,6 +89,7 @@ export default function Reviews() {
                 display: 'flex',
                 flexDirection: 'row',
                 position: 'relative',
+                willChange: 'transform' // Hardware acceleration for GSAP scroll
             }}>
                 {reviews.map((review, index) => (
                     <div key={index} style={{

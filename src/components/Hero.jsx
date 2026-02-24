@@ -62,6 +62,7 @@ export default function Hero() {
                 ref={bgRef}
                 src="/images/landing/hero_orchard.png"
                 alt="Himachal Orchard"
+                fetchPriority="high"
                 style={{
                     position: 'absolute', top: '-10%', left: 0, width: '100%', height: '120%', zIndex: 0,
                     objectFit: 'cover'

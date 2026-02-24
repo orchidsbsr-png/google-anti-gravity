@@ -51,7 +51,8 @@ export default function ProductShowcase() {
                 display: 'flex',
                 flexDirection: 'row',
                 position: 'relative',
-                backgroundColor: '#2d3319' // Dark green
+                backgroundColor: '#2d3319', // Dark green
+                willChange: 'transform' // Hardware acceleration for GSAP scroll
             }}>
                 {products.map((product, index) => (
                     <div key={index}

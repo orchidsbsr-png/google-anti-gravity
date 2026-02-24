@@ -22,8 +22,8 @@ export default function SmoothScroll({ children }) {
             lenis.raf(time * 1000);
         });
 
-        // 4. Disable GSAP's native lag smoothing
-        gsap.ticker.lagSmoothing(0);
+        // 4. Allow GSAP native lag smoothing (reduces INP blocking)
+        gsap.ticker.lagSmoothing(1000, 16);
 
         return () => {
             // Cleanup
