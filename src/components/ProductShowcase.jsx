@@ -8,7 +8,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const products = [
     { name: 'Apples', video: '/videos/apples.mp4' },
-    { name: 'Orange Persimmons', video: '/videos/orange-persimmons.mp4' },
+    { name: 'Persimmons', video: '/videos/orange-persimmons.mp4' }, // Consolidated category
     { name: 'Fuzzy Kiwis', video: '/videos/fuzzy-kiwis.mp4' },
     { name: 'Plums', video: '/videos/plums.mp4' },
     { name: 'Pears', video: '/videos/pears.mp4' },

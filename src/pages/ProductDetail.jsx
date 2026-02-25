@@ -19,7 +19,7 @@ const ProductDetail = () => {
     const [product, setProduct] = useState(null);
     const [varieties, setVarieties] = useState([]);
     const [selectedVariety, setSelectedVariety] = useState(null);
-    const [selectedSize, setSelectedSize] = useState(5); // 5 or 10 kg
+    const [selectedSize, setSelectedSize] = useState(5); // Default to 5kg, but will auto-update
     const [quantity, setQuantity] = useState(1);
     const [addedToCart, setAddedToCart] = useState(false);
 
@@ -36,6 +36,20 @@ const ProductDetail = () => {
             }
         }
     }, [id, loading, getProductById, getVarietiesByProductId]);
+
+    // Auto-update default selected size when variety changes or inventory loads
+    useEffect(() => {
+        if (selectedVariety && inventory.length > 0) {
+            const invItem = inventory.find(i => i.variety_id === selectedVariety.id);
+            if (invItem && invItem.pack_sizes && invItem.pack_sizes.length > 0) {
+                // Check if current selectedSize exists in new options, otherwise default to first option
+                const isValidSize = invItem.pack_sizes.some(p => p.weight === selectedSize);
+                if (!isValidSize) {
+                    setSelectedSize(invItem.pack_sizes[0].weight);
+                }
+            }
+        }
+    }, [selectedVariety, inventory]);
 
     if (loading || !product) return <div className="loading">Loading...</div>;
 
@@ -54,6 +68,9 @@ const ProductDetail = () => {
             setTimeout(() => setAddedToCart(false), 3000); // Hide message after 3 seconds
         }
     };
+
+    const invItemForDisplay = selectedVariety ? inventory.find(i => i.variety_id === selectedVariety.id) : null;
+    const packSizes = invItemForDisplay?.pack_sizes || [];
 
     const stockAvailable = selectedVariety ? getStock(selectedVariety.id, selectedSize) : 0;
     const isShopOpen = settings.shop_open;
@@ -102,18 +119,19 @@ const ProductDetail = () => {
                         <div className="size-selector">
                             <label>Select Size:</label>
                             <div className="size-buttons">
-                                <button
-                                    className={`size-btn ${selectedSize === 5 ? 'active' : ''}`}
-                                    onClick={() => setSelectedSize(5)}
-                                >
-                                    5 kg
-                                </button>
-                                <button
-                                    className={`size-btn ${selectedSize === 10 ? 'active' : ''}`}
-                                    onClick={() => setSelectedSize(10)}
-                                >
-                                    10 kg
-                                </button>
+                                {packSizes.length > 0 ? (
+                                    packSizes.map(pack => (
+                                        <button
+                                            key={pack.weight}
+                                            className={`size-btn ${selectedSize === pack.weight ? 'active' : ''}`}
+                                            onClick={() => setSelectedSize(pack.weight)}
+                                        >
+                                            {pack.weight} kg
+                                        </button>
+                                    ))
+                                ) : (
+                                    <span style={{ fontSize: '0.9rem', color: '#666' }}>No packing sizes configured for this variety.</span>
+                                )}
                             </div>
                         </div>
 
@@ -142,16 +160,18 @@ const ProductDetail = () => {
                             <span className="price-label">Price:</span>
                             <span className="price-value">₹{
                                 (() => {
-                                    const invItem = inventory.find(i => i.variety_id === selectedVariety.id);
                                     let pricePerBox;
-                                    if (invItem && selectedSize === 5 && invItem.price_5kg) {
-                                        pricePerBox = invItem.price_5kg;
-                                    } else if (invItem && selectedSize === 10 && invItem.price_10kg) {
-                                        pricePerBox = invItem.price_10kg;
+                                    if (invItemForDisplay && invItemForDisplay.pack_sizes) {
+                                        const pack = invItemForDisplay.pack_sizes.find(p => p.weight === selectedSize);
+                                        if (pack && pack.price) {
+                                            pricePerBox = pack.price;
+                                        } else {
+                                            pricePerBox = selectedVariety.price_per_kg * selectedSize;
+                                        }
                                     } else {
                                         pricePerBox = selectedVariety.price_per_kg * selectedSize;
                                     }
-                                    return pricePerBox * quantity;
+                                    return (pricePerBox * quantity).toLocaleString('en-IN', { minimumFractionDigits: 2 });
                                 })()
                             }</span>
                             <span className="price-unit">({quantity} box{quantity > 1 ? 'es' : ''} × {selectedSize}kg)</span>

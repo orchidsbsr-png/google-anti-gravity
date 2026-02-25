@@ -28,7 +28,8 @@ const Search = () => {
             3: '14-0452 TCX', // Kiwi Green
             4: '19-3632 TCX', // Plum Purple
             5: '14-0755 TCX', // Pear Green
-            6: '19-1930 TCX'  // Cherry Red
+            6: '19-1930 TCX', // Cherry Red
+            7: '15-1153 TCX'  // Fuyu Orange (Apricot Wash)
         };
         return codes[id] || '00-0000 TCX';
     };

@@ -17,7 +17,18 @@ export const InventoryProvider = ({ children }) => {
             collection(db, 'inventory'),
             (snapshot) => {
                 console.log('✅ Inventory snapshot received:', snapshot.docs.length, 'items');
-                const items = snapshot.docs.map(doc => ({ variety_id: parseInt(doc.id), ...doc.data() }));
+                const items = snapshot.docs.map(doc => {
+                    const data = doc.data();
+                    // Backward compatibility: Convert legacy 5kg/10kg to pack_sizes if missing
+                    let packSizes = data.pack_sizes;
+                    if (!packSizes && data.stock_5kg !== undefined) {
+                        packSizes = [
+                            { weight: 5, stock: data.stock_5kg, price: data.price_5kg || data.price_per_kg * 5 },
+                            { weight: 10, stock: data.stock_10kg, price: data.price_10kg || data.price_per_kg * 10 }
+                        ];
+                    }
+                    return { variety_id: parseInt(doc.id), ...data, pack_sizes: packSizes || [] };
+                });
 
                 if (items.length === 0) {
                     console.log('⚠️ No inventory found in Firestore, initializing from mockData...');
@@ -70,28 +81,25 @@ export const InventoryProvider = ({ children }) => {
 
     const getStock = (varietyId, sizeKg) => {
         const item = inventory.find(i => i.variety_id === parseInt(varietyId));
-        if (!item || !item.is_active) return 0;
-        return sizeKg === 5 ? item.stock_5kg : item.stock_10kg;
+        if (!item || !item.is_active || !item.pack_sizes) return 0;
+        const pack = item.pack_sizes.find(p => p.weight === Number(sizeKg));
+        return pack ? pack.stock : 0;
     };
 
     const isInStock = (varietyId, sizeKg) => {
         return getStock(varietyId, sizeKg) > 0;
     };
 
-    const updateInventory = async (varietyId, stock5kg, stock10kg, isActive, isBestseller, price5kg, price10kg, pricePerKg) => {
+    const updateInventory = async (varietyId, isActive, isBestseller, pricePerKg, packSizes) => {
         try {
             console.log('📝 Updating inventory for variety:', varietyId);
             const ref = doc(db, 'inventory', varietyId.toString());
 
-            // Ensure NO undefined values - Firestore rejects them
             const data = {
-                stock_5kg: Number(stock5kg) || 0,
-                stock_10kg: Number(stock10kg) || 0,
                 is_active: Boolean(isActive ?? true),
                 is_bestseller: Boolean(isBestseller ?? false),
-                price_5kg: Number(price5kg) || 0,
-                price_10kg: Number(price10kg) || 0,
-                price_per_kg: Number(pricePerKg) || 0
+                price_per_kg: Number(pricePerKg) || 0,
+                pack_sizes: packSizes // Expects an array: [{weight: X, stock: Y, price: Z}]
             };
 
             console.log('📝 Data to save:', data);

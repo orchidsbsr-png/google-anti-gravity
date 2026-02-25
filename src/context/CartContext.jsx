@@ -38,13 +38,16 @@ export const CartProvider = ({ children }) => {
         const cartItemId = `${variety.id}-${quantityKg}`;
         const existingItem = cartItems.find(item => item.id === cartItemId);
 
-        // Calculate price from inventory if available, otherwise use variety price_per_kg
+        // Calculate price from inventory pack_sizes if available, otherwise fallback
         const invItem = inventory?.find(i => i.variety_id === variety.id);
         let pricePerBox;
-        if (invItem && quantityKg === 5 && invItem.price_5kg) {
-            pricePerBox = invItem.price_5kg;
-        } else if (invItem && quantityKg === 10 && invItem.price_10kg) {
-            pricePerBox = invItem.price_10kg;
+        if (invItem && invItem.pack_sizes) {
+            const pack = invItem.pack_sizes.find(p => p.weight === quantityKg);
+            if (pack && pack.price) {
+                pricePerBox = pack.price;
+            } else {
+                pricePerBox = variety.price_per_kg * quantityKg;
+            }
         } else {
             pricePerBox = variety.price_per_kg * quantityKg;
         }

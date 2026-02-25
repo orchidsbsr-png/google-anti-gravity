@@ -50,38 +50,75 @@ const Admin = () => {
         sessionStorage.removeItem('admin_auth');
     };
 
-    const handleFieldChange = (varietyId, field, value) => {
-        setEditedItems(prev => ({
-            ...prev,
-            [varietyId]: {
-                ...prev[varietyId],
-                [field]: value,
-                hasChanges: true
+    const handleFieldChange = (varietyId, field, value, packIndex = null) => {
+        setEditedItems(prev => {
+            const currentItem = prev[varietyId] || {};
+            // Deep copy pack_sizes if we are editing an array element
+            let newPackSizes = currentItem.pack_sizes ? [...currentItem.pack_sizes] : [];
+
+            if (packIndex !== null && field === 'pack_sizes') {
+                if (value === 'DELETE') {
+                    newPackSizes.splice(packIndex, 1);
+                } else {
+                    newPackSizes[packIndex] = { ...newPackSizes[packIndex], ...value };
+                }
             }
-        }));
+
+            return {
+                ...prev,
+                [varietyId]: {
+                    ...currentItem,
+                    ...(packIndex === null ? { [field]: value } : { pack_sizes: newPackSizes }),
+                    hasChanges: true
+                }
+            };
+        });
     };
 
     const handleSave = async (varietyId) => {
         const item = inventory.find(i => i.variety_id === varietyId) || {
-            stock_5kg: 0,
-            stock_10kg: 0,
             is_active: true,
             is_bestseller: false,
-            price_per_kg: varieties.find(v => v.id === varietyId)?.price_per_kg || 0
+            price_per_kg: varieties.find(v => v.id === varietyId)?.price_per_kg || 0,
+            pack_sizes: []
         };
 
         const edited = editedItems[varietyId] || {};
 
-        const stock5kg = edited.stock_5kg !== undefined ? parseInt(edited.stock_5kg) || 0 : (item.stock_5kg || 0);
-        const stock10kg = edited.stock_10kg !== undefined ? parseInt(edited.stock_10kg) || 0 : (item.stock_10kg || 0);
         const isActive = edited.is_active !== undefined ? edited.is_active : (item.is_active ?? true);
         const isBestseller = edited.is_bestseller !== undefined ? edited.is_bestseller : (item.is_bestseller ?? false);
         const pricePerKg = edited.price_per_kg !== undefined ? parseFloat(edited.price_per_kg) || 0 : (item.price_per_kg || 0);
 
-        const price5kg = pricePerKg * 5;
-        const price10kg = pricePerKg * 10;
+        // If edited.pack_sizes is a complete array (from checkbox toggle), use it directly.
+        // Otherwise, merge sparse edits onto original pack_sizes.
+        let finalPackSizes;
+        if (edited.pack_sizes && Array.isArray(edited.pack_sizes)) {
+            // Check if it's a complete replacement (has weight property on first element)
+            const isCompleteArray = edited.pack_sizes.length === 0 || (edited.pack_sizes[0] && edited.pack_sizes[0].weight !== undefined);
+            if (isCompleteArray) {
+                finalPackSizes = edited.pack_sizes.filter(p => p).map(pack => ({
+                    weight: Number(pack.weight),
+                    stock: Number(pack.stock ?? 0),
+                    price: Number(pack.price ?? pricePerKg * pack.weight)
+                }));
+            } else {
+                // Sparse overlay on original
+                finalPackSizes = (item.pack_sizes || []).map((pack, index) => {
+                    if (edited.pack_sizes[index]) {
+                        return {
+                            weight: Number(edited.pack_sizes[index].weight ?? pack.weight),
+                            stock: Number(edited.pack_sizes[index].stock ?? pack.stock),
+                            price: Number(edited.pack_sizes[index].price ?? pack.price)
+                        };
+                    }
+                    return pack;
+                });
+            }
+        } else {
+            finalPackSizes = item.pack_sizes || [];
+        }
 
-        const success = await updateInventory(varietyId, stock5kg, stock10kg, isActive, isBestseller, price5kg, price10kg, pricePerKg);
+        const success = await updateInventory(varietyId, isActive, isBestseller, pricePerKg, finalPackSizes);
 
         if (success) {
             setEditedItems(prev => {
@@ -160,17 +197,18 @@ const Admin = () => {
         for (const v of VARIETIES) {
             const item = inventory.find(i => i.variety_id === v.id);
             if (item) {
-                // Keep stock, update price
+                // Keep stock, update base price and pack prices
                 const pKg = v.price_per_kg;
+                const newPacks = (item.pack_sizes || []).map(pack => ({
+                    ...pack,
+                    price: pKg * pack.weight
+                }));
                 await updateInventory(
                     v.id,
-                    item.stock_5kg,
-                    item.stock_10kg,
                     item.is_active,
                     item.is_bestseller,
-                    pKg * 5,
-                    pKg * 10,
-                    pKg
+                    pKg,
+                    newPacks
                 );
                 count++;
             }
@@ -270,38 +308,95 @@ const Admin = () => {
 
             {activeTab === 'inventory' && (
                 <div className="inventory-grid">
-                    {filteredVarieties.map(variety => {
+                    {filteredVarieties.map((variety, cardIndex) => {
                         const product = products.find(p => p.id === variety.product_id);
                         const invItem = inventory.find(i => i.variety_id === variety.id) || {
-                            stock_5kg: 0,
-                            stock_10kg: 0,
                             is_active: true,
                             is_bestseller: false,
-                            price_per_kg: variety.price_per_kg
+                            price_per_kg: variety.price_per_kg,
+                            pack_sizes: []
                         };
 
                         const edited = editedItems[variety.id] || {};
                         const hasChanges = edited.hasChanges;
 
                         // Current values (edited or original)
-                        const currentStock5kg = edited.stock_5kg !== undefined ? edited.stock_5kg : (invItem.stock_5kg || 0);
-                        const currentStock10kg = edited.stock_10kg !== undefined ? edited.stock_10kg : (invItem.stock_10kg || 0);
-                        const currentPrice = edited.price_per_kg !== undefined ? edited.price_per_kg : (invItem.price_per_kg || variety.price_per_kg);
+                        const currentPackSizes = (edited.pack_sizes || invItem.pack_sizes || []).filter(p => p);
+                        const currentPrice = edited.price_per_kg !== undefined ? parseFloat(edited.price_per_kg) : (invItem.price_per_kg || variety.price_per_kg);
                         const currentActive = edited.is_active !== undefined ? edited.is_active : (invItem.is_active ?? true);
                         const currentBestseller = edited.is_bestseller !== undefined ? edited.is_bestseller : (invItem.is_bestseller || false);
 
+                        // Available packaging weight options
+                        const AVAILABLE_WEIGHTS = [0.5, 1, 2, 5, 10];
+                        const enabledWeights = currentPackSizes.map(p => p.weight);
+
+                        const handleToggleWeight = (weight) => {
+                            const exists = currentPackSizes.findIndex(p => p.weight === weight);
+                            let newArr;
+                            if (exists >= 0) {
+                                // Remove
+                                newArr = currentPackSizes.filter((_, i) => i !== exists);
+                            } else {
+                                // Add with auto-calculated price
+                                newArr = [...currentPackSizes, { weight, stock: 0, price: currentPrice * weight }];
+                                newArr.sort((a, b) => a.weight - b.weight);
+                            }
+                            setEditedItems(prev => ({
+                                ...prev,
+                                [variety.id]: {
+                                    ...prev[variety.id],
+                                    pack_sizes: newArr,
+                                    hasChanges: true
+                                }
+                            }));
+                        };
+
+                        const handleDiscardChanges = () => {
+                            setEditedItems(prev => {
+                                const newState = { ...prev };
+                                delete newState[variety.id];
+                                return newState;
+                            });
+                        };
+
+                        const formatWeight = (w) => w < 1 ? `${w * 1000}g` : `${w}kg`;
+
                         return (
                             <div key={variety.id} className="product-card-new">
+                                {/* 1. Card Header Row */}
                                 <div className="card-header">
                                     <h3>{product?.name} - {variety.name}</h3>
-                                    <button
-                                        className={`edit-btn ${hasChanges ? 'save-mode' : ''}`}
-                                        onClick={() => hasChanges ? handleSave(variety.id) : null}
-                                    >
-                                        {hasChanges ? '💾 Save' : '✎ Edit'}
-                                    </button>
+                                    <div className="card-header-actions">
+                                        <button
+                                            className={`btn-edit ${hasChanges ? 'save-mode' : ''}`}
+                                            onClick={() => hasChanges ? handleSave(variety.id) : null}
+                                        >
+                                            {hasChanges ? '💾 Save' : '✏️ Edit'}
+                                        </button>
+                                        {hasChanges ? (
+                                            <button
+                                                className="btn-cancel"
+                                                onClick={handleDiscardChanges}
+                                                title="Discard changes"
+                                            >
+                                                ✕
+                                            </button>
+                                        ) : (
+                                            <button
+                                                className="btn-delete"
+                                                onClick={() => {
+                                                    if (window.confirm(`Delete inventory for "${product?.name} - ${variety.name}"?`)) {
+                                                        updateInventory(variety.id, false, false, 0, []);
+                                                    }
+                                                }}
+                                            >
+                                                🗑 Delete
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
 
+                                {/* 2. Product Status Row */}
                                 <div className="card-status-row">
                                     <div
                                         className="status-indicator"
@@ -319,38 +414,67 @@ const Admin = () => {
                                     </div>
                                 </div>
 
-                                <div className="stock-inputs-row">
-                                    <div className="input-col">
-                                        <label>5kg Stock</label>
+                                {/* 3. Stock Management Row */}
+                                <div className="stock-row">
+                                    {currentPackSizes.map((pack, index) => {
+                                        const currentPackEdited = (edited.pack_sizes && edited.pack_sizes[index]) ? edited.pack_sizes[index] : {};
+                                        const currentStock = currentPackEdited.stock !== undefined ? currentPackEdited.stock : pack.stock;
+
+                                        return (
+                                            <div key={`stock-${pack.weight}`} className="stock-input-group">
+                                                <label>{formatWeight(pack.weight)} Stock</label>
+                                                <input
+                                                    type="number"
+                                                    min="0"
+                                                    value={currentStock}
+                                                    onChange={(e) => handleFieldChange(variety.id, 'pack_sizes', { stock: parseInt(e.target.value) || 0 }, index)}
+                                                />
+                                            </div>
+                                        );
+                                    })}
+                                    {currentPackSizes.length === 0 && (
+                                        <span style={{ fontSize: '0.85rem', color: '#999', fontStyle: 'italic' }}>No packaging sizes enabled — use checkboxes below</span>
+                                    )}
+                                </div>
+
+                                {/* 4. Pricing & Packaging Row */}
+                                <div className="pricing-packaging-row">
+                                    <div className="price-input-section">
+                                        <label>Price per KG (₹)</label>
                                         <input
                                             type="number"
-                                            value={currentStock5kg}
-                                            onChange={(e) => handleFieldChange(variety.id, 'stock_5kg', e.target.value)}
+                                            min="0"
+                                            value={currentPrice}
+                                            onChange={(e) => handleFieldChange(variety.id, 'price_per_kg', e.target.value)}
                                         />
                                     </div>
-                                    <div className="input-col">
-                                        <label>10kg Stock</label>
-                                        <input
-                                            type="number"
-                                            value={currentStock10kg}
-                                            onChange={(e) => handleFieldChange(variety.id, 'stock_10kg', e.target.value)}
-                                        />
+                                    <div className="packaging-section">
+                                        <span className="packaging-section-title">Packaging & Unit Sizes</span>
+                                        <div className="packaging-checkboxes">
+                                            {AVAILABLE_WEIGHTS.map(w => (
+                                                <label key={w} className="packaging-checkbox-item">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={enabledWeights.includes(w)}
+                                                        onChange={() => handleToggleWeight(w)}
+                                                    />
+                                                    {formatWeight(w)}
+                                                </label>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div className="price-input-row">
-                                    <label>Price per KG (₹)</label>
-                                    <input
-                                        type="number"
-                                        value={currentPrice}
-                                        onChange={(e) => handleFieldChange(variety.id, 'price_per_kg', e.target.value)}
-                                    />
-                                </div>
-
-                                <div className="card-footer">
-                                    <span>5kg = ₹{(currentPrice * 5).toFixed(2)}</span>
-                                    <span>10kg = ₹{(currentPrice * 10).toFixed(2)}</span>
-                                </div>
+                                {/* 5. Card Footer — Calculated Prices */}
+                                {currentPackSizes.length > 0 && (
+                                    <div className="card-footer-prices">
+                                        {currentPackSizes.map(pack => (
+                                            <span key={`price-${pack.weight}`} className="price-item">
+                                                {formatWeight(pack.weight)} = ₹{(currentPrice * pack.weight).toFixed(2)}
+                                            </span>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         );
                     })}

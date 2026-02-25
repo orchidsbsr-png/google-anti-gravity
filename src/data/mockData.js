@@ -10,11 +10,11 @@ export const PRODUCTS = [
     },
     {
         id: 2,
-        name: 'Orange Persimmons',
+        name: 'Persimmons',
         category: 'persimmons',
-        description: 'Sweet and juicy orange persimmons. Rich in vitamins and perfect for a healthy snack.',
-        taste_profile: 'Very sweet with honey-like flavor and subtle cinnamon notes',
-        texture_profile: 'Smooth and custard-like when ripe, jelly-like interior',
+        description: 'Sweet, rich, and culturally revered. Our orchard grows the two most famous varieties: the astringent Hachiya and the crisp Fuyu.',
+        taste_profile: 'Ranges from honey-sweet to rich and pulpy depending on variety',
+        texture_profile: 'Ranges from crisp and apple-like to creamy and jelly-like',
         image_path: '/images/products/Orange Persimmons.png'
     },
     {
@@ -130,24 +130,43 @@ export const VARIETIES = [
         taste_profile: 'Sweet and juicy',
         texture_profile: 'Crisp'
     },
+    // Persimmons
+    {
+        id: 9,
+        product_id: 2,
+        name: 'Hachiya',
+        price_per_kg: 649,
+        description: 'Acorn-shaped and tastes best when overripe like tomatoes. Jelly-like, creamy, and tangy-sweet at peak maturity. Fantastic for baking muffins, cookies, breads, and puddings.',
+        taste_profile: 'Rich, pulpy, and sweet (astringent when unripe)',
+        texture_profile: 'Jelly-like and creamy'
+    },
+    {
+        id: 13,
+        product_id: 2,
+        name: 'Fuyu',
+        price_per_kg: 599,
+        description: 'Squat and stubby, kind of like a flattened apple. Boasts a spicy-sweet flavor with unique tropical and cinnamon hints. Excellent eaten raw and firm, or baked for a savory side.',
+        taste_profile: 'Spicy-sweet with tropical and cinnamon hints',
+        texture_profile: 'Hard and crisp, like an apple'
+    },
     // Single Varieties
-    { id: 9, product_id: 2, name: 'Orange Persimmons', price_per_kg: 649 },
     { id: 10, product_id: 3, name: 'Fuzzy Kiwis', price_per_kg: 479 },
     { id: 11, product_id: 4, name: 'Plums', price_per_kg: 299 },
     { id: 12, product_id: 6, name: 'Cherries', price_per_kg: 599 }
 ];
 
 export const INITIAL_INVENTORY = [
-    { variety_id: 1, stock_5kg: 50, stock_10kg: 30, is_active: true },
-    { variety_id: 2, stock_5kg: 40, stock_10kg: 25, is_active: true },
-    { variety_id: 3, stock_5kg: 35, stock_10kg: 20, is_active: true },
-    { variety_id: 4, stock_5kg: 45, stock_10kg: 28, is_active: true },
-    { variety_id: 5, stock_5kg: 30, stock_10kg: 15, is_active: true },
-    { variety_id: 6, stock_5kg: 25, stock_10kg: 12, is_active: true },
-    { variety_id: 7, stock_5kg: 20, stock_10kg: 10, is_active: true },
-    { variety_id: 8, stock_5kg: 15, stock_10kg: 8, is_active: true },
-    { variety_id: 9, stock_5kg: 30, stock_10kg: 15, is_active: true },
-    { variety_id: 10, stock_5kg: 25, stock_10kg: 12, is_active: true },
-    { variety_id: 11, stock_5kg: 40, stock_10kg: 20, is_active: true },
-    { variety_id: 12, stock_5kg: 20, stock_10kg: 10, is_active: true }
+    { variety_id: 1, is_active: true, pack_sizes: [{ weight: 5, stock: 50, price: 399 * 5 }, { weight: 10, stock: 30, price: 399 * 10 }] },
+    { variety_id: 2, is_active: true, pack_sizes: [{ weight: 5, stock: 40, price: 429 * 5 }, { weight: 10, stock: 25, price: 429 * 10 }] },
+    { variety_id: 3, is_active: true, pack_sizes: [{ weight: 5, stock: 35, price: 399 * 5 }, { weight: 10, stock: 20, price: 399 * 10 }] },
+    { variety_id: 4, is_active: true, pack_sizes: [{ weight: 5, stock: 45, price: 329 * 5 }, { weight: 10, stock: 28, price: 329 * 10 }] },
+    { variety_id: 5, is_active: true, pack_sizes: [{ weight: 5, stock: 30, price: 149 * 5 }, { weight: 10, stock: 15, price: 149 * 10 }] },
+    { variety_id: 6, is_active: true, pack_sizes: [{ weight: 5, stock: 25, price: 399 * 5 }, { weight: 10, stock: 12, price: 399 * 10 }] },
+    { variety_id: 7, is_active: true, pack_sizes: [{ weight: 5, stock: 20, price: 379 * 5 }, { weight: 10, stock: 10, price: 379 * 10 }] },
+    { variety_id: 8, is_active: true, pack_sizes: [{ weight: 5, stock: 15, price: 449 * 5 }, { weight: 10, stock: 8, price: 449 * 10 }] },
+    { variety_id: 9, is_active: true, pack_sizes: [{ weight: 0.5, stock: 40, price: 350 }, { weight: 1, stock: 30, price: 649 }, { weight: 5, stock: 15, price: 649 * 5 }] }, // Hachiya
+    { variety_id: 13, is_active: true, pack_sizes: [{ weight: 0.5, stock: 40, price: 320 }, { weight: 1, stock: 30, price: 599 }, { weight: 5, stock: 15, price: 599 * 5 }] }, // Fuyu
+    { variety_id: 10, is_active: true, pack_sizes: [{ weight: 5, stock: 25, price: 479 * 5 }, { weight: 10, stock: 12, price: 479 * 10 }] },
+    { variety_id: 11, is_active: true, pack_sizes: [{ weight: 5, stock: 40, price: 299 * 5 }, { weight: 10, stock: 20, price: 299 * 10 }] },
+    { variety_id: 12, is_active: true, pack_sizes: [{ weight: 5, stock: 20, price: 599 * 5 }, { weight: 10, stock: 10, price: 599 * 10 }] }
 ];
