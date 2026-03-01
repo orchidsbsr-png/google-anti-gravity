@@ -23,7 +23,8 @@ const Home = () => {
                     padding: '8vw 5vw',
                     textAlign: 'center',
                     backgroundColor: '#e9ecd3', // Light, earthy green/beige
-                    color: '#2d3319'
+                    color: '#2d3319',
+                    position: 'relative'
                 }}>
                     <h2 style={{ fontSize: '3rem', marginBottom: '20px' }}>You can adopt a tree</h2>
                     <p style={{ fontSize: '1.2rem', opacity: 0.9, marginBottom: '30px', maxWidth: '600px', margin: '0 auto 40px auto' }}>
@@ -51,6 +52,18 @@ const Home = () => {
                     >
                         Learn More
                     </Link>
+
+                    {/* Transition from CTA to Footer */}
+                    <div style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '20vh',
+                        background: 'linear-gradient(to bottom, transparent 0%, rgba(45, 51, 25, 0.4) 60%, #2d3319 100%)',
+                        zIndex: 1,
+                        pointerEvents: 'none' // Ensures it doesn't block clicks
+                    }} />
                 </section>
 
                 {/* Contact/Footer Section */}

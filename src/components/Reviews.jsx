@@ -66,8 +66,20 @@ export default function Reviews() {
     }, []);
 
     return (
-        <div ref={triggerRef} style={{ overflow: 'hidden', backgroundColor: '#242a14' }}>
-            <div style={{ padding: '80px 8vw 20px', textAlign: 'center' }}>
+        <div ref={triggerRef} style={{ overflow: 'hidden', backgroundColor: '#242a14', position: 'relative' }}>
+            {/* Seamless Transition from Showcase (#2d3319) to Reviews (#242a14) */}
+            <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '20vh',
+                background: 'linear-gradient(to bottom, #2d3319 0%, rgba(36, 42, 20, 0.4) 60%, transparent 100%)',
+                zIndex: 1,
+                pointerEvents: 'none'
+            }} />
+
+            <div style={{ padding: '80px 8vw 20px', textAlign: 'center', position: 'relative', zIndex: 2 }}>
                 <h2 style={{
                     fontSize: 'clamp(2.5rem, 5vw, 4rem)',
                     color: '#f5f5f0',

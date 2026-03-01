@@ -104,8 +104,8 @@ export default function Hero() {
                 bottom: 0,
                 left: 0,
                 width: '100%',
-                height: '25vh',
-                background: 'linear-gradient(to bottom, transparent 0%, #2d3319 100%)',
+                height: '35vh',
+                background: 'linear-gradient(to bottom, transparent 0%, rgba(45, 51, 25, 0.2) 30%, rgba(45, 51, 25, 0.6) 65%, #2d3319 100%)',
                 zIndex: 2,
                 pointerEvents: 'none' // Ensures it doesn't block clicks
             }} />

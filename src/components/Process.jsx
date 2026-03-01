@@ -91,9 +91,21 @@ export default function Process() {
 
     return (
         <section ref={sectionRef} className="process-section">
+            {/* Transition from Reviews (#242a14) to Image */}
+            <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '30vh',
+                background: 'linear-gradient(to bottom, #242a14 0%, rgba(36, 42, 20, 0.1) 60%, transparent 100%)',
+                zIndex: 0,
+                pointerEvents: 'none'
+            }} />
+
             <h2 style={{ fontSize: '4rem', color: '#fff', marginBottom: '5vh' }}>The Journey</h2>
 
-            <div ref={containerRef} style={{ position: 'relative', width: '100%', maxWidth: '800px', paddingBottom: '50px' }}>
+            <div ref={containerRef} style={{ position: 'relative', width: '100%', maxWidth: '800px', paddingBottom: '100px' }}>
                 {/* SVG Path Container */}
                 <svg style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 0, height: '100%', width: '200px', zIndex: 0, pointerEvents: 'none', overflow: 'visible' }}>
                     <path
@@ -143,6 +155,18 @@ export default function Process() {
                     </div>
                 ))}
             </div>
+
+            {/* Transition from Image to CTA (#e9ecd3) */}
+            <div style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                width: '100%',
+                height: '35vh',
+                background: 'linear-gradient(to bottom, transparent 0%, rgba(233, 236, 211, 0.3) 40%, rgba(233, 236, 211, 0.8) 75%, #e9ecd3 100%)',
+                zIndex: 0,
+                pointerEvents: 'none'
+            }} />
         </section>
     );
 }
