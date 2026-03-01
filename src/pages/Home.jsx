@@ -18,6 +18,41 @@ const Home = () => {
                 <Reviews />
                 <Process />
 
+                {/* Adopt a Tree CTA */}
+                <section style={{
+                    padding: '8vw 5vw',
+                    textAlign: 'center',
+                    backgroundColor: '#e9ecd3', // Light, earthy green/beige
+                    color: '#2d3319'
+                }}>
+                    <h2 style={{ fontSize: '3rem', marginBottom: '20px' }}>You can adopt a tree</h2>
+                    <p style={{ fontSize: '1.2rem', opacity: 0.9, marginBottom: '30px', maxWidth: '600px', margin: '0 auto 40px auto' }}>
+                        Join us in cultivating the finest apples grown purely by nature. Adopt an organic apple tree today for a sustainable harvest.
+                    </p>
+                    <Link to="/adopt-a-tree" style={{
+                        display: 'inline-block',
+                        padding: '15px 40px',
+                        fontSize: '1.1rem',
+                        backgroundColor: '#2d3319', // Dark forest green
+                        color: '#fff',
+                        textDecoration: 'none',
+                        borderRadius: '50px',
+                        cursor: 'pointer',
+                        transition: 'transform 0.3s ease, background-color 0.3s ease'
+                    }}
+                        onMouseEnter={(e) => {
+                            e.target.style.transform = 'scale(1.05)';
+                            e.target.style.backgroundColor = '#1a1f0e';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.target.style.transform = 'scale(1)';
+                            e.target.style.backgroundColor = '#2d3319';
+                        }}
+                    >
+                        Learn More
+                    </Link>
+                </section>
+
                 {/* Contact/Footer Section */}
                 <section style={{
                     padding: '10vw',

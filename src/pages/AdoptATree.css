@@ -1,0 +1,230 @@
+.adopt-page {
+    background-color: #fdfbf7;
+    /* Warm earthy off-white */
+    min-height: 100vh;
+    padding-bottom: 80px;
+}
+
+/* Hero Section */
+.adopt-hero {
+    position: relative;
+    height: 70vh;
+    min-height: 400px;
+    background-image: url("/images/adopt apple tree photos/red apple tree.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    /* Parallax effect */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+}
+
+.adopt-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom,
+            rgba(45, 51, 25, 0.4) 0%,
+            rgba(45, 51, 25, 0.7) 100%);
+    /* Dark forest green gradient overlay for readability */
+    z-index: 1;
+}
+
+.adopt-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+}
+
+.adopt-hero-content h1 {
+    color: #fff;
+    font-size: clamp(2rem, 5vw, 4rem);
+    line-height: 1.2;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    font-weight: 500;
+}
+
+/* Content Blocks */
+.adopt-content {
+    max-width: 800px;
+    margin: -80px auto 0;
+    position: relative;
+    z-index: 3;
+    background: #fff;
+    padding: 60px 40px;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+}
+
+.adopt-text-block {
+    margin-bottom: 50px;
+}
+
+.adopt-text-block:last-of-type {
+    margin-bottom: 40px;
+}
+
+.adopt-text-block h3 {
+    color: #2d3319;
+    /* Forest green */
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    position: relative;
+    display: inline-block;
+}
+
+.adopt-text-block h3::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background-color: #c44536;
+    /* Earthy terracotta */
+    border-radius: 2px;
+}
+
+.adopt-text-block p {
+    color: #4a5431;
+    font-size: 1.15rem;
+    line-height: 1.8;
+}
+
+.adopt-benefits-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.adopt-benefits-list li {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 15px;
+    color: #4a5431;
+    font-size: 1.15rem;
+    line-height: 1.6;
+}
+
+.adopt-benefits-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    top: 2px;
+    color: #c44536;
+    /* Terracotta checkmarks */
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* Checkout Section */
+.adopt-checkout-section {
+    margin-top: 60px;
+    padding-top: 50px;
+    border-top: 1px solid #e9ecd3;
+    text-align: center;
+}
+
+.price-tag {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    margin-bottom: 30px;
+    color: #2d3319;
+}
+
+.price-tag .currency {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-right: 5px;
+}
+
+.price-tag .amount {
+    font-size: 4rem;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.price-tag .duration {
+    font-size: 1.2rem;
+    color: #7a8659;
+    margin-left: 10px;
+}
+
+.adopt-btn {
+    background-color: #c44536;
+    /* Terracotta */
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: 18px 50px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(196, 69, 54, 0.2);
+    width: 100%;
+    max-width: 400px;
+}
+
+.adopt-btn:hover {
+    background-color: #a83a2d;
+    transform: translateY(-2px);
+    box-shadow: 0 15px 25px rgba(196, 69, 54, 0.3);
+}
+
+.adopt-btn:active {
+    transform: translateY(0);
+}
+
+.guarantee {
+    margin-top: 15px;
+    font-size: 0.9rem;
+    color: #7a8659;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.guarantee::before {
+    content: '🔒';
+    font-size: 1rem;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .adopt-hero {
+        height: 50vh;
+        background-attachment: scroll;
+        /* Disable parallax on mobile for performance */
+    }
+
+    .adopt-content {
+        margin: -40px 20px 0;
+        padding: 40px 25px;
+    }
+
+    .adopt-text-block h3 {
+        font-size: 1.5rem;
+    }
+
+    .adopt-text-block p,
+    .adopt-benefits-list li {
+        font-size: 1.05rem;
+    }
+
+    .price-tag .amount {
+        font-size: 3rem;
+    }
+
+    .adopt-btn {
+        padding: 16px 30px;
+        width: 100%;
+    }
+}
