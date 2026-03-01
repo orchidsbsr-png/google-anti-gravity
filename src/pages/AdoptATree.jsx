@@ -171,7 +171,7 @@ const AdoptATree = () => {
                     <div className="lux-story-row lux-reveal">
                         <div className="lux-story-image">
                             {/* Placeholder for real orchard tree image */}
-                            <img src="/images/adopt apple tree photos/red apple tree.jpg" alt="Apple Tree Selection" />
+                            <img src="/images/adopt apple tree photos/red apple tree.jpg" alt="Apple Tree Selection" loading="lazy" />
                         </div>
                         <div className="lux-story-text">
                             <span className="lux-step-number">01</span>
@@ -182,7 +182,7 @@ const AdoptATree = () => {
 
                     <div className="lux-story-row reverse lux-reveal">
                         <div className="lux-story-image">
-                            <img src="/images/adopt apple tree photos/image_2.png" alt="Orchard Care" />
+                            <img src="/images/adopt apple tree photos/image_2.webp" alt="Orchard Care" loading="lazy" />
                         </div>
                         <div className="lux-story-text">
                             <span className="lux-step-number">02</span>
