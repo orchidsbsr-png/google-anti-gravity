@@ -179,7 +179,7 @@ const AdoptATree = () => {
 
                     <div className="lux-story-row reverse lux-reveal">
                         <div className="lux-story-image">
-                            <img src="/images/landing/hero_orchard.png" alt="Orchard Care" />
+                            <img src="/images/adopt apple tree photos/image 2.png" alt="Orchard Care" />
                         </div>
                         <div className="lux-story-text">
                             <span className="lux-step-number">02</span>
