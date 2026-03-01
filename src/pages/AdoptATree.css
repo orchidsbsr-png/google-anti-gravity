@@ -518,7 +518,7 @@
     position: relative;
     width: 100%;
     background-color: var(--lux-forest-green, #1B3B22);
-    color: #ffffff;
+    color: #ffffff !important;
     border: none;
     border-radius: 50px;
     padding: 22px 0;
@@ -556,6 +556,7 @@
     position: relative;
     z-index: 2;
     letter-spacing: 0.05em;
+    color: #ffffff !important;
 }
 
 /* Sweeping Shine Hover Effect */
