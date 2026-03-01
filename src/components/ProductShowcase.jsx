@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import { useNavigate } from 'react-router-dom';
+import './ProductShowcase.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -44,63 +45,26 @@ export default function ProductShowcase() {
     }, []);
 
     return (
-        <div ref={triggerRef} style={{ overflow: 'hidden' }}>
-            <div ref={sectionRef} style={{
-                height: '100vh',
-                width: '600vw',
-                display: 'flex',
-                flexDirection: 'row',
-                position: 'relative',
-                backgroundColor: '#2d3319', // Dark green
-                willChange: 'transform' // Hardware acceleration for GSAP scroll
-            }}>
+        <div ref={triggerRef} className="showcase-slider-container">
+            <div ref={sectionRef} className="showcase-scroll-wrapper">
                 {products.map((product, index) => (
                     <div key={index}
                         onClick={() => navigate(`/search?query=${product.name}`)}
-                        style={{
-                            width: '100vw',
-                            height: '100%',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            padding: '5vw',
-                            cursor: 'pointer'
-                        }}>
-                        <div style={{
-                            width: '50vw',
-                            height: '60vh',
-                            position: 'relative',
-                            borderRadius: '15px',
-                            overflow: 'hidden',
-                            boxShadow: '0 40px 100px rgba(0,0,0,0.4)',
-                            marginBottom: '3rem'
-                        }}>
+                        className="showcase-slide">
+                        <div className="showcase-media-container">
                             <video
                                 src={product.video}
                                 autoPlay
                                 loop
                                 muted
                                 playsInline
-                                style={{
-                                    width: '100%',
-                                    height: '100%',
-                                    objectFit: 'cover'
-                                }}
                             />
                         </div>
-                        <h3 style={{ fontSize: '3.5rem', color: '#f5f5f0', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
+                        <h3 className="showcase-title">
                             {product.name}
                         </h3>
                         {index === products.length - 1 && (
-                            <p style={{
-                                marginTop: '1rem',
-                                color: '#f5f5f0',
-                                opacity: 0.6,
-                                textTransform: 'uppercase',
-                                letterSpacing: '0.2em',
-                                fontSize: '0.9rem'
-                            }}>
+                            <p className="showcase-prompt">
                                 Keep scrolling for full menu →
                             </p>
                         )}
