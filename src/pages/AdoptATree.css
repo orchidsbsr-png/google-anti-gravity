@@ -52,10 +52,12 @@
 /* Content Blocks */
 .adopt-content {
     max-width: 800px;
-    margin: -80px auto 0;
+    margin: -40px auto 0;
+    /* Reduced negative margin to work better with the cinematic fade */
     position: relative;
     z-index: 3;
-    background: #fff;
+    background: #fcfdf9;
+    /* Slightly off-white to match form fields, creating softer depth */
     padding: 60px 40px;
     border-radius: 20px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);

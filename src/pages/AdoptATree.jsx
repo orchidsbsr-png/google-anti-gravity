@@ -131,12 +131,22 @@ const AdoptATree = () => {
     return (
         <SmoothScroll>
             <main className="adopt-page">
-                {/* Hero Section */}
                 <section className="adopt-hero">
                     <div className="adopt-hero-overlay"></div>
                     <div className="adopt-hero-content">
                         <h1>Here's how you can rent an organic apple tree at Naaliban Apple Orchards</h1>
                     </div>
+                    {/* Seamless Transition Gradient to Page Background (#fdfbf7) */}
+                    <div style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '25vh',
+                        background: 'linear-gradient(to bottom, transparent 0%, rgba(253, 251, 247, 0.4) 60%, #fdfbf7 100%)',
+                        zIndex: 2,
+                        pointerEvents: 'none' // Ensures it doesn't block clicks
+                    }} />
                 </section>
 
                 {/* Info Content */}
