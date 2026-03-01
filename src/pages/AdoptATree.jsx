@@ -1,8 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import SmoothScroll from '../components/SmoothScroll';
 import './AdoptATree.css';
 
 const AdoptATree = () => {
+    // Form State
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        isGift: false,
+        recipientName: '',
+        giftMessage: ''
+    });
+    const [formErrors, setFormErrors] = useState({});
 
     // Integrating Razorpay Standard Checkout
     useEffect(() => {
@@ -15,7 +25,39 @@ const AdoptATree = () => {
         loadRazorpayScript();
     }, []);
 
+    const handleInputChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: type === 'checkbox' ? checked : value
+        }));
+        // Clear error when user types
+        if (formErrors[name]) {
+            setFormErrors(prev => ({ ...prev, [name]: null }));
+        }
+    };
+
+    const validateForm = () => {
+        const errors = {};
+        if (!formData.name.trim()) errors.name = 'Name is required for the certificate';
+        if (!formData.email.trim() || !/^\S+@\S+\.\S+$/.test(formData.email)) errors.email = 'Valid email is required';
+        if (!formData.phone.trim() || formData.phone.length < 10) errors.phone = 'Valid phone number is required';
+
+        if (formData.isGift) {
+            if (!formData.recipientName.trim()) errors.recipientName = 'Recipient name is required for the gift certificate';
+        }
+
+        setFormErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
     const handleAdoptClick = () => {
+        if (!validateForm()) {
+            // Scroll to form or show an alert
+            alert("Please fill in all required details for the certificate before proceeding.");
+            return;
+        }
+
         if (!window.Razorpay) {
             alert("Razorpay SDK failed to load. Are you online?");
             return;
@@ -26,16 +68,22 @@ const AdoptATree = () => {
             amount: "3100000", // ₹31,000 in paise
             currency: "INR",
             name: "Naaliban Apple Orchards",
-            description: "Adopt an Organic Apple Tree",
+            description: formData.isGift ? `Gift an Apple Tree to ${formData.recipientName}` : "Adopt an Organic Apple Tree",
             image: "/images/logo.png",
             handler: function (response) {
-                alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}`);
-                // In a real app, this is where you would call your backend to verify the signature
+                alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}. We will contact you soon regarding your certificate!`);
+                // In a real app, send response + formData to your backend
             },
             prefill: {
-                name: "John Doe",
-                email: "customer@example.com",
-                contact: "9999999999"
+                name: formData.name,
+                email: formData.email,
+                contact: formData.phone
+            },
+            notes: {
+                is_gift: formData.isGift ? "Yes" : "No",
+                recipient_name: formData.recipientName,
+                gift_message: formData.giftMessage,
+                certificate_name: formData.isGift ? formData.recipientName : formData.name
             },
             theme: {
                 color: "#2d3319" // Forest green brand color
@@ -86,6 +134,92 @@ const AdoptATree = () => {
                     <div className="adopt-text-block">
                         <h3>You can also gift a tree</h3>
                         <p>Imagine the look on their faces and the joy it will bring to you, when you gift someone their own organic apple tree. We think it will make the best gift ever.</p>
+                    </div>
+
+                    {/* Adoption Details Form */}
+                    <div className="adopt-form-section">
+                        <h3>Adoption Details</h3>
+                        <p className="form-subtitle">Information needed for your adoption certificate and updates.</p>
+
+                        <div className="form-group">
+                            <label>Your Full Name *</label>
+                            <input
+                                type="text"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleInputChange}
+                                placeholder="Name as it should appear on certificate"
+                                className={formErrors.name ? 'error' : ''}
+                            />
+                            {formErrors.name && <span className="error-text">{formErrors.name}</span>}
+                        </div>
+
+                        <div className="form-row">
+                            <div className="form-group half">
+                                <label>Email Address *</label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleInputChange}
+                                    placeholder="For updates and digital certificate"
+                                    className={formErrors.email ? 'error' : ''}
+                                />
+                                {formErrors.email && <span className="error-text">{formErrors.email}</span>}
+                            </div>
+                            <div className="form-group half">
+                                <label>Phone Number *</label>
+                                <input
+                                    type="tel"
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleInputChange}
+                                    placeholder="10-digit mobile number"
+                                    className={formErrors.phone ? 'error' : ''}
+                                />
+                                {formErrors.phone && <span className="error-text">{formErrors.phone}</span>}
+                            </div>
+                        </div>
+
+                        <div className="form-group checkbox-group">
+                            <label className="checkbox-label">
+                                <input
+                                    type="checkbox"
+                                    name="isGift"
+                                    checked={formData.isGift}
+                                    onChange={handleInputChange}
+                                />
+                                <span>This adoption is a gift for someone else</span>
+                            </label>
+                        </div>
+
+                        {formData.isGift && (
+                            <div className="gift-details-section">
+                                <h4>Gift Details</h4>
+                                <div className="form-group">
+                                    <label>Recipient's Full Name *</label>
+                                    <input
+                                        type="text"
+                                        name="recipientName"
+                                        value={formData.recipientName}
+                                        onChange={handleInputChange}
+                                        placeholder="Name for their certificate"
+                                        className={formErrors.recipientName ? 'error' : ''}
+                                    />
+                                    {formErrors.recipientName && <span className="error-text">{formErrors.recipientName}</span>}
+                                </div>
+                                <div className="form-group">
+                                    <label>Message for Certificate (Optional)</label>
+                                    <textarea
+                                        name="giftMessage"
+                                        value={formData.giftMessage}
+                                        onChange={handleInputChange}
+                                        placeholder="Add a special message for the recipient..."
+                                        rows="3"
+                                    />
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     {/* Pricing / Checkout Action */}
