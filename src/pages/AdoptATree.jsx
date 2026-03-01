@@ -14,8 +14,9 @@ const AdoptATree = () => {
     });
     const [formErrors, setFormErrors] = useState({});
 
-    // Integrating Razorpay Standard Checkout
+    // Integrating Razorpay Standard Checkout & Scroll Animation Observers
     useEffect(() => {
+        // Razorpay Script
         const loadRazorpayScript = () => {
             const script = document.createElement('script');
             script.src = 'https://checkout.razorpay.com/v1/checkout.js';
@@ -23,6 +24,22 @@ const AdoptATree = () => {
             document.body.appendChild(script);
         };
         loadRazorpayScript();
+
+        // Scroll Reveal Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('lux-active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        const revealElements = document.querySelectorAll('.lux-reveal');
+        revealElements.forEach(el => observer.observe(el));
+
+        return () => {
+            revealElements.forEach(el => observer.unobserve(el));
+        };
     }, []);
 
     const handleInputChange = (e) => {
@@ -128,154 +145,206 @@ const AdoptATree = () => {
         }
     };
 
+    // Component UI Render
     return (
         <SmoothScroll>
-            <main className="adopt-page">
-                <section className="adopt-hero">
-                    <div className="adopt-hero-overlay"></div>
-                    <div className="adopt-hero-content">
-                        <h1>Here's how you can rent an organic apple tree at Naaliban Apple Orchards</h1>
+            {/* The global noise texture creates the "organic paper" feel */}
+            <div className="noise-overlay" style={{ position: 'fixed', zIndex: 9999, pointerEvents: 'none' }}></div>
+
+            <main className="lux-adopt-page">
+                {/* 1. Hero Section (Parallax & Elegant Hook) */}
+                <section className="lux-hero">
+                    <div className="lux-hero-bg"></div>
+                    <div className="lux-hero-overlay"></div>
+                    <div className="lux-hero-content lux-reveal">
+                        <span className="lux-kicker">Naaliban Apple Orchards</span>
+                        <h1 className="lux-headline">Adopt a Living Legacy.</h1>
+                        <p className="lux-subhead">Secure your own piece of the Himalayas. Nurtured by nature, harvested for you.</p>
                     </div>
-                    {/* Seamless Transition Gradient to Page Background (#fdfbf7) */}
-                    <div style={{
-                        position: 'absolute',
-                        bottom: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '25vh',
-                        background: 'linear-gradient(to bottom, transparent 0%, rgba(253, 251, 247, 0.4) 60%, #fdfbf7 100%)',
-                        zIndex: 2,
-                        pointerEvents: 'none' // Ensures it doesn't block clicks
-                    }} />
                 </section>
 
-                {/* Info Content */}
-                <section className="adopt-content">
-                    <div className="adopt-text-block">
-                        <h3>Pick a tree</h3>
-                        <p>Based on the variety of apple the tree produces, age of the tree, location in the orchard, you can pick a tree. Or to keep things simple we can pick one for you.</p>
-                    </div>
-
-                    <div className="adopt-text-block">
-                        <h3>Make it your own</h3>
-                        <p>With a small monetary contribution, most of which will go towards the upkeep of the tree, you get a fruit bearing tree to call your own for 11 months.</p>
-                    </div>
-
-                    <div className="adopt-text-block">
-                        <h3>And with that you get a whole lot more</h3>
-                        <ul className="adopt-benefits-list">
-                            <li>The tree gets marked as 'adopted'</li>
-                            <li>A framed certificate of adoption</li>
-                            <li>Round the year, special care will be provided to your tree - pruning, nourishment, etc.</li>
-                            <li>5 X 5 kg boxes of certified organic apples delivered at your doorstep</li>
-                            <li>A chance to visit the orchard, and harvest apples from your own tree (1 box of 10 kg capacity will be provided - day trips only - stay and transportation can be arranged at the nearest hotel at extra cost)</li>
-                        </ul>
-                    </div>
-
-                    <div className="adopt-text-block">
-                        <h3>You can also gift a tree</h3>
-                        <p>Imagine the look on their faces and the joy it will bring to you, when you gift someone their own organic apple tree. We think it will make the best gift ever.</p>
-                    </div>
-
-                    {/* Adoption Details Form */}
-                    <div className="adopt-form-section">
-                        <h3>Adoption Details</h3>
-                        <p className="form-subtitle">Information needed for your adoption certificate and updates.</p>
-
-                        <div className="form-group">
-                            <label>Your Full Name *</label>
-                            <input
-                                type="text"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleInputChange}
-                                placeholder="Name as it should appear on certificate"
-                                className={formErrors.name ? 'error' : ''}
-                            />
-                            {formErrors.name && <span className="error-text">{formErrors.name}</span>}
+                {/* 2. The Process (Zig-Zag Storytelling) */}
+                <section className="lux-story-section">
+                    <div className="lux-story-row lux-reveal">
+                        <div className="lux-story-image">
+                            {/* Placeholder for real orchard tree image */}
+                            <img src="/images/adopt apple tree photos/red apple tree.jpg" alt="Apple Tree Selection" />
                         </div>
-
-                        <div className="form-row">
-                            <div className="form-group half">
-                                <label>Email Address *</label>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleInputChange}
-                                    placeholder="For updates and digital certificate"
-                                    className={formErrors.email ? 'error' : ''}
-                                />
-                                {formErrors.email && <span className="error-text">{formErrors.email}</span>}
-                            </div>
-                            <div className="form-group half">
-                                <label>Phone Number *</label>
-                                <input
-                                    type="tel"
-                                    name="phone"
-                                    value={formData.phone}
-                                    onChange={handleInputChange}
-                                    placeholder="10-digit mobile number"
-                                    className={formErrors.phone ? 'error' : ''}
-                                />
-                                {formErrors.phone && <span className="error-text">{formErrors.phone}</span>}
-                            </div>
+                        <div className="lux-story-text">
+                            <span className="lux-step-number">01</span>
+                            <h2>Pick Your Tree</h2>
+                            <p>Based on the apple variety, the age of the roots, and its location basking in the mountain sun, you can hand-select your tree. Or, if you prefer, allow our master orchardists to choose the perfect one for you.</p>
                         </div>
+                    </div>
 
-                        <div className="form-group checkbox-group">
-                            <label className="checkbox-label">
-                                <input
-                                    type="checkbox"
-                                    name="isGift"
-                                    checked={formData.isGift}
-                                    onChange={handleInputChange}
-                                />
-                                <span>This adoption is a gift for someone else</span>
-                            </label>
+                    <div className="lux-story-row reverse lux-reveal">
+                        <div className="lux-story-image">
+                            <img src="/images/landing/hero_orchard.png" alt="Orchard Care" />
                         </div>
+                        <div className="lux-story-text">
+                            <span className="lux-step-number">02</span>
+                            <h2>Make It Yours</h2>
+                            <p>With a one-time monetary contribution that goes directly towards the organic upkeep and nourishment of the soil, this fruit-bearing tree becomes exclusively yours for an entire 11-month season.</p>
+                        </div>
+                    </div>
+                </section>
 
-                        {formData.isGift && (
-                            <div className="gift-details-section">
-                                <h4>Gift Details</h4>
-                                <div className="form-group">
-                                    <label>Recipient's Full Name *</label>
+                {/* 3. The Perks (Bento Box Grid) */}
+                <section className="lux-perks-section lux-reveal">
+                    <div className="lux-section-header">
+                        <h2>The Harvest Experience</h2>
+                        <p>More than just fruit. It's a connection to the land.</p>
+                    </div>
+
+                    <div className="lux-bento-grid">
+                        <div className="lux-bento-card">
+                            <div className="lux-icon">🏷️</div>
+                            <h3>Exclusive Marking</h3>
+                            <p>Your tree is physically tagged as 'adopted' with your name in our orchard.</p>
+                        </div>
+                        <div className="lux-bento-card featured">
+                            <div className="lux-icon">🍎</div>
+                            <h3>The Bounty</h3>
+                            <p>Receive five 5kg boxes of premium, certified organic apples delivered straight from your tree to your doorstep.</p>
+                        </div>
+                        <div className="lux-bento-card">
+                            <div className="lux-icon">📜</div>
+                            <h3>Official Certificate</h3>
+                            <p>A beautifully framed certificate of adoption, documenting your living legacy.</p>
+                        </div>
+                        <div className="lux-bento-card">
+                            <div className="lux-icon">🌱</div>
+                            <h3>Expert Care</h3>
+                            <p>Round-the-year organic nourishment, pruning, and protection provided by our local farmers.</p>
+                        </div>
+                        <div className="lux-bento-card wide">
+                            <div className="lux-icon">⛰️</div>
+                            <h3>Visit Your Tree</h3>
+                            <p>A standing invitation to visit the orchard. Harvest apples from your own tree in person (includes 1 box of 10kg capacity for day trips).</p>
+                        </div>
+                    </div>
+                </section>
+
+                {/* 4. The Gift Section (Sage Background) */}
+                <section className="lux-gift-section">
+                    <div className="lux-gift-container lux-reveal">
+                        <div className="lux-gift-text">
+                            <h2>The Ultimate Gift</h2>
+                            <p>Imagine the joy of gifting someone their very own producing apple tree in the Himalayas. It is a sustainable, breathing gift that keeps giving throughout the season.</p>
+
+                            <div className="lux-gift-toggle">
+                                <label className="lux-checkbox">
                                     <input
-                                        type="text"
-                                        name="recipientName"
-                                        value={formData.recipientName}
+                                        type="checkbox"
+                                        name="isGift"
+                                        checked={formData.isGift}
                                         onChange={handleInputChange}
-                                        placeholder="Name for their certificate"
-                                        className={formErrors.recipientName ? 'error' : ''}
                                     />
-                                    {formErrors.recipientName && <span className="error-text">{formErrors.recipientName}</span>}
-                                </div>
-                                <div className="form-group">
-                                    <label>Message for Certificate (Optional)</label>
-                                    <textarea
-                                        name="giftMessage"
-                                        value={formData.giftMessage}
-                                        onChange={handleInputChange}
-                                        placeholder="Add a special message for the recipient..."
-                                        rows="3"
-                                    />
-                                </div>
+                                    <span className="checkmark"></span>
+                                    Make this adoption a gift
+                                </label>
                             </div>
-                        )}
-                    </div>
-
-                    {/* Pricing / Checkout Action */}
-                    <div className="adopt-checkout-section">
-                        <div className="price-tag">
-                            <span className="currency">₹</span>
-                            <span className="amount">31,000</span>
-                            <span className="duration">/ season</span>
                         </div>
-                        <button className="adopt-btn" onClick={handleAdoptClick} disabled={isProcessing} style={{ opacity: isProcessing ? 0.7 : 1 }}>
-                            {isProcessing ? "Processing..." : "Adopt / Gift a Tree Now"}
-                        </button>
-                        <p className="guarantee">Secure checkout powered by Razorpay</p>
                     </div>
                 </section>
+
+                {/* 5. Pricing & Checkout (Floating Card) */}
+                <section className="lux-checkout-section lux-reveal">
+                    <div className="lux-pricing-card">
+                        <div className="lux-pricing-header">
+                            <h3>Adoption Details</h3>
+                            <p>Complete your registration below.</p>
+                        </div>
+
+                        <div className="lux-form">
+                            <div className="lux-input-group">
+                                <label>Full Name *</label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleInputChange}
+                                    placeholder="For the certificate"
+                                    className={formErrors.name ? 'error' : ''}
+                                />
+                                {formErrors.name && <span className="lux-error">{formErrors.name}</span>}
+                            </div>
+
+                            <div className="lux-input-row">
+                                <div className="lux-input-group">
+                                    <label>Email *</label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleInputChange}
+                                        placeholder="For updates"
+                                        className={formErrors.email ? 'error' : ''}
+                                    />
+                                    {formErrors.email && <span className="lux-error">{formErrors.email}</span>}
+                                </div>
+                                <div className="lux-input-group">
+                                    <label>Phone *</label>
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        value={formData.phone}
+                                        onChange={handleInputChange}
+                                        placeholder="Mobile number"
+                                        className={formErrors.phone ? 'error' : ''}
+                                    />
+                                    {formErrors.phone && <span className="lux-error">{formErrors.phone}</span>}
+                                </div>
+                            </div>
+
+                            {formData.isGift && (
+                                <div className="lux-gift-fields">
+                                    <div className="lux-input-group">
+                                        <label>Recipient's Full Name *</label>
+                                        <input
+                                            type="text"
+                                            name="recipientName"
+                                            value={formData.recipientName}
+                                            onChange={handleInputChange}
+                                            placeholder="Name for their certificate"
+                                            className={formErrors.recipientName ? 'error' : ''}
+                                        />
+                                        {formErrors.recipientName && <span className="lux-error">{formErrors.recipientName}</span>}
+                                    </div>
+                                    <div className="lux-input-group">
+                                        <label>Gift Message (Optional)</label>
+                                        <textarea
+                                            name="giftMessage"
+                                            value={formData.giftMessage}
+                                            onChange={handleInputChange}
+                                            placeholder="A special note..."
+                                            rows="2"
+                                        />
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="lux-checkout-action">
+                            <div className="lux-price-display">
+                                <span className="currency">₹</span>
+                                <span className="amount">31,000</span>
+                                <span className="duration">/ season</span>
+                            </div>
+
+                            <button
+                                className={`lux-submit-btn ${isProcessing ? 'processing' : ''}`}
+                                onClick={handleAdoptClick}
+                                disabled={isProcessing}
+                            >
+                                <span className="btn-text">{isProcessing ? "Securing Tree..." : "Adopt / Gift a Tree"}</span>
+                                <div className="btn-shine"></div>
+                            </button>
+                            <p className="lux-secure-note">🔒 Secured by Razorpay</p>
+                        </div>
+                    </div>
+                </section>
+
             </main>
         </SmoothScroll>
     );

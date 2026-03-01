@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+
 :root {
   --primary-green: #2d5016;
   --secondary-green: #4a7c2a;
@@ -12,6 +14,18 @@
   --success: #4a7c2a;
   --card-bg: #ffffff;
   --border-color: rgba(0, 0, 0, 0.1);
+
+  /* Earthy Luxury Theme Variables (Adopt A Tree) */
+  --lux-forest-green: #1B3B22;
+  --lux-forest-dark: #122917;
+  --lux-soft-sage: #E8EDE4;
+  --lux-off-white: #F9F6F0;
+  --lux-terracotta: #C44536;
+  --lux-muted-gold: #D4AF37;
+  --lux-text-dark: #2A362B;
+  --lux-text-light: #F9F6F0;
+  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'Inter', sans-serif;
 }
 
 [data-theme="dark"] {
@@ -106,4 +120,18 @@ body {
 .btn-secondary:hover {
   background: var(--primary-green);
   color: white;
+}
+
+/* Organic Noise Overlay Utility */
+.noise-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.4;
+  /* SVG Data URI for an organic grain/noise texture */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }

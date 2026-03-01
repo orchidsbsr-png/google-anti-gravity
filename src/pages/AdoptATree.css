@@ -1,439 +1,471 @@
-.adopt-page {
-    background-color: #fdfbf7;
-    /* Warm earthy off-white */
+.lux-adopt-page {
+    background-color: var(--lux-off-white, #F9F6F0);
+    color: var(--lux-text-dark, #2A362B);
     min-height: 100vh;
-    padding-bottom: 80px;
+    font-family: var(--font-sans, sans-serif);
+    overflow-x: hidden;
 }
 
-/* Hero Section */
-.adopt-hero {
+/* -----------------------------
+   REVEAL ON SCROLL ANIMATIONS
+----------------------------- */
+.lux-reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+.lux-reveal.lux-active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* -----------------------------
+   1. HERO SECTION
+----------------------------- */
+.lux-hero {
     position: relative;
-    height: 70vh;
-    min-height: 400px;
-    background-image: url("/images/adopt apple tree photos/red apple tree.jpg");
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    /* Parallax effect */
+    height: 100vh;
+    min-height: 600px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 20px;
+    overflow: hidden;
 }
 
-.adopt-hero-overlay {
+.lux-hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 120%;
+    /* Extra height for parallax */
+    background-image: url("/images/adopt apple tree photos/red apple tree.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    /* Pure CSS Parallax */
+    z-index: 0;
+}
+
+.lux-hero-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to bottom,
-            rgba(45, 51, 25, 0.4) 0%,
-            rgba(45, 51, 25, 0.7) 100%);
-    /* Dark forest green gradient overlay for readability */
+    /* Dark gradient fade from top to bottom, completely matching the next section's background at the bottom */
+    background: linear-gradient(to bottom, rgba(18, 41, 23, 0.4) 0%, rgba(18, 41, 23, 0.8) 70%, var(--lux-off-white, #F9F6F0) 100%);
     z-index: 1;
 }
 
-.adopt-hero-content {
+.lux-hero-content {
     position: relative;
     z-index: 2;
-    max-width: 800px;
+    max-width: 900px;
+    padding: 0 20px;
+    margin-top: -10vh;
+    /* Optical centering above the heavy bottom gradient */
 }
 
-.adopt-hero-content h1 {
-    color: #fff;
-    font-size: clamp(2rem, 5vw, 4rem);
-    line-height: 1.2;
-    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+.lux-kicker {
+    display: block;
+    color: var(--lux-muted-gold, #D4AF37);
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    margin-bottom: 2rem;
     font-weight: 500;
 }
 
-/* Content Blocks */
-.adopt-content {
-    max-width: 800px;
-    margin: -40px auto 0;
-    /* Reduced negative margin to work better with the cinematic fade */
+.lux-headline {
+    font-family: var(--font-serif, serif);
+    color: var(--lux-text-light, #F9F6F0);
+    font-size: clamp(3rem, 8vw, 6rem);
+    line-height: 1.1;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.lux-subhead {
+    color: var(--lux-soft-sage, #E8EDE4);
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+    font-weight: 300;
+}
+
+
+/* -----------------------------
+   2. STORY SECTION (ZIG-ZAG)
+----------------------------- */
+.lux-story-section {
+    padding: 10vw 5vw;
+    background-color: var(--lux-off-white, #F9F6F0);
     position: relative;
     z-index: 3;
-    background: #fcfdf9;
-    /* Slightly off-white to match form fields, creating softer depth */
-    padding: 60px 40px;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
 }
 
-.adopt-text-block {
-    margin-bottom: 50px;
+.lux-story-row {
+    display: flex;
+    align-items: center;
+    gap: 8vw;
+    max-width: 1200px;
+    margin: 0 auto 15vw;
 }
 
-.adopt-text-block:last-of-type {
-    margin-bottom: 40px;
+.lux-story-row.reverse {
+    flex-direction: row-reverse;
 }
 
-.adopt-text-block h3 {
-    color: #2d3319;
-    /* Forest green */
-    font-size: 1.8rem;
-    margin-bottom: 15px;
+.lux-story-image {
+    flex: 1;
     position: relative;
-    display: inline-block;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 30px 60px rgba(27, 59, 34, 0.15);
+    aspect-ratio: 4/5;
 }
 
-.adopt-text-block h3::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 40px;
-    height: 3px;
-    background-color: #c44536;
-    /* Earthy terracotta */
-    border-radius: 2px;
+.lux-story-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.5s ease;
 }
 
-.adopt-text-block p {
-    color: #4a5431;
+.lux-story-row:hover .lux-story-image img {
+    transform: scale(1.05);
+}
+
+.lux-story-text {
+    flex: 1;
+    padding: 2rem 0;
+}
+
+.lux-step-number {
+    display: block;
+    font-family: var(--font-serif, serif);
+    color: var(--lux-muted-gold, #D4AF37);
+    font-size: 1.5rem;
+    font-style: italic;
+    margin-bottom: 1rem;
+}
+
+.lux-story-text h2 {
+    font-family: var(--font-serif, serif);
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    color: var(--lux-forest-green, #1B3B22);
+    margin-bottom: 2rem;
+    line-height: 1.2;
+}
+
+.lux-story-text p {
     font-size: 1.15rem;
     line-height: 1.8;
+    color: var(--lux-text-dark, #2A362B);
+    opacity: 0.85;
 }
 
-.adopt-benefits-list {
-    list-style: none;
-    padding: 0;
-    margin-top: 20px;
+
+/* -----------------------------
+   3. PERKS SECTION (BENTO GRID)
+----------------------------- */
+.lux-perks-section {
+    padding: 8vw 5vw 12vw;
+    background-color: var(--lux-forest-dark, #122917);
+    color: var(--lux-text-light, #F9F6F0);
 }
 
-.adopt-benefits-list li {
-    position: relative;
-    padding-left: 30px;
-    margin-bottom: 15px;
-    color: #4a5431;
-    font-size: 1.15rem;
-    line-height: 1.6;
+.lux-section-header {
+    text-align: center;
+    margin-bottom: 6vw;
 }
 
-.adopt-benefits-list li::before {
-    content: '✓';
-    position: absolute;
-    left: 0;
-    top: 2px;
-    color: #c44536;
-    /* Terracotta checkmarks */
-    font-weight: bold;
+.lux-section-header h2 {
+    font-family: var(--font-serif, serif);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    color: var(--lux-soft-sage, #E8EDE4);
+    margin-bottom: 1rem;
+}
+
+.lux-section-header p {
     font-size: 1.2rem;
+    color: var(--lux-muted-gold, #D4AF37);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
 }
 
-/* Form Section */
-.adopt-form-section {
-    margin-top: 60px;
-    padding-top: 50px;
-    border-top: 1px solid #e9ecd3;
-    text-align: left;
+.lux-bento-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.adopt-form-section h3 {
-    color: #2d3319;
-    font-size: 1.8rem;
-    margin-bottom: 5px;
+.lux-bento-card {
+    background: rgba(232, 237, 228, 0.03);
+    /* Extremely subtle glass */
+    border: 1px solid rgba(232, 237, 228, 0.1);
+    border-radius: 12px;
+    padding: 3rem 2rem;
+    transition: all 0.4s ease;
+    backdrop-filter: blur(10px);
 }
 
-.form-subtitle {
-    color: #7a8659;
-    margin-bottom: 30px;
-    font-size: 1rem !important;
+.lux-bento-card:hover {
+    transform: translateY(-8px);
+    background: rgba(232, 237, 228, 0.08);
+    border-color: rgba(212, 175, 55, 0.3);
+    /* Gold hint on hover */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
-.form-group {
-    margin-bottom: 20px;
+.lux-bento-card.featured {
+    grid-column: span 1;
+    grid-row: span 2;
+    background: linear-gradient(135deg, rgba(45, 80, 22, 0.4) 0%, rgba(18, 41, 23, 0) 100%);
+    border-color: rgba(127, 179, 71, 0.2);
 }
 
-.form-row {
-    display: flex;
-    gap: 20px;
+.lux-bento-card.wide {
+    grid-column: span 2;
 }
 
-.form-group.half {
-    flex: 1;
+.lux-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.9;
 }
 
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    color: #2d3319;
-    font-weight: 500;
-    font-size: 0.95rem;
+.lux-bento-card h3 {
+    font-family: var(--font-serif, serif);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--lux-soft-sage, #E8EDE4);
 }
 
-.form-group input[type="text"],
-.form-group input[type="email"],
-.form-group input[type="tel"],
-.form-group textarea {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #d4d8c6;
-    border-radius: 8px;
-    font-size: 1rem;
-    background-color: #fcfdf9;
-    color: #2d3319;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    font-family: inherit;
+.lux-bento-card p {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: rgba(249, 246, 240, 0.7);
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: #c44536;
-    box-shadow: 0 0 0 3px rgba(196, 69, 54, 0.1);
+
+/* -----------------------------
+   4. GIFT SECTION
+----------------------------- */
+.lux-gift-section {
+    padding: 10vw 5vw;
+    background-color: var(--lux-soft-sage, #E8EDE4);
+    position: relative;
+    /* Adding the emotional lifestyle image as a subtle background */
+    background-image: url("/images/landing/apple_story.jpg");
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: overlay;
 }
 
-.form-group input.error {
-    border-color: #e63946;
-    background-color: #fffafb;
+.lux-gift-container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    background: rgba(249, 246, 240, 0.9);
+    padding: 4rem;
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
 }
 
-.error-text {
-    color: #e63946;
-    font-size: 0.85rem;
-    margin-top: 5px;
-    display: block;
+.lux-gift-text h2 {
+    font-family: var(--font-serif, serif);
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    color: var(--lux-forest-green, #1B3B22);
+    margin-bottom: 1.5rem;
 }
 
-.checkbox-group {
-    margin-top: 30px;
-    margin-bottom: 20px;
+.lux-gift-text p {
+    font-size: 1.25rem;
+    line-height: 1.8;
+    color: var(--lux-text-dark, #2A362B);
+    margin-bottom: 3rem;
+    opacity: 0.9;
 }
 
-.checkbox-label {
+.lux-gift-toggle {
+    display: inline-block;
+    background: var(--lux-off-white, #F9F6F0);
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    box-shadow: 0 10px 30px rgba(27, 59, 34, 0.08);
+}
+
+.lux-checkbox {
     display: flex;
     align-items: center;
     cursor: pointer;
-    font-size: 1.05rem !important;
-    color: #2d3319 !important;
-}
-
-.checkbox-label input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    margin-right: 12px;
-    accent-color: #c44536;
-    cursor: pointer;
-}
-
-.gift-details-section {
-    background-color: #f7f9ee;
-    padding: 25px;
-    border-radius: 12px;
-    border: 1px dashed #d4d8c6;
-    margin-bottom: 30px;
-    animation: slideDown 0.3s ease-out forwards;
-}
-
-.gift-details-section h4 {
-    color: #2d3319;
-    margin-bottom: 20px;
     font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--lux-forest-green, #1B3B22);
+    user-select: none;
 }
 
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.lux-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
 }
 
-/* Checkout Section */
-.adopt-checkout-section {
-    margin-top: 60px;
-    padding-top: 50px;
-    border-top: 1px solid #e9ecd3;
+.checkmark {
+    height: 24px;
+    width: 24px;
+    background-color: #e0e0e0;
+    border-radius: 6px;
+    margin-right: 15px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lux-checkbox:hover input~.checkmark {
+    background-color: #ccc;
+}
+
+.lux-checkbox input:checked~.checkmark {
+    background-color: var(--lux-terracotta, #C44536);
+}
+
+.checkmark:after {
+    content: "";
+    display: none;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    margin-bottom: 2px;
+}
+
+.lux-checkbox input:checked~.checkmark:after {
+    display: block;
+}
+
+
+/* -----------------------------
+   5. CHECKOUT (PRICING CARD)
+----------------------------- */
+.lux-checkout-section {
+    padding: 10vw 5vw;
+    background-color: var(--lux-off-white, #F9F6F0);
+    display: flex;
+    justify-content: center;
+}
+
+.lux-pricing-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 16px;
+    box-shadow: 0 40px 100px rgba(27, 59, 34, 0.1);
+    border: 1px solid rgba(27, 59, 34, 0.05);
+    overflow: hidden;
+    position: relative;
+    /* Lifting effect so the card feels detached */
+    transform: translateY(-50px);
+}
+
+.lux-pricing-header {
+    background-color: var(--lux-forest-green, #1B3B22);
+    color: var(--lux-off-white, #F9F6F0);
+    padding: 3rem 2rem;
     text-align: center;
 }
 
-.price-tag {
-    display: flex;
-    justify-content: center;
-    align-items: baseline;
-    margin-bottom: 30px;
-    color: #2d3319;
+.lux-pricing-header h3 {
+    font-family: var(--font-serif, serif);
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
 }
 
-.price-tag .currency {
-    font-size: 1.5rem;
-    font-weight: 500;
-    margin-right: 5px;
+.lux-pricing-header p {
+    color: var(--lux-muted-gold, #D4AF37);
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
 }
 
-.price-tag .amount {
-    font-size: 4rem;
-    font-weight: bold;
-    line-height: 1;
+.lux-form {
+    padding: 3rem 2.5rem 2rem;
 }
 
-.price-tag .duration {
-    font-size: 1.2rem;
-    color: #7a8659;
-    margin-left: 10px;
-}
-
-.adopt-btn {
-    background-color: #c44536;
-    /* Terracotta */
-    color: white;
-    font-size: 1.2rem;
-    font-weight: 500;
-    padding: 18px 50px;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 10px 20px rgba(196, 69, 54, 0.2);
+.lux-input-group {
+    margin-bottom: 1.5rem;
     width: 100%;
-    max-width: 400px;
 }
 
-.adopt-btn:hover {
-    background-color: #a83a2d;
-    transform: translateY(-2px);
-    box-shadow: 0 15px 25px rgba(196, 69, 54, 0.3);
+.lux-input-row {
+    display: flex;
+    gap: 1.5rem;
 }
 
-.adopt-btn:active {
-    transform: translateY(0);
-}
-
-.guarantee {
-    margin-top: 15px;
+.lux-input-group label {
+    display: block;
     font-size: 0.9rem;
-    color: #7a8659;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.guarantee::before {
-    content: '🔒';
-    font-size: 1rem;
-}
-
-/* Form Section */
-.adopt-form-section {
-    margin-top: 60px;
-    padding-top: 50px;
-    border-top: 1px solid #e9ecd3;
-    text-align: left;
-}
-
-.adopt-form-section h3 {
-    color: #2d3319;
-    font-size: 1.8rem;
-    margin-bottom: 5px;
-}
-
-.form-subtitle {
-    color: #7a8659;
-    margin-bottom: 30px;
-    font-size: 1rem !important;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-row {
-    display: flex;
-    gap: 20px;
-}
-
-.form-group.half {
-    flex: 1;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    color: #2d3319;
     font-weight: 500;
-    font-size: 0.95rem;
+    color: var(--lux-forest-green, #1B3B22);
+    margin-bottom: 0.5rem;
 }
 
-.form-group input[type="text"],
-.form-group input[type="email"],
-.form-group input[type="tel"],
-.form-group textarea {
+.lux-input-group input,
+.lux-input-group textarea {
     width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #d4d8c6;
-    border-radius: 8px;
+    background: #fbfbfa;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 14px 16px;
+    font-family: var(--font-sans, sans-serif);
     font-size: 1rem;
-    background-color: #fcfdf9;
-    color: #2d3319;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    font-family: inherit;
+    color: var(--lux-text-dark, #2A362B);
+    transition: all 0.3s ease;
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
+.lux-input-group input:focus,
+.lux-input-group textarea:focus {
     outline: none;
-    border-color: #c44536;
-    box-shadow: 0 0 0 3px rgba(196, 69, 54, 0.1);
+    border-color: var(--lux-forest-green, #1B3B22);
+    box-shadow: 0 0 0 2px rgba(27, 59, 34, 0.1);
+    background: #ffffff;
 }
 
-.form-group input.error {
-    border-color: #e63946;
-    background-color: #fffafb;
+.lux-input-group input.error {
+    border-color: var(--lux-terracotta, #C44536);
+    background: #fff8f8;
 }
 
-.error-text {
-    color: #e63946;
-    font-size: 0.85rem;
-    margin-top: 5px;
+.lux-error {
     display: block;
+    color: var(--lux-terracotta, #C44536);
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
 }
 
-.checkbox-group {
-    margin-top: 30px;
-    margin-bottom: 20px;
+.lux-gift-fields {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px dashed #e0e0e0;
+    animation: fadeIn 0.4s ease;
 }
 
-.checkbox-label {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    font-size: 1.05rem !important;
-    color: #2d3319 !important;
-}
-
-.checkbox-label input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    margin-right: 12px;
-    accent-color: #c44536;
-    cursor: pointer;
-}
-
-.gift-details-section {
-    background-color: #f7f9ee;
-    padding: 25px;
-    border-radius: 12px;
-    border: 1px dashed #d4d8c6;
-    margin-bottom: 30px;
-    animation: slideDown 0.3s ease-out forwards;
-}
-
-.gift-details-section h4 {
-    color: #2d3319;
-    margin-bottom: 20px;
-    font-size: 1.2rem;
-}
-
-@keyframes slideDown {
+@keyframes fadeIn {
     from {
         opacity: 0;
         transform: translateY(-10px);
@@ -445,39 +477,171 @@
     }
 }
 
-/* Mobile Responsiveness */
+.lux-checkout-action {
+    background: #fbfbfa;
+    padding: 2.5rem;
+    border-top: 1px solid #f0f0f0;
+    text-align: center;
+}
+
+.lux-price-display {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    margin-bottom: 2rem;
+    color: var(--lux-forest-green, #1B3B22);
+}
+
+.lux-price-display .currency {
+    font-size: 2rem;
+    font-weight: 500;
+    margin-right: 4px;
+}
+
+.lux-price-display .amount {
+    font-family: var(--font-serif, serif);
+    font-size: 4rem;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.lux-price-display .duration {
+    font-size: 1rem;
+    color: #888;
+    margin-left: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* PREMIUM SHINING BUTTON */
+.lux-submit-btn {
+    position: relative;
+    width: 100%;
+    background-color: var(--lux-forest-green, #1B3B22);
+    color: #ffffff;
+    border: none;
+    border-radius: 50px;
+    padding: 20px 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(27, 59, 34, 0.2);
+}
+
+.lux-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(27, 59, 34, 0.3);
+}
+
+.lux-submit-btn:active {
+    transform: translateY(1px);
+}
+
+.lux-submit-btn.processing {
+    background-color: #556b5b;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.btn-text {
+    position: relative;
+    z-index: 2;
+    letter-spacing: 0.05em;
+}
+
+/* Sweeping Shine Hover Effect */
+.btn-shine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0) 100%);
+    transform: skewX(-25deg);
+    z-index: 1;
+}
+
+.lux-submit-btn:hover .btn-shine {
+    animation: shineSweep 1.5s infinite;
+}
+
+@keyframes shineSweep {
+    0% {
+        left: -100%;
+    }
+
+    20% {
+        left: 200%;
+    }
+
+    100% {
+        left: 200%;
+    }
+}
+
+.lux-secure-note {
+    margin-top: 1.2rem;
+    font-size: 0.85rem;
+    color: #888;
+}
+
+
+/* -----------------------------
+   MOBILE RESPONSIVENESS
+----------------------------- */
+@media (max-width: 900px) {
+    .lux-bento-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .lux-bento-card.featured {
+        grid-column: span 2;
+        grid-row: span 1;
+    }
+}
+
 @media (max-width: 768px) {
-    .adopt-hero {
-        height: 50vh;
+    .lux-hero {
+        min-height: 500px;
+    }
+
+    .lux-hero-bg {
         background-attachment: scroll;
-        /* Disable parallax on mobile for performance */
+        /* Disable parallax on mobile */
     }
 
-    .adopt-content {
-        margin: -40px 20px 0;
-        padding: 40px 25px;
+    .lux-story-row,
+    .lux-story-row.reverse {
+        flex-direction: column;
+        gap: 2rem;
+        margin-bottom: 4rem;
     }
 
-    .adopt-text-block h3 {
-        font-size: 1.5rem;
-    }
-
-    .adopt-text-block p,
-    .adopt-benefits-list li {
-        font-size: 1.05rem;
-    }
-
-    .price-tag .amount {
-        font-size: 3rem;
-    }
-
-    .adopt-btn {
-        padding: 16px 30px;
+    .lux-story-image {
         width: 100%;
     }
 
-    .form-row {
+    .lux-bento-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .lux-bento-card.featured,
+    .lux-bento-card.wide {
+        grid-column: span 1;
+    }
+
+    .lux-input-row {
         flex-direction: column;
         gap: 0;
+    }
+
+    .lux-form {
+        padding: 2rem 1.5rem 1.5rem;
+    }
+
+    .lux-checkout-action {
+        padding: 2rem 1.5rem;
     }
 }
