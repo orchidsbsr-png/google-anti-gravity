@@ -1,0 +1,28 @@
+.process-card {
+    width: 40%;
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 15px;
+    border: 1px solid #e0e0d6;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.process-card-title {
+    font-size: 2rem;
+    color: #2d3319;
+    margin: 10px 0;
+}
+
+@media (max-width: 600px) {
+    .process-card {
+        width: 80%;
+        /* Take up more space since screen is narrow */
+        padding: 1.5rem;
+        /* Better internal padding for small screens */
+    }
+
+    .process-card-title {
+        font-size: 1.5rem;
+        /* Reduce font size to prevent breaking out */
+    }
+}

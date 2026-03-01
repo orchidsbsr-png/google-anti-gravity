@@ -2,6 +2,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import './Process.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -137,17 +138,13 @@ export default function Process() {
                             position: 'relative',
                             zIndex: 1
                         }}>
-                        <div style={{
-                            width: '40%',
-                            backgroundColor: '#fff',
-                            padding: '2rem',
-                            borderRadius: '15px',
-                            border: '1px solid #e0e0d6',
-                            textAlign: index % 2 === 0 ? 'left' : 'right',
-                            boxShadow: '0 4px 10px rgba(0,0,0,0.05)'
-                        }}>
+                        <div
+                            className="process-card"
+                            style={{
+                                textAlign: index % 2 === 0 ? 'left' : 'right',
+                            }}>
                             <span style={{ fontSize: '1rem', color: '#2d3319', fontWeight: 'bold', opacity: 0.5 }}>{`0${index + 1}`}</span>
-                            <h4 style={{ fontSize: '2rem', color: '#2d3319', margin: '10px 0' }}>{step.title}</h4>
+                            <h4 className="process-card-title">{step.title}</h4>
                             <p style={{ color: '#5c6044', lineHeight: '1.4' }}>{step.desc}</p>
                         </div>
                     </div>
