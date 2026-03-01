@@ -90,38 +90,31 @@ export default function Process() {
     }, []);
 
     return (
-        <section ref={sectionRef} style={{
-            padding: '10vw 0',
-            backgroundColor: '#f5f5f0',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            position: 'relative'
-        }}>
-            <h2 style={{ fontSize: '4rem', color: '#2d3319', marginBottom: '5vh' }}>The Journey</h2>
+        <section ref={sectionRef} className="process-section">
+            <h2 style={{ fontSize: '4rem', color: '#fff', marginBottom: '5vh' }}>The Journey</h2>
 
             <div ref={containerRef} style={{ position: 'relative', width: '100%', maxWidth: '800px', paddingBottom: '50px' }}>
                 {/* SVG Path Container */}
                 <svg style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 0, height: '100%', width: '200px', zIndex: 0, pointerEvents: 'none', overflow: 'visible' }}>
                     <path
                         d=""
-                        stroke="#2d3319"
+                        stroke="#fff"
                         strokeWidth="2"
                         fill="none"
-                        opacity="0.2"
+                        opacity="0.3"
                     />
                     <path
                         ref={pathRef}
                         d=""
-                        stroke="#2d3319"
+                        stroke="#fff"
                         strokeWidth="4" // Slightly thicker for the active line
                         fill="none"
                     />
                     <circle
                         id="slider-bead"
                         r="6"
-                        fill="#2d3319"
-                        stroke="#f5f5f0"
+                        fill="#fff"
+                        stroke="#fff"
                         strokeWidth="2"
                     />
                 </svg>

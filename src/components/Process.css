@@ -1,3 +1,33 @@
+.process-section {
+    padding: 100px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+
+    background-image: url("/images/himalayan-orchard.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.process-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 0;
+}
+
+.process-section>h2,
+.process-section>div {
+    position: relative;
+    z-index: 1;
+}
+
 .process-card {
     width: 40%;
     background-color: #fff;
@@ -11,6 +41,12 @@
     font-size: 2rem;
     color: #2d3319;
     margin: 10px 0;
+}
+
+@media (max-width: 768px) {
+    .process-section {
+        background-attachment: scroll;
+    }
 }
 
 @media (max-width: 600px) {
