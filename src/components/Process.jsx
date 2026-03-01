@@ -67,7 +67,7 @@ export default function Process() {
                 trigger: sectionRef.current,
                 start: "top center",
                 end: "bottom center",
-                scrub: 1,
+                scrub: 2,
             }
         });
 
@@ -105,7 +105,7 @@ export default function Process() {
 
             <h2 style={{ fontSize: '4rem', color: '#fff', marginBottom: '5vh' }}>The Journey</h2>
 
-            <div ref={containerRef} style={{ position: 'relative', width: '100%', maxWidth: '800px', paddingBottom: '100px' }}>
+            <div ref={containerRef} style={{ position: 'relative', width: '100%', maxWidth: '800px', paddingBottom: '200px' }}>
                 {/* SVG Path Container */}
                 <svg style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 0, height: '100%', width: '200px', zIndex: 0, pointerEvents: 'none', overflow: 'visible' }}>
                     <path
@@ -138,7 +138,7 @@ export default function Process() {
                         style={{
                             display: 'flex',
                             justifyContent: index % 2 === 0 ? 'flex-start' : 'flex-end',
-                            marginBottom: index === steps.length - 1 ? '0' : '80px', // Reduced spacing
+                            marginBottom: index === steps.length - 1 ? '0' : '200px', // Increased from 80px to slow down scroll
                             width: '100%',
                             position: 'relative',
                             zIndex: 1
