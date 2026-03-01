@@ -97,6 +97,18 @@ export default function Hero() {
                     Premium Organic • Himachal Pradesh
                 </p>
             </div>
+
+            {/* Seamless Transition Gradient */}
+            <div style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                width: '100%',
+                height: '25vh',
+                background: 'linear-gradient(to bottom, transparent 0%, #2d3319 100%)',
+                zIndex: 2,
+                pointerEvents: 'none' // Ensures it doesn't block clicks
+            }} />
         </section>
     );
 }
