@@ -16,17 +16,17 @@
     z-index: 1000;
 
     /* Glassmorphism Capsule Style */
-    background: rgba(255, 255, 255, 0.15);
-    /* Highly translucent white for stronger glass effect */
+    background: rgba(255, 255, 255, 0.45);
+    /* Slightly more opaque for light mode contrast */
     backdrop-filter: blur(15px);
     /* Strong Frosted glass effect */
     -webkit-backdrop-filter: blur(15px);
     border-radius: 35px;
     /* High border-radius for pill shape */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    /* Floating shadow */
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    /* Subtle border */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    /* Soft floating shadow to create separation from light backgrounds */
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    /* Stronger white border for rim lighting effect */
 
     padding: 0 20px;
     padding-bottom: 0;
