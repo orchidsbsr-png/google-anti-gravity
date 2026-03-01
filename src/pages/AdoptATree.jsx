@@ -16,6 +16,9 @@ const AdoptATree = () => {
 
     // Integrating Razorpay Standard Checkout & Scroll Animation Observers
     useEffect(() => {
+        // Ensure page loads at the top
+        window.scrollTo(0, 0);
+
         // Razorpay Script
         const loadRazorpayScript = () => {
             const script = document.createElement('script');
@@ -179,7 +182,7 @@ const AdoptATree = () => {
 
                     <div className="lux-story-row reverse lux-reveal">
                         <div className="lux-story-image">
-                            <img src="/images/adopt apple tree photos/image 2.png" alt="Orchard Care" />
+                            <img src="/images/adopt apple tree photos/image_2.png" alt="Orchard Care" />
                         </div>
                         <div className="lux-story-text">
                             <span className="lux-step-number">02</span>
