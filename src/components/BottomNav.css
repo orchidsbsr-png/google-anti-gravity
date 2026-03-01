@@ -16,11 +16,11 @@
     z-index: 1000;
 
     /* Glassmorphism Capsule Style */
-    background: rgba(255, 255, 255, 0.75);
-    /* Translucent white */
-    backdrop-filter: blur(20px);
-    /* Frosted glass effect */
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.3);
+    /* Highly translucent white for stronger glass effect */
+    backdrop-filter: blur(25px);
+    /* Strong Frosted glass effect */
+    -webkit-backdrop-filter: blur(25px);
     border-radius: 35px;
     /* High border-radius for pill shape */
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
@@ -35,7 +35,9 @@
 
 /* Dark Mode Adaptation */
 [data-theme='dark'] .bottom-nav {
-    background: rgba(30, 30, 30, 0.75);
+    background: rgba(30, 30, 30, 0.4);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
 }
