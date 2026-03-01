@@ -51,7 +51,9 @@ const AdoptATree = () => {
         return Object.keys(errors).length === 0;
     };
 
-    const handleAdoptClick = () => {
+    const [isProcessing, setIsProcessing] = useState(false);
+
+    const handleAdoptClick = async () => {
         if (!validateForm()) {
             // Scroll to form or show an alert
             alert("Please fill in all required details for the certificate before proceeding.");
@@ -63,38 +65,67 @@ const AdoptATree = () => {
             return;
         }
 
-        const options = {
-            key: import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_dummykey123456", // Tries to load key from .env file, falls back to dummy key
-            amount: "3100000", // ₹31,000 in paise
-            currency: "INR",
-            name: "Naaliban Apple Orchards",
-            description: formData.isGift ? `Gift an Apple Tree to ${formData.recipientName}` : "Adopt an Organic Apple Tree",
-            image: "/images/logo.png",
-            handler: function (response) {
-                alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}. We will contact you soon regarding your certificate!`);
-                // In a real app, send response + formData to your backend
-            },
-            prefill: {
-                name: formData.name,
-                email: formData.email,
-                contact: formData.phone
-            },
-            notes: {
-                is_gift: formData.isGift ? "Yes" : "No",
-                recipient_name: formData.recipientName,
-                gift_message: formData.giftMessage,
-                certificate_name: formData.isGift ? formData.recipientName : formData.name
-            },
-            theme: {
-                color: "#2d3319" // Forest green brand color
-            }
-        };
+        try {
+            setIsProcessing(true);
 
-        const rzp = new window.Razorpay(options);
-        rzp.on('payment.failed', function (response) {
-            alert(`Payment failed. Reason: ${response.error.description}`);
-        });
-        rzp.open();
+            // Step 1: Create Order on the Backend
+            const response = await fetch('/api/initiate_payment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    amount: 31000, // ₹31,000 passed to backend (backend multiplies by 100 to get paise)
+                    receipt: `adopt_tree_${Date.now()}`
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Payment initiation failed');
+            }
+
+            // Step 2: Open Razorpay Checkout with the returned order_id
+            const options = {
+                key: import.meta.env.VITE_RAZORPAY_KEY_ID || data.key || "rzp_test_dummykey123456",
+                amount: data.amount, // from backend (paise)
+                currency: data.currency, // from backend
+                name: "Naaliban Apple Orchards",
+                description: formData.isGift ? `Gift an Apple Tree to ${formData.recipientName}` : "Adopt an Organic Apple Tree",
+                image: "/images/logo.png",
+                order_id: data.id, // Mandatory for live payments
+                handler: function (response) {
+                    alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}. We will contact you soon regarding your certificate!`);
+                    // In a real app, send response + formData to your backend to verify payment and store adoption details
+                },
+                prefill: {
+                    name: formData.name,
+                    email: formData.email,
+                    contact: formData.phone
+                },
+                notes: {
+                    is_gift: formData.isGift ? "Yes" : "No",
+                    recipient_name: formData.recipientName,
+                    gift_message: formData.giftMessage,
+                    certificate_name: formData.isGift ? formData.recipientName : formData.name
+                },
+                theme: {
+                    color: "#2d3319" // Forest green brand color
+                }
+            };
+
+            const rzp = new window.Razorpay(options);
+            rzp.on('payment.failed', function (response) {
+                console.error("Razorpay Payment Failed:", response.error);
+                alert(`Payment failed. Reason: ${response.error.description}`);
+            });
+            rzp.open();
+
+        } catch (error) {
+            console.error('Error initiating payment:', error);
+            alert(`Failed to start payment: ${error.message}`);
+        } finally {
+            setIsProcessing(false);
+        }
     };
 
     return (
@@ -229,8 +260,8 @@ const AdoptATree = () => {
                             <span className="amount">31,000</span>
                             <span className="duration">/ season</span>
                         </div>
-                        <button className="adopt-btn" onClick={handleAdoptClick}>
-                            Adopt / Gift a Tree Now
+                        <button className="adopt-btn" onClick={handleAdoptClick} disabled={isProcessing} style={{ opacity: isProcessing ? 0.7 : 1 }}>
+                            {isProcessing ? "Processing..." : "Adopt / Gift a Tree Now"}
                         </button>
                         <p className="guarantee">Secure checkout powered by Razorpay</p>
                     </div>
