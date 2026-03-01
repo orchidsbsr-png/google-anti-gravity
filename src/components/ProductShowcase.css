@@ -63,10 +63,10 @@
 /* Mobile responsive adjustments */
 @media (max-width: 768px) {
     .showcase-media-container {
-        width: 80vw;
+        width: 90vw;
         height: auto;
-        aspect-ratio: 1 / 1;
-        /* Keep images square on mobile */
+        aspect-ratio: auto;
+        /* Let images maintain their natural aspect ratio */
         margin-bottom: 2rem;
     }
 
