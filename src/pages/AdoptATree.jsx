@@ -22,7 +22,7 @@ const AdoptATree = () => {
         }
 
         const options = {
-            key: "YOUR_KEY_ID", // Placeholder API Key
+            key: import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_dummykey123456", // Tries to load key from .env file, falls back to dummy key
             amount: "3100000", // ₹31,000 in paise
             currency: "INR",
             name: "Naaliban Apple Orchards",
