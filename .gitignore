@@ -7,3 +7,5 @@ firebase-debug.log*
 output.json
 pincode_output.json
 debug_output.txt
+.vercel
+.env*
