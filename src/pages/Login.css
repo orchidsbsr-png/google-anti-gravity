@@ -27,26 +27,10 @@
     gap: 20px;
 }
 
-/* Apple Logo */
-.apple-logo {
-    width: 200px;
-    height: 200px;
-    margin-bottom: 10px;
-    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1));
-    background: transparent;
-    border: none;
-    outline: none;
-}
-
-.apple-logo img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    background: transparent;
-    border: none;
-    outline: none;
-    mix-blend-mode: multiply;
-    /* This helps blend the white background with the page */
+/* Brand logo */
+.login-logo {
+    color: var(--forest-700, #2D3319);
+    margin-bottom: 34px;
 }
 
 /* Brand Title */

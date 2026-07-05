@@ -1,389 +1,253 @@
-﻿/* The Antigravity Alpine Kitchen */
+/* Orchard Editorial — The Kitchen */
 
-/* Global Page Layout */
-.antigravity-kitchen {
-    position: relative;
-    min-height: 100vh;
-    width: 100%;
-    overflow-x: hidden;
-    background-color: #F7F4EC;
-    /* Soft off-white base */
-    padding-bottom: 5rem;
-}
-
-/* Ethereal Background - Sunrise Peaks */
-.alpine-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    z-index: 0;
-    background:
-        linear-gradient(to bottom, rgba(247, 244, 236, 0.55), rgba(247, 244, 236, 0.35)),
-        url('/images/himalayan-orchard.jpg') no-repeat center center/cover;
-    filter: blur(8px) contrast(0.9) brightness(1.1);
-    transform: scale(1.1);
-    /* Prevent blur edges */
-}
-
-/* Content Container */
-.kitchen-content {
-    position: relative;
-    z-index: 10;
-    max-width: 1280px;
+.kitchen-page {
+    padding: clamp(40px, 6vw, 90px) clamp(20px, 5vw, 80px) 140px;
+    max-width: 1240px;
     margin: 0 auto;
-    padding: 6rem 2rem 2rem;
+    min-height: 100vh;
 }
 
-/* Header Typography */
 .kitchen-header {
-    text-align: center;
-    margin-bottom: 4rem;
+    max-width: 760px;
+    margin-bottom: clamp(44px, 5vw, 70px);
 }
 
-.kitchen-header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 3.5rem;
-    color: #1C2313;
-    margin: 0;
-    letter-spacing: -1px;
-    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.kitchen-header .subtitle {
-    font-family: 'Inter', sans-serif;
+.kitchen-eyebrow {
+    font-size: 0.72rem;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 4px;
-    font-size: 0.9rem;
-    color: #7f8c8d;
-    margin-top: 1rem;
+    letter-spacing: 0.35em;
+    color: var(--terracotta, #C44536);
+    margin-bottom: 18px;
 }
 
-/* Masonry Grid Layout */
-.masonry-grid {
-    column-count: 3;
-    column-gap: 2rem;
-    width: 100%;
+.kitchen-title {
+    font-family: var(--font-serif, 'Fraunces', serif);
+    font-size: clamp(2.6rem, 6vw, 4.4rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.02;
+    color: var(--ink, #1C2313);
+    margin: 0 0 22px;
 }
 
-@media (max-width: 900px) {
-    .masonry-grid {
-        column-count: 2;
-    }
+.kitchen-title em {
+    font-weight: 300;
 }
 
-@media (max-width: 600px) {
-    .masonry-grid {
-        column-count: 1;
-    }
+.kitchen-sub {
+    font-size: 1.05rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--ink-soft, #4A4F3E);
+    max-width: 480px;
 }
 
-/* Recipe Card Base */
-.recipe-card {
-    display: block;
-    /* For Link */
-    break-inside: avoid;
-    margin-bottom: 2rem;
-    border-radius: 16px;
+/* ---------- Featured recipe ---------- */
+
+.featured-recipe {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    background: var(--forest-700, #2D3319);
+    border-radius: 26px;
     overflow: hidden;
-    background: white;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
     text-decoration: none;
+    color: var(--cream, #F7F4EC);
+    margin-bottom: clamp(44px, 5vw, 70px);
+    box-shadow: 0 34px 80px -30px rgba(28, 35, 19, 0.5);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.featured-recipe:hover {
+    transform: translateY(-4px);
+}
+
+.featured-media {
+    min-height: 380px;
     position: relative;
-    transform: translateY(0);
+    overflow: hidden;
+}
+
+.featured-media .recipe-video,
+.featured-media video,
+.featured-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    position: absolute;
+    inset: 0;
+}
+
+.featured-info {
+    padding: clamp(28px, 3.5vw, 52px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.featured-tag {
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold, #C9A227);
+    margin-bottom: 16px;
+}
+
+.featured-info h2 {
+    font-family: var(--font-serif, 'Fraunces', serif);
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    margin: 0 0 8px;
+}
+
+.recipe-chef {
+    font-family: var(--font-serif, 'Fraunces', serif);
+    font-style: italic;
+    font-size: 0.95rem;
+    opacity: 0.7;
+    margin: 0 0 16px;
+}
+
+.featured-desc {
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 1.75;
+    opacity: 0.85;
+    margin: 0 0 22px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.recipe-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.recipe-meta span {
+    font-size: 0.64rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    border: 1px solid rgba(247, 244, 236, 0.3);
+    color: rgba(247, 244, 236, 0.85);
+}
+
+.featured-cta {
+    margin-top: 18px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold, #C9A227);
+}
+
+/* ---------- Grid ---------- */
+
+.recipes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: clamp(20px, 2.5vw, 34px);
+}
+
+.recipe-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--paper, #FDFCF7);
+    border: 1px solid var(--hairline, rgba(28, 35, 19, 0.14));
+    border-radius: 20px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
 }
 
 .recipe-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-    z-index: 5;
+    transform: translateY(-6px);
+    box-shadow: 0 28px 60px -24px rgba(28, 35, 19, 0.28);
 }
 
-/* Floating Animation (Drifting upwards) */
-@keyframes antigravity {
-    0% {
-        transform: translateY(0px);
-    }
-
-    50% {
-        transform: translateY(-5px);
-    }
-
-    100% {
-        transform: translateY(0px);
-    }
-}
-
-.float-animation {
-    animation: antigravity 6s ease-in-out infinite;
-}
-
-.delay-0 {
-    animation-delay: 0s;
-}
-
-.delay-1 {
-    animation-delay: 2s;
-}
-
-.delay-2 {
-    animation-delay: 4s;
-}
-
-/* Media/Video Section */
 .card-media {
+    height: 220px;
     position: relative;
-    width: 100%;
-    /* Aspect ratios can vary in masonry */
+    overflow: hidden;
+    background: var(--cream-warm, #F2EDE0);
 }
 
-.recipe-video {
+.card-media .recipe-video,
+.card-media video,
+.card-media img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
     display: block;
-    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Play Icon Overlay */
-.play-icon {
+.recipe-card:hover .card-media .recipe-video,
+.recipe-card:hover .card-media video,
+.recipe-card:hover .card-media img {
+    transform: scale(1.05);
+}
+
+.card-media .card-index {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 48px;
-    height: 48px;
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(4px);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    pointer-events: none;
-    opacity: 0.9;
-    transition: opacity 0.3s ease;
-}
-
-.recipe-card:hover .play-icon {
-    opacity: 0;
-    /* Hide when hovering (assuming video plays automatically clearly) */
-}
-
-/* Hero Card Specifics */
-.hero-card {
-    column-span: 2;
-    /* Spans 2 columns if supported, main focal point */
-}
-
-.hero-card h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 2rem;
-    color: #1C2313;
-    margin: 1rem 1.5rem 0.5rem;
-}
-
-.hero-card .chef-name {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.85rem;
-    color: #95a5a6;
-    margin: 0 1.5rem 1.5rem;
-}
-
-/* Bundle UI Module (Scenario 3) */
-.bundle-module {
-    margin: 0 1.5rem 1.5rem;
-    padding: 1rem;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.8);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.bundle-icon {
-    font-size: 1.5rem;
-    margin-right: 1rem;
-}
-
-.bundle-text {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    width: 100%;
-}
-
-.bundle-text span {
-    font-size: 0.8rem;
-    color: #57606f;
-    font-weight: 500;
-}
-
-.btn-apricot {
-    background: #C9A227;
-    /* Warm Apricot */
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
+    top: 14px;
+    left: 16px;
+    font-size: 0.66rem;
     font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: background 0.3s;
-    text-align: left;
-    width: fit-content;
+    letter-spacing: 0.28em;
+    color: rgba(253, 252, 247, 0.9);
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
+    z-index: 2;
 }
 
-.btn-apricot:hover {
-    background: #C44536;
+.card-info {
+    padding: 1.3rem 1.5rem 1.5rem;
 }
 
-/* Standard Card Typography */
-.card-info-minimal {
-    padding: 1rem 1.25rem;
-    background: white;
-}
-
-.card-info-minimal h3 {
-    font-family: 'Inter', sans-serif;
-    font-size: 1rem;
-    font-weight: 500;
-    color: #1C2313;
-    margin: 0;
-}
-
-/* Responsive Fixes */
-@media (max-width: 600px) {
-    .kitchen-header h1 {
-        font-size: 2.5rem;
-    }
-
-    .hero-card h2 {
-        font-size: 1.5rem;
-    }
-
-    .bundle-text span {
-        font-size: 0.7rem;
-    }
-
-    .btn-apricot {
-        font-size: 0.8rem;
-    }
-}
-
-
-/* TYPOGRAPHY CLASSES - Distinct Personality for Each Card */
-.font-playfair h3 {
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-}
-
-.font-cormorant h3 {
-    font-family: 'Cormorant Garamond', serif;
+.card-fruit {
+    display: block;
+    font-size: 0.62rem;
     font-weight: 600;
-    font-size: 1.2rem;
-    letter-spacing: 0.5px;
-}
-
-.font-montserrat h3 {
-    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 0.26em;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: 0.8rem;
+    color: var(--terracotta, #C44536);
+    margin-bottom: 8px;
 }
 
-.font-merriweather h3 {
-    font-family: 'Merriweather', serif;
-    font-style: italic;
-    color: #C44536;
+.card-info h3 {
+    font-family: var(--font-serif, 'Fraunces', serif);
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    color: var(--ink, #1C2313);
+    margin: 0 0 12px;
 }
 
-.font-cinzel h3 {
-    font-family: 'Cinzel', serif;
-    font-weight: 600;
-    letter-spacing: 1px;
-    color: #1C2313;
+.card-info .recipe-meta span {
+    border-color: var(--hairline, rgba(28, 35, 19, 0.16));
+    color: var(--ink-faint, #83866F);
 }
 
-.font-vibes h3 {
-    font-family: 'Great Vibes', cursive;
-    font-size: 1.8rem;
-    color: #A93B2E;
-    transform: rotate(-2deg);
-    margin-top: -5px;
-}
+/* ---------- Responsive ---------- */
 
-.font-lato h3 {
-    font-family: 'Lato', sans-serif;
-    font-weight: 300;
-    letter-spacing: 1px;
-}
-
-/* ORGANIC ASYMMETRY - Offsets */
-/* Push the second item in flows down to create staggering */
-.recipe-card:nth-child(2n) {
-    margin-top: 3rem;
-}
-
-.recipe-card:nth-child(3n) {
-    margin-top: -1.5rem;
-    /* Pull some up */
-}
-
-.recipe-card:nth-child(5n) {
-    margin-left: 1rem;
-    /* Slight horizontal drift */
-}
-
-/* Aspect Ratio Modifiers */
-.portrait-card .card-media {
-    aspect-ratio: 9 / 16;
-}
-
-.portrait-card .recipe-video {
-    height: 100%;
-    object-fit: cover;
-}
-
-.landscape-card .card-media {
-    aspect-ratio: 16 / 9;
-}
-
-.square-card .card-media {
-    aspect-ratio: 1 / 1;
-}
-
-/* Ensure steam effect only triggers on relevant hero cards or hovered hot items */
-.steam-effect {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at 50% 80%, rgba(255, 255, 255, 0.4) 0%, transparent 60%);
-    opacity: 0.6;
-    animation: steamRise 3s infinite ease-out;
-    pointer-events: none;
-}
-
-@keyframes steamRise {
-    0% {
-        transform: translateY(0) scale(1);
-        opacity: 0.3;
+@media (max-width: 860px) {
+    .featured-recipe {
+        grid-template-columns: 1fr;
     }
 
-    50% {
-        transform: translateY(-10px) scale(1.1);
-        opacity: 0.6;
-    }
-
-    100% {
-        transform: translateY(-20px) scale(1.2);
-        opacity: 0;
+    .featured-media {
+        min-height: 240px;
     }
 }

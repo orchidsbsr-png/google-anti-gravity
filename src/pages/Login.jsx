@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import Logo from '../components/Logo';
 import './Login.css';
 
 const Login = () => {
@@ -38,13 +39,10 @@ const Login = () => {
     return (
         <div className="login-minimal">
             <div className="login-content-minimal">
-                {/* Apple Logo */}
-                <div className="apple-logo">
-                    <img src="/images/apple.png" alt="Apple" />
+                {/* Brand */}
+                <div className="login-logo">
+                    <Logo variant="full" size={72} stacked />
                 </div>
-
-                {/* Title */}
-                <h1 className="brand-title">Farm Fresh</h1>
 
                 {/* Features */}
                 <div className="features-badges">

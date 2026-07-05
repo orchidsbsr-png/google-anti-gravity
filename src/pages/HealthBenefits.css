@@ -1,59 +1,162 @@
+/* Orchard Editorial — Health Benefits */
+
 .benefits-page {
-    padding: 1rem;
-    padding-bottom: 100px;
+    padding: clamp(40px, 6vw, 90px) clamp(20px, 5vw, 80px) 140px;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: 100vh;
 }
 
-.page-header {
-    padding: 1.5rem;
-    border-radius: 16px;
-    margin-bottom: 2rem;
-    text-align: center;
+.benefits-header {
+    max-width: 720px;
+    margin-bottom: clamp(48px, 6vw, 80px);
 }
 
-.page-header h1 {
-    color: var(--primary-green);
-    margin-bottom: 0.5rem;
+.benefits-eyebrow {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.35em;
+    color: var(--terracotta, #C44536);
+    margin-bottom: 18px;
 }
 
-.page-header p {
-    color: var(--text-secondary);
+.benefits-title {
+    font-family: var(--font-serif, 'Fraunces', serif);
+    font-size: clamp(2.6rem, 6vw, 4.4rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.02;
+    color: var(--ink, #1C2313);
+    margin: 0 0 22px;
 }
+
+.benefits-title em {
+    font-weight: 300;
+}
+
+.benefits-sub {
+    font-size: 1.05rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--ink-soft, #4A4F3E);
+    max-width: 520px;
+}
+
+/* ---------- Cards ---------- */
 
 .benefits-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    gap: clamp(20px, 2.5vw, 34px);
 }
 
 .benefit-card {
     display: flex;
-    align-items: center;
-    padding: 1.5rem;
-    gap: 1.5rem;
-    transition: transform 0.3s;
+    flex-direction: column;
+    background: var(--paper, #FDFCF7);
+    border: 1px solid var(--hairline, rgba(28, 35, 19, 0.14));
+    border-radius: 22px;
+    overflow: hidden;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
 }
 
 .benefit-card:hover {
-    transform: translateX(5px);
+    transform: translateY(-6px);
+    box-shadow: 0 30px 60px -24px rgba(28, 35, 19, 0.28);
 }
 
-.benefit-icon {
-    font-size: 3rem;
-    background: rgba(255, 255, 255, 0.5);
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
+.benefit-visual {
+    height: 190px;
+    background: var(--sage, #E9ECD3);
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.benefit-visual img {
+    height: 78%;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 16px 24px rgba(28, 35, 19, 0.25));
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.benefit-card:hover .benefit-visual img {
+    transform: scale(1.07) rotate(-2deg);
+}
+
+.benefit-content {
+    padding: 1.6rem 1.7rem 1.8rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.benefit-index {
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    color: var(--gold, #C9A227);
+    margin-bottom: 8px;
 }
 
 .benefit-content h3 {
-    color: var(--primary-green);
-    margin-bottom: 0.5rem;
+    font-family: var(--font-serif, 'Fraunces', serif);
+    font-size: 1.6rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--ink, #1C2313);
+    margin: 0 0 6px;
 }
 
-.benefit-content p {
-    color: var(--text-secondary);
-    line-height: 1.5;
+.benefit-line {
+    font-family: var(--font-serif, 'Fraunces', serif);
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--ink-soft, #4A4F3E);
+    margin: 0 0 12px;
+}
+
+.benefit-text {
+    font-size: 0.9rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--ink-soft, #4A4F3E);
+    margin: 0 0 18px;
+}
+
+.nutrient-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.nutrient-chip {
+    font-size: 0.64rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--forest-700, #2D3319);
+    background: var(--sage, #E9ECD3);
+    border-radius: 999px;
+    padding: 0.35rem 0.85rem;
+}
+
+.benefit-shop-link {
+    margin-top: auto;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--terracotta, #C44536);
+    text-decoration: none;
+    transition: opacity 0.25s ease;
+}
+
+.benefit-shop-link:hover {
+    opacity: 0.7;
 }

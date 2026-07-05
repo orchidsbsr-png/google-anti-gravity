@@ -1,7 +1,39 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { recipes } from '../data/recipes';
+import { LogoMark } from '../components/Logo';
 import './RecipeDetail.css';
+
+const metaIconProps = {
+    width: 15,
+    height: 15,
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: 1.8,
+    strokeLinecap: 'round',
+    strokeLinejoin: 'round',
+};
+
+const MetaIcons = {
+    clock: (
+        <svg {...metaIconProps}>
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7v5l3 2" />
+        </svg>
+    ),
+    flame: (
+        <svg {...metaIconProps}>
+            <path d="M12 3c1 3-3 5-3 9a5 5 0 0 0 10 0c0-2-1-3.5-2-5-1 1.5-2 2-2.5 1.5C15.5 7 14 5 12 3z" />
+        </svg>
+    ),
+    bowl: (
+        <svg {...metaIconProps}>
+            <path d="M4 11h16a8 8 0 0 1-16 0z" />
+            <path d="M9 11c0-4 1.5-6 4-8" />
+        </svg>
+    ),
+};
 
 const RecipeDetail = () => {
     const { id } = useParams();
@@ -22,117 +54,108 @@ const RecipeDetail = () => {
     const totalTime = (parseInt(recipe.prepTime) || 0) + (parseInt(recipe.cookTime) || 0) + " mins";
 
     return (
-        <div className="recipe-detail-container">
-            {/* Dynamic Blurred Background */}
-            <div
-                className="recipe-bg-fixed"
-                style={{ backgroundImage: `url(${recipe.image})` }}
-            />
+        <div className="recipe-detail-page">
+            {/* Top bar */}
+            <div className="recipe-nav">
+                <button className="back-button" onClick={() => navigate('/recipes')} aria-label="Back to Kitchen">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M19 12H5" /><path d="M12 19l-7-7 7-7" />
+                    </svg>
+                    The Kitchen
+                </button>
+                <span className="recipe-nav-logo"><LogoMark size={34} /></span>
+            </div>
 
-            <div className="recipe-content-overlay">
-                {/* Header / Nav Area */}
-                <div className="recipe-nav">
-                    <button className="back-button" onClick={() => navigate('/recipes')}>
-                        ←
-                    </button>
-                    <div className="brand-pill">FruityBakes</div>
-                    <button className="search-icon">🔍</button>
+            {/* Hero */}
+            <header className="recipe-hero">
+                <div className="recipe-hero-media">
+                    <img src={recipe.image} alt={recipe.title} />
                 </div>
+                <div className="recipe-hero-info">
+                    <span className="recipe-fruit-tag">{recipe.fruitType || 'Seasonal'} &middot; {recipe.difficulty || 'Easy'}</span>
+                    <h1>{recipe.title}</h1>
+                    {recipe.chef && <p className="chef-credit">by {recipe.chef}</p>}
+                    <p className="recipe-short-desc">{recipe.description}</p>
 
-                <div className="recipe-main-card glass-strong">
-
-                    <div className="recipe-top-grid">
-                        {/* LEFT COLUMN: Image & Header */}
-                        <div className="recipe-hero-section">
-                            <div className="hero-image-wrapper">
-                                <img src={recipe.image} alt={recipe.title} />
-                                <button className="heart-btn">♡</button>
-                            </div>
-
-                            <div className="recipe-header-info">
-                                <h1>{recipe.title}</h1>
-                                {recipe.chef && <h4 className="chef-credit">By {recipe.chef}</h4>}
-                                <p className="recipe-short-desc">{recipe.description}</p>
-
-                                {recipe.secret && (
-                                    <div className="secret-box">
-                                        <strong>💡 The Secret:</strong>
-                                        <p>{recipe.secret}</p>
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Quick Stats Row */}
-                            <div className="stats-row">
-                                <div className="stat-box">
-                                    <span className="stat-icon">⏱️</span>
-                                    <span className="stat-val">{recipe.prepTime ? `Total: ${totalTime}` : 'N/A'}</span>
-                                </div>
-                                <div className="stat-box">
-                                    <span className="stat-icon">🔥</span>
-                                    <span className="stat-val">{recipe.calories || 'N/A'}</span>
-                                </div>
-                                <div className="stat-box">
-                                    <span className="stat-icon">🥣</span>
-                                    <span className="stat-val">{recipe.yields}</span>
-                                </div>
-                            </div>
+                    <div className="stats-row">
+                        <div className="stat-box">
+                            {MetaIcons.clock}
+                            <span>{recipe.prepTime ? totalTime : 'N/A'}</span>
                         </div>
-
-                        {/* RIGHT COLUMN: Ingredients */}
-                        <div className="ingredients-panel">
-                            <h2>Grocery List</h2>
-                            <div className="ingredients-scroll">
-                                {Object.entries(recipe.ingredients).map(([section, items]) => (
-                                    <div key={section}>
-                                        {section !== 'Grocery List' && section !== 'Main' && section !== 'Filling' && <h4>{section}</h4>}
-                                        <ul className="clean-list">
-                                            {items.map((item, index) => {
-                                                const key = `${section}-${index}`;
-                                                const isChecked = checkedIngredients[key];
-                                                return (
-                                                    <li
-                                                        key={key}
-                                                        className={isChecked ? 'checked' : ''}
-                                                        onClick={() => toggleIngredient(key)}
-                                                    >
-                                                        <div className={`check-circle ${isChecked ? 'active' : ''}`}>
-                                                            {isChecked && '✓'}
-                                                        </div>
-                                                        <span>{item}</span>
-                                                    </li>
-                                                );
-                                            })}
-                                        </ul>
-                                    </div>
-                                ))}
-                            </div>
+                        <div className="stat-box">
+                            {MetaIcons.flame}
+                            <span>{recipe.calories || 'N/A'}</span>
+                        </div>
+                        <div className="stat-box">
+                            {MetaIcons.bowl}
+                            <span>{recipe.yields}</span>
                         </div>
                     </div>
 
-                    {/* BOTTOM SECTION: Instructions */}
-                    <div className="instructions-panel">
-                        <h2>Instructions</h2>
-                        <div className="steps-list">
-                            {recipe.instructions.map((step, index) => (
-                                <div key={index} className="step-item">
-                                    <span className="step-num">{index + 1}.</span>
-                                    <p>{step.text}</p>
-                                </div>
-                            ))}
+                    {recipe.secret && (
+                        <div className="secret-box">
+                            <span className="secret-label">The Secret</span>
+                            <p>{recipe.secret}</p>
                         </div>
+                    )}
+                </div>
+            </header>
 
-                        {recipe.videoUrl && (
-                            <button
-                                className="start-cooking-btn video-btn"
-                                onClick={() => window.open(recipe.videoUrl, '_blank')}
-                            >
-                                <span>▶ Watch Video Tutorial</span>
-                            </button>
-                        )}
+            {/* Ingredients + Instructions */}
+            <div className="recipe-body">
+                <aside className="ingredients-panel">
+                    <h2>Grocery <em>List</em></h2>
+                    {Object.entries(recipe.ingredients).map(([section, items]) => (
+                        <div key={section}>
+                            {section !== 'Grocery List' && section !== 'Main' && section !== 'Filling' && (
+                                <h4 className="ingredient-section">{section}</h4>
+                            )}
+                            <ul className="clean-list">
+                                {items.map((item, index) => {
+                                    const key = `${section}-${index}`;
+                                    const isChecked = checkedIngredients[key];
+                                    return (
+                                        <li
+                                            key={key}
+                                            className={isChecked ? 'checked' : ''}
+                                            onClick={() => toggleIngredient(key)}
+                                        >
+                                            <div className={`check-circle ${isChecked ? 'active' : ''}`}>
+                                                {isChecked && (
+                                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                                        <path d="M20 6L9 17l-5-5" />
+                                                    </svg>
+                                                )}
+                                            </div>
+                                            <span>{item}</span>
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        </div>
+                    ))}
+                </aside>
+
+                <section className="instructions-panel">
+                    <h2>The <em>Method</em></h2>
+                    <div className="steps-list">
+                        {recipe.instructions.map((step, index) => (
+                            <div key={index} className="step-item">
+                                <span className="step-num">{String(index + 1).padStart(2, '0')}</span>
+                                <p>{step.text}</p>
+                            </div>
+                        ))}
                     </div>
 
-                </div>
+                    {recipe.videoUrl && (
+                        <button
+                            className="btn-primary watch-video-btn"
+                            onClick={() => window.open(recipe.videoUrl, '_blank')}
+                        >
+                            Watch the Video Tutorial
+                        </button>
+                    )}
+                </section>
             </div>
         </div>
     );

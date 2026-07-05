@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import { useLanguage } from '../context/LanguageContext';
+import Logo from './Logo';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -76,6 +77,17 @@ export default function Hero() {
                 background: 'radial-gradient(ellipse at center, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.45) 100%)',
                 zIndex: 0
             }} />
+
+            {/* Brand mark */}
+            <div className="hero-reveal" style={{
+                position: 'absolute',
+                top: 'clamp(20px, 3.5vw, 40px)',
+                left: 'clamp(20px, 5vw, 64px)',
+                zIndex: 3,
+                color: '#F7F4EC'
+            }}>
+                <Logo variant="full" size={40} />
+            </div>
 
             {/* Hero Text */}
             <div ref={textRef} style={{ textAlign: 'center', color: '#F7F4EC', zIndex: 3, padding: '0 20px', maxWidth: '1100px' }}>

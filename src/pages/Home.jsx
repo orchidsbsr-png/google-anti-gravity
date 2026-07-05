@@ -7,6 +7,7 @@ import ProductShowcase from '../components/ProductShowcase';
 import Reviews from '../components/Reviews';
 import Process from '../components/Process';
 import OrchardTicker from '../components/OrchardTicker';
+import Logo from '../components/Logo';
 import { Link } from 'react-router-dom';
 import { whatsappLink } from '../config/brand';
 import { useLanguage } from '../context/LanguageContext';
@@ -205,14 +206,9 @@ const Home = () => {
                         padding: 'clamp(50px, 5vw, 80px) 0'
                     }}>
                         <div>
-                            <h3 style={{
-                                fontFamily: "'Fraunces', Georgia, serif",
-                                fontSize: '1.5rem',
-                                fontWeight: 400,
-                                marginBottom: '14px'
-                            }}>
-                                Farm Fresh
-                            </h3>
+                            <div style={{ marginBottom: '16px' }}>
+                                <Logo variant="full" size={38} />
+                            </div>
                             <p style={{ fontSize: '0.85rem', lineHeight: 1.8, opacity: 0.6, fontWeight: 300, maxWidth: '260px' }}>
                                 A four-generation family orchard in the Jubbal-Kotkhai
                                 valley, above Hatkoti — growing fruit the slow way,
@@ -272,7 +268,7 @@ const Home = () => {
                         fontSize: '0.78rem',
                         color: 'rgba(247, 244, 236, 0.45)'
                     }}>
-                        <span>&copy; 2025 Farm Fresh &middot; Pure Himachal.</span>
+                        <span>&copy; 2025 Farm Fresh &middot; Shimla.</span>
                         <span>Grown at 2,300m &middot; Shipped across India</span>
                     </div>
                 </footer>
