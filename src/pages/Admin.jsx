@@ -3,8 +3,7 @@ import { useInventory } from '../context/InventoryContext';
 import { useProduct } from '../context/ProductContext';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { db } from '../firebase';
-import { collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, getDocs } from 'firebase/firestore';
+import { supabase } from '../supabase';
 import AdminLogin from '../components/AdminLogin';
 import '../components/AdminLogin.css';
 import './Admin.css';
@@ -33,16 +32,26 @@ const Admin = () => {
     useEffect(() => {
         if (!isAuthenticated) return;
 
-        const q = query(collection(db, 'orders'), orderBy('created_at', 'desc'));
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const loadedOrders = snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }));
-            setOrders(loadedOrders);
-        });
+        const fetchOrders = async () => {
+            const { data, error } = await supabase
+                .from('orders')
+                .select('*')
+                .order('created_at', { ascending: false });
+            if (error) {
+                console.error('Error loading orders:', error);
+                return;
+            }
+            setOrders(data || []);
+        };
 
-        return () => unsubscribe();
+        fetchOrders();
+
+        const channel = supabase
+            .channel('admin-orders')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => fetchOrders())
+            .subscribe();
+
+        return () => { supabase.removeChannel(channel); };
     }, [isAuthenticated]);
 
     const handleLogout = () => {
@@ -131,12 +140,12 @@ const Admin = () => {
 
     const handleStatusUpdate = async (orderId, newStatus) => {
         try {
-            // 1. Update Firestore
-            const orderRef = doc(db, 'orders', orderId);
-            await updateDoc(orderRef, {
+            // 1. Update the order
+            const { error } = await supabase.from('orders').update({
                 status: newStatus,
                 updated_at: new Date().toISOString()
-            });
+            }).eq('id', orderId);
+            if (error) throw error;
 
             // 2. Sync to Google Sheet (Fire and Forget)
             fetch('/api/update_sheet_status', {
@@ -168,11 +177,11 @@ const Admin = () => {
         if (confirm2 !== 'DELETE') return;
 
         try {
-            const q = query(collection(db, 'orders'));
-            const snapshot = await getDocs(q);
-
-            const deletePromises = snapshot.docs.map(doc => deleteDoc(doc.ref));
-            await Promise.all(deletePromises);
+            const { error } = await supabase
+                .from('orders')
+                .delete()
+                .not('id', 'is', null); // delete all rows
+            if (error) throw error;
 
             alert("All orders have been cleared.");
         } catch (error) {
@@ -577,8 +586,9 @@ const Admin = () => {
                                                 </button>
                                                 <button
                                                     onClick={async () => {
-                                                        const orderRef = doc(db, 'orders', order.id);
-                                                        await updateDoc(orderRef, { cancellation_requested: false });
+                                                        await supabase.from('orders')
+                                                            .update({ cancellation_requested: false })
+                                                            .eq('id', order.id);
                                                     }}
                                                     style={{ padding: '0.5rem 1rem', background: '#fff', border: '1px solid #ccc', borderRadius: '6px', cursor: 'pointer' }}
                                                 >

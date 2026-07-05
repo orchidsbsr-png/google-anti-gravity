@@ -1,6 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { db } from '../firebase';
-import { collection, doc, onSnapshot, setDoc } from 'firebase/firestore';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { supabase } from '../supabase';
 
 const InventoryContext = createContext();
 
@@ -11,73 +10,48 @@ export const InventoryProvider = ({ children }) => {
     const [settings, setSettings] = useState({ shop_open: true });
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        console.log('🔵 Setting up Firestore inventory listener...');
-        const unsubInventory = onSnapshot(
-            collection(db, 'inventory'),
-            (snapshot) => {
-                console.log('✅ Inventory snapshot received:', snapshot.docs.length, 'items');
-                const items = snapshot.docs.map(doc => {
-                    const data = doc.data();
-                    // Backward compatibility: Convert legacy 5kg/10kg to pack_sizes if missing
-                    let packSizes = data.pack_sizes;
-                    if (!packSizes && data.stock_5kg !== undefined) {
-                        packSizes = [
-                            { weight: 5, stock: data.stock_5kg, price: data.price_5kg || data.price_per_kg * 5 },
-                            { weight: 10, stock: data.stock_10kg, price: data.price_10kg || data.price_per_kg * 10 }
-                        ];
-                    }
-                    return { variety_id: parseInt(doc.id), ...data, pack_sizes: packSizes || [] };
-                });
+    const fetchInventory = useCallback(async () => {
+        const { data, error } = await supabase
+            .from('inventory')
+            .select('*')
+            .order('variety_id', { ascending: true });
 
-                if (items.length === 0) {
-                    console.log('⚠️ No inventory found in Firestore, initializing from mockData...');
-                    initializeInventory();
-                } else {
-                    console.log('✅ Loaded inventory from Firestore:', items);
-                    setInventory(items);
-                }
-                setLoading(false);
-            },
-            (error) => {
-                console.error('❌ Firestore inventory error:', error);
-                console.error('❌ Error code:', error.code);
-                console.error('❌ Error message:', error.message);
-                if (error.code === 'permission-denied') {
-                    console.error('⛔ PERMISSION DENIED: You need to set up Firestore security rules!');
-                    console.error('📖 See FIRESTORE_SETUP.md for instructions');
-                }
-                setLoading(false);
-            }
-        );
-
-        const unsubSettings = onSnapshot(
-            doc(db, 'settings', 'shop'),
-            (doc) => {
-                if (doc.exists()) {
-                    setSettings(doc.data());
-                } else {
-                    console.log('⚠️ No settings found, creating default...');
-                    setDoc(doc.ref, { shop_open: true });
-                }
-            },
-            (error) => {
-                console.error('❌ Firestore settings error:', error);
-            }
-        );
-
-        return () => {
-            unsubInventory();
-            unsubSettings();
-        };
+        if (error) {
+            console.error('❌ Supabase inventory error:', error.message);
+            return;
+        }
+        setInventory((data || []).map(row => ({
+            ...row,
+            pack_sizes: row.pack_sizes || []
+        })));
     }, []);
 
-    const initializeInventory = async () => {
-        const { INITIAL_INVENTORY } = await import('../data/mockData');
-        for (const item of INITIAL_INVENTORY) {
-            await setDoc(doc(db, 'inventory', item.variety_id.toString()), item);
+    const fetchSettings = useCallback(async () => {
+        const { data, error } = await supabase
+            .from('settings')
+            .select('*')
+            .eq('id', 1)
+            .maybeSingle();
+
+        if (error) {
+            console.error('❌ Supabase settings error:', error.message);
+            return;
         }
-    };
+        if (data) setSettings(data);
+    }, []);
+
+    useEffect(() => {
+        Promise.all([fetchInventory(), fetchSettings()])
+            .finally(() => setLoading(false));
+
+        const channel = supabase
+            .channel('inventory-settings')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'inventory' }, () => fetchInventory())
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'settings' }, () => fetchSettings())
+            .subscribe();
+
+        return () => { supabase.removeChannel(channel); };
+    }, [fetchInventory, fetchSettings]);
 
     const getStock = (varietyId, sizeKg) => {
         const item = inventory.find(i => i.variety_id === parseInt(varietyId));
@@ -92,39 +66,37 @@ export const InventoryProvider = ({ children }) => {
 
     const updateInventory = async (varietyId, isActive, isBestseller, pricePerKg, packSizes) => {
         try {
-            console.log('📝 Updating inventory for variety:', varietyId);
-            const ref = doc(db, 'inventory', varietyId.toString());
+            const { error } = await supabase
+                .from('inventory')
+                .upsert({
+                    variety_id: parseInt(varietyId),
+                    is_active: Boolean(isActive ?? true),
+                    is_bestseller: Boolean(isBestseller ?? false),
+                    price_per_kg: Number(pricePerKg) || 0,
+                    pack_sizes: packSizes, // [{weight, stock, price}]
+                    updated_at: new Date().toISOString()
+                });
 
-            const data = {
-                is_active: Boolean(isActive ?? true),
-                is_bestseller: Boolean(isBestseller ?? false),
-                price_per_kg: Number(pricePerKg) || 0,
-                pack_sizes: packSizes // Expects an array: [{weight: X, stock: Y, price: Z}]
-            };
-
-            console.log('📝 Data to save:', data);
-            await setDoc(ref, data, { merge: true });
-            console.log('✅ Inventory updated successfully!');
+            if (error) throw error;
+            await fetchInventory();
             return true;
         } catch (err) {
-            console.error('❌ Error updating inventory:', err);
-            console.error('❌ Error code:', err.code);
-            if (err.code === 'permission-denied') {
-                alert('Permission denied! Please set up Firestore security rules. See FIRESTORE_SETUP.md');
-            } else if (err.code === 'invalid-argument') {
-                console.error('❌ Invalid data - one or more fields has undefined value');
-                alert('Error: Invalid data. Check console for details.');
-            }
+            console.error('❌ Error updating inventory:', err.message);
+            alert(`Error updating inventory: ${err.message}`);
             return false;
         }
     };
 
     const updateShopStatus = async (isOpen) => {
         try {
-            await setDoc(doc(db, 'settings', 'shop'), { shop_open: isOpen }, { merge: true });
+            const { error } = await supabase
+                .from('settings')
+                .upsert({ id: 1, shop_open: isOpen, updated_at: new Date().toISOString() });
+            if (error) throw error;
+            await fetchSettings();
             return true;
         } catch (err) {
-            console.error('Error updating shop status:', err);
+            console.error('Error updating shop status:', err.message);
             return false;
         }
     };

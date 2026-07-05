@@ -1,7 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useAuth } from './AuthContext';
-import { db } from '../firebase';
-import { collection, doc, addDoc, deleteDoc, updateDoc, onSnapshot, query } from 'firebase/firestore';
+import { supabase } from '../supabase';
 
 const AddressContext = createContext();
 
@@ -12,6 +11,21 @@ export const AddressProvider = ({ children }) => {
     const [addresses, setAddresses] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const fetchAddresses = useCallback(async () => {
+        if (!user) return;
+        const { data, error } = await supabase
+            .from('addresses')
+            .select('id, data')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: true });
+
+        if (error) {
+            console.error('Error loading addresses:', error);
+            return;
+        }
+        setAddresses((data || []).map(row => ({ id: row.id, ...row.data })));
+    }, [user]);
+
     useEffect(() => {
         if (!user) {
             setAddresses([]);
@@ -20,18 +34,19 @@ export const AddressProvider = ({ children }) => {
         }
 
         setLoading(true);
-        const q = query(collection(db, `users/${user.id}/addresses`));
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const loadedAddresses = snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }));
-            setAddresses(loadedAddresses);
-            setLoading(false);
-        });
+        fetchAddresses().finally(() => setLoading(false));
 
-        return () => unsubscribe();
-    }, [user]);
+        // Live updates (mirrors the old Firestore onSnapshot behavior)
+        const channel = supabase
+            .channel(`addresses-${user.id}`)
+            .on('postgres_changes',
+                { event: '*', schema: 'public', table: 'addresses', filter: `user_id=eq.${user.id}` },
+                () => fetchAddresses()
+            )
+            .subscribe();
+
+        return () => { supabase.removeChannel(channel); };
+    }, [user, fetchAddresses]);
 
     const validateAddress = (address) => {
         const errors = {};
@@ -50,29 +65,34 @@ export const AddressProvider = ({ children }) => {
 
     const addAddress = async (newAddress) => {
         if (!user) return;
-        try {
-            await addDoc(collection(db, `users/${user.id}/addresses`), newAddress);
-        } catch (err) {
-            console.error("Error adding address:", err);
-        }
+        const { error } = await supabase
+            .from('addresses')
+            .insert({ user_id: user.id, data: newAddress });
+        if (error) console.error("Error adding address:", error);
+        await fetchAddresses();
     };
 
     const updateAddress = async (id, updatedAddress) => {
         if (!user) return;
-        try {
-            await updateDoc(doc(db, `users/${user.id}/addresses`, id), updatedAddress);
-        } catch (err) {
-            console.error("Error updating address:", err);
-        }
+        const { id: _drop, ...data } = updatedAddress;
+        const { error } = await supabase
+            .from('addresses')
+            .update({ data })
+            .eq('id', id)
+            .eq('user_id', user.id);
+        if (error) console.error("Error updating address:", error);
+        await fetchAddresses();
     };
 
     const deleteAddress = async (id) => {
         if (!user) return;
-        try {
-            await deleteDoc(doc(db, `users/${user.id}/addresses`, id));
-        } catch (err) {
-            console.error("Error deleting address:", err);
-        }
+        const { error } = await supabase
+            .from('addresses')
+            .delete()
+            .eq('id', id)
+            .eq('user_id', user.id);
+        if (error) console.error("Error deleting address:", error);
+        await fetchAddresses();
     };
 
     const getDefaultAddress = () => {

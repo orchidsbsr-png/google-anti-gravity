@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAddress } from '../context/AddressContext';
 import { useAuth } from '../context/AuthContext';
-import { db } from '../firebase';
-import { collection, addDoc, updateDoc, doc } from 'firebase/firestore';
+import { supabase } from '../supabase';
 import AddressForm from '../components/AddressForm';
 import ProductImage from '../components/ProductImage';
 import { sendOrderConfirmationEmail } from '../services/emailService';
@@ -122,9 +121,9 @@ const Payment = () => {
         const selectedAddress = addresses.find(a => a.id === selectedAddressId);
 
         try {
-            // Create order in Firestore first
+            // Create order in Supabase first
             const orderData = {
-                userId: user?.id || 'guest',
+                user_id: user?.id || 'guest',
                 customer_details: {
                     name: selectedAddress.name,
                     phone: selectedAddress.phone,
@@ -141,7 +140,13 @@ const Payment = () => {
                 gift_note: isGift ? giftNote.trim() : ''
             };
 
-            const docRef = await addDoc(collection(db, 'orders'), orderData);
+            const { data: insertedOrder, error: insertError } = await supabase
+                .from('orders')
+                .insert(orderData)
+                .select('id')
+                .single();
+            if (insertError) throw new Error(insertError.message);
+            const docRef = { id: insertedOrder.id };
             console.log('📦 Order created:', docRef.id);
 
             // Save to Google Sheet
@@ -197,14 +202,14 @@ const Payment = () => {
 
                             if (verifyData.success) {
                                 // Payment Successful
-                                await updateDoc(doc(db, 'orders', docRef.id), {
+                                await supabase.from('orders').update({
                                     status: 'confirmed',
                                     payment_status: 'paid',
                                     payment_details: {
                                         razorpay_order_id: response.razorpay_order_id,
                                         razorpay_payment_id: response.razorpay_payment_id
                                     }
-                                });
+                                }).eq('id', docRef.id);
 
                                 console.log('💳 Payment Verified. Order confirmed.');
 
@@ -241,10 +246,10 @@ const Payment = () => {
 
             } else {
                 // COD - No payment needed
-                await updateDoc(doc(db, 'orders', docRef.id), {
+                await supabase.from('orders').update({
                     status: 'confirmed',
                     payment_status: 'cod'
-                });
+                }).eq('id', docRef.id);
 
                 console.log('💳 COD Order confirmed.');
 

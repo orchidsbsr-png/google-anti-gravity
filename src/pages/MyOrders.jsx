@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { db } from '../firebase';
-import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import { supabase } from '../supabase';
 import { Link, useNavigate } from 'react-router-dom';
 import './MyOrders.css';
 
@@ -20,30 +19,31 @@ const MyOrders = () => {
         }
 
         // Query orders where customer email matches
-        // Note: Removed orderBy to avoid index requirement errors. Sorting client-side.
-        const q = query(
-            collection(db, 'orders'),
-            where('customer_details.email', '==', user.email)
-        );
+        const fetchOrders = async () => {
+            const { data, error } = await supabase
+                .from('orders')
+                .select('*')
+                .eq('customer_details->>email', user.email)
+                .order('created_at', { ascending: false });
 
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const loadedOrders = snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }));
-
-            // Sort client-side
-            loadedOrders.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-
-            setOrders(loadedOrders);
+            if (error) {
+                console.error("Error fetching orders:", error);
+                setError("Failed to load orders. Please try again later.");
+            } else {
+                setOrders(data || []);
+            }
             setLoading(false);
-        }, (error) => {
-            console.error("Error fetching orders:", error);
-            setError("Failed to load orders. Please try again later.");
-            setLoading(false);
-        });
+        };
 
-        return () => unsubscribe();
+        fetchOrders();
+
+        // Live updates when order status changes
+        const channel = supabase
+            .channel(`orders-${user.id}`)
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => fetchOrders())
+            .subscribe();
+
+        return () => { supabase.removeChannel(channel); };
     }, [user]);
 
     const getStatusCategory = (status) => {

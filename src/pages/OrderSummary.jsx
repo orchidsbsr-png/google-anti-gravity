@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { db } from '../firebase';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { supabase } from '../supabase';
 import { getProductImage } from '../utils/imageService';
 import { BRAND, whatsappLink } from '../config/brand';
 import './OrderSummary.css';
@@ -16,10 +15,14 @@ const OrderSummary = () => {
     useEffect(() => {
         const fetchOrder = async () => {
             try {
-                const docRef = doc(db, 'orders', orderId);
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    setOrder({ id: docSnap.id, ...docSnap.data() });
+                const { data, error } = await supabase
+                    .from('orders')
+                    .select('*')
+                    .eq('id', orderId)
+                    .maybeSingle();
+                if (error) throw error;
+                if (data) {
+                    setOrder(data);
                 } else {
                     console.error("No such order!");
                 }
@@ -71,11 +74,11 @@ const OrderSummary = () => {
         if (!window.confirm("Are you sure you want to request cancellation for this order?")) return;
 
         try {
-            const orderRef = doc(db, 'orders', order.id);
-            await updateDoc(orderRef, {
+            const { error } = await supabase.from('orders').update({
                 cancellation_requested: true,
                 cancellation_requested_at: new Date().toISOString()
-            });
+            }).eq('id', order.id);
+            if (error) throw error;
 
             // Update local state to reflect change immediately
             setOrder(prev => ({ ...prev, cancellation_requested: true }));

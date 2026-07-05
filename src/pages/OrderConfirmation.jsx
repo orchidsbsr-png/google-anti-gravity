@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
-import { db } from '../firebase';
-import { doc, updateDoc } from 'firebase/firestore';
+import { supabase } from '../supabase';
 import { whatsappLink } from '../config/brand';
 import './OrderConfirmation.css';
 
@@ -38,14 +37,13 @@ const OrderConfirmation = () => {
                 const data = await response.json();
 
                 if (data.code === 'PAYMENT_SUCCESS') {
-                    // Update Firestore
+                    // Update the order
                     // Note: Ideally this is done via Webhook, but doing it client-side for MVP
-                    const orderRef = doc(db, 'orders', transactionId);
-                    await updateDoc(orderRef, {
+                    await supabase.from('orders').update({
                         payment_status: 'paid',
                         status: 'confirmed',
                         paid_at: new Date().toISOString()
-                    });
+                    }).eq('id', transactionId);
                     setStatus('success');
                 } else {
                     setStatus('failed');

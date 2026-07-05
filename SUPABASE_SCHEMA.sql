@@ -1,125 +1,134 @@
--- 1. Products Table
-CREATE TABLE products (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  category VARCHAR(100) NOT NULL,
-  description TEXT,
-  taste_profile TEXT,
-  texture_profile TEXT,
-  image_path VARCHAR(500),
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+-- ============================================================
+-- FARM FRESH — Supabase schema (v2, matches the current app)
+-- Run this whole file in: Supabase Dashboard → SQL Editor → New query
+-- Safe to re-run: drops and recreates everything.
+-- ============================================================
 
--- 2. Varieties Table
-CREATE TABLE varieties (
-  id SERIAL PRIMARY KEY,
-  product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
-  name VARCHAR(255) NOT NULL,
-  price_per_kg DECIMAL(10, 2) NOT NULL,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+-- ---------- Reset (safe on a fresh project) ----------
+DROP TABLE IF EXISTS carts CASCADE;
+DROP TABLE IF EXISTS addresses CASCADE;
+DROP TABLE IF EXISTS orders CASCADE;
+DROP TABLE IF EXISTS inventory CASCADE;
+DROP TABLE IF EXISTS settings CASCADE;
 
--- 3. Inventory Table
+-- ---------- 1. Inventory (one row per variety) ----------
+-- pack_sizes: [{ "weight": 5, "stock": 50, "price": 1995 }, ...]
 CREATE TABLE inventory (
-  id SERIAL PRIMARY KEY,
-  variety_id INTEGER NOT NULL REFERENCES varieties(id) ON DELETE CASCADE,
-  stock_5kg INTEGER DEFAULT 0,
-  stock_10kg INTEGER DEFAULT 0,
+  variety_id INTEGER PRIMARY KEY,
   is_active BOOLEAN DEFAULT true,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  UNIQUE(variety_id)
+  is_bestseller BOOLEAN DEFAULT false,
+  price_per_kg NUMERIC(10, 2) DEFAULT 0,
+  pack_sizes JSONB DEFAULT '[]'::jsonb,
+  updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 4. Orders Table
+-- ---------- 2. Settings (single row) ----------
+CREATE TABLE settings (
+  id INTEGER PRIMARY KEY DEFAULT 1 CHECK (id = 1),
+  shop_open BOOLEAN DEFAULT true,
+  now_picking TEXT,
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ---------- 3. Orders ----------
 CREATE TABLE orders (
-  id SERIAL PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id TEXT,
   customer_details JSONB NOT NULL,
   cart_items JSONB NOT NULL,
-  total_price DECIMAL(10, 2) NOT NULL,
-  status VARCHAR(50) DEFAULT 'pending',
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+  total_price NUMERIC(10, 2) NOT NULL,
+  status TEXT DEFAULT 'pending',
+  payment_status TEXT DEFAULT 'pending',
+  payment_method TEXT,
+  payment_details JSONB,
+  is_gift BOOLEAN DEFAULT false,
+  gift_note TEXT DEFAULT '',
+  cancellation_requested BOOLEAN DEFAULT false,
+  cancellation_requested_at TIMESTAMPTZ,
+  paid_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 5. Settings Table
-CREATE TABLE settings (
-  id INTEGER PRIMARY KEY DEFAULT 1,
-  shop_open BOOLEAN DEFAULT true,
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  CONSTRAINT single_row CHECK (id = 1)
+CREATE INDEX idx_orders_created_at ON orders (created_at DESC);
+CREATE INDEX idx_orders_user_id ON orders (user_id);
+CREATE INDEX idx_orders_email ON orders ((customer_details->>'email'));
+
+-- ---------- 4. Addresses (one row per saved address) ----------
+-- data: { name, phone, pincode, addressLine1, addressLine2, city, state, addressType }
+CREATE TABLE addresses (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id TEXT NOT NULL,
+  data JSONB NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 6. Indexes
-CREATE INDEX idx_varieties_product_id ON varieties(product_id);
-CREATE INDEX idx_inventory_variety_id ON inventory(variety_id);
-CREATE INDEX idx_orders_status ON orders(status);
-CREATE INDEX idx_orders_created_at ON orders(created_at DESC);
+CREATE INDEX idx_addresses_user_id ON addresses (user_id);
 
--- 7. Row Level Security
-ALTER TABLE products ENABLE ROW LEVEL SECURITY;
-ALTER TABLE varieties ENABLE ROW LEVEL SECURITY;
+-- ---------- 5. Carts (one row per cart line) ----------
+-- item_id: "<varietyId>-<weightKg>" (same key the app used before)
+CREATE TABLE carts (
+  user_id TEXT NOT NULL,
+  item_id TEXT NOT NULL,
+  data JSONB NOT NULL,
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  PRIMARY KEY (user_id, item_id)
+);
+
+-- ---------- 6. Row Level Security ----------
 ALTER TABLE inventory ENABLE ROW LEVEL SECURITY;
-ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 ALTER TABLE settings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+ALTER TABLE addresses ENABLE ROW LEVEL SECURITY;
+ALTER TABLE carts ENABLE ROW LEVEL SECURITY;
 
--- 8. RLS Policies
-CREATE POLICY "Public can read products" ON products FOR SELECT USING (true);
-CREATE POLICY "Public can read varieties" ON varieties FOR SELECT USING (true);
-CREATE POLICY "Public can read inventory" ON inventory FOR SELECT USING (true);
-CREATE POLICY "Public can insert orders" ON orders FOR INSERT WITH CHECK (true);
-CREATE POLICY "Public can read settings" ON settings FOR SELECT USING (true);
-CREATE POLICY "Public can update inventory" ON inventory FOR UPDATE USING (true);
-CREATE POLICY "Public can update settings" ON settings FOR UPDATE USING (true);
-CREATE POLICY "Public can insert inventory" ON inventory FOR INSERT WITH CHECK (true);
+-- Everyone can read the catalog state
+CREATE POLICY "read inventory" ON inventory FOR SELECT USING (true);
+CREATE POLICY "read settings" ON settings FOR SELECT USING (true);
 
--- 9. Insert Sample Products
-INSERT INTO products (name, category, description, taste_profile, texture_profile, image_path) VALUES
-('Red Apples', 'apples', 'Fresh, crisp, and sweet red apples. Hand-picked from our orchard, perfect for snacking or baking.', 'Sweet with a hint of tartness', 'Crisp and juicy', '/images/products/Red Delicious.png'),
-('Orange Persimmons', 'persimmons', 'Sweet and juicy orange persimmons. Rich in vitamins and perfect for a healthy snack.', 'Very sweet with honey-like flavor and subtle cinnamon notes', 'Smooth and custard-like when ripe, jelly-like interior', '/images/products/Orange Persimmons.png'),
-('Fuzzy Kiwis', 'kiwis', 'Tangy and sweet fuzzy kiwis. Rich in vitamin C, perfect for smoothies or eating fresh.', 'Tangy and sweet with tropical notes, slightly tart', 'Soft and juicy with tiny edible black seeds, smooth flesh', '/images/products/Fuzzy Kiwis.png'),
-('Plums', 'plums', 'Sweet and tart plums. Perfect for snacking or making preserves.', 'Sweet with a pleasant tartness, slightly floral', 'Firm yet tender, juicy with smooth skin', '/images/products/Plums.png'),
-('Pears', 'pears', 'Sweet, juicy, and crunchy with a hint of floral aroma. Hand-picked from our family orchard.', 'Sweet with a hint of floral aroma', 'Juicy and crunchy', '/images/products/landscape.jpg'),
-('Cherries', 'cherries', 'Sweet and juicy cherries. Perfect for snacking, baking, or making preserves.', 'Sweet and slightly tart with a rich, fruity flavor', 'Firm and crisp, bursting with juice', '/images/products/Cherries.png');
+-- NOTE: the admin dashboard runs in the browser behind a client-side
+-- password, exactly like the Firestore version did. These write policies
+-- mirror that existing behavior. When you later move admin auth
+-- server-side, tighten these to a role check.
+CREATE POLICY "write inventory" ON inventory FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "write settings" ON settings FOR ALL USING (true) WITH CHECK (true);
 
--- 10. Insert Varieties
--- Apples
-INSERT INTO varieties (product_id, name, price_per_kg) VALUES
-(1, 'Red Delicious', 399),
-(1, 'Granny Smith', 429),
-(1, 'Gala', 449),
-(1, 'Golden Delicious', 419);
+CREATE POLICY "insert orders" ON orders FOR INSERT WITH CHECK (true);
+CREATE POLICY "read orders" ON orders FOR SELECT USING (true);
+CREATE POLICY "update orders" ON orders FOR UPDATE USING (true);
+CREATE POLICY "delete orders" ON orders FOR DELETE USING (true);
 
--- Pears
-INSERT INTO varieties (product_id, name, price_per_kg) VALUES
-(5, 'Nashpati Pear', 449),
-(5, 'Bosc Pear', 479),
-(5, 'Concorde Pear', 499),
-(5, 'French Butter Pear', 529);
+-- Addresses/carts: owner (or shared guest account) only
+CREATE POLICY "own addresses" ON addresses FOR ALL
+  USING (user_id = auth.uid()::text OR user_id LIKE 'guest%')
+  WITH CHECK (user_id = auth.uid()::text OR user_id LIKE 'guest%');
 
--- Products without varieties (create single variety for each)
-INSERT INTO varieties (product_id, name, price_per_kg) VALUES
-(2, 'Orange Persimmons', 649),
-(3, 'Fuzzy Kiwis', 479),
-(4, 'Plums', 299),
-(6, 'Cherries', 599);
+CREATE POLICY "own carts" ON carts FOR ALL
+  USING (user_id = auth.uid()::text OR user_id LIKE 'guest%')
+  WITH CHECK (user_id = auth.uid()::text OR user_id LIKE 'guest%');
 
--- 11. Insert Initial Inventory
-INSERT INTO inventory (variety_id, stock_5kg, stock_10kg, is_active) VALUES
-(1, 50, 30, true),  -- Red Delicious
-(2, 40, 25, true),  -- Granny Smith
-(3, 35, 20, true),  -- Gala
-(4, 45, 28, true),  -- Golden Delicious
-(5, 30, 15, true),  -- Nashpati Pear
-(6, 25, 12, true),  -- Bosc Pear
-(7, 20, 10, true),  -- Concorde Pear
-(8, 15, 8, true),   -- French Butter Pear
-(9, 30, 15, true),  -- Orange Persimmons
-(10, 25, 12, true), -- Fuzzy Kiwis
-(11, 40, 20, true), -- Plums
-(12, 20, 10, true); -- Cherries
+-- ---------- 7. Realtime (live updates like Firestore onSnapshot) ----------
+ALTER PUBLICATION supabase_realtime ADD TABLE orders;
+ALTER PUBLICATION supabase_realtime ADD TABLE inventory;
+ALTER PUBLICATION supabase_realtime ADD TABLE settings;
+ALTER PUBLICATION supabase_realtime ADD TABLE carts;
+ALTER PUBLICATION supabase_realtime ADD TABLE addresses;
 
--- 12. Initialize Settings
-INSERT INTO settings (id, shop_open) VALUES (1, true);
+-- ---------- 8. Seed data ----------
+INSERT INTO settings (id, shop_open, now_picking) VALUES (1, true, NULL);
+
+-- variety_ids must match src/data/mockData.js
+INSERT INTO inventory (variety_id, is_active, is_bestseller, price_per_kg, pack_sizes) VALUES
+(1,  true, true,  399, '[{"weight":5,"stock":50,"price":1995},{"weight":10,"stock":30,"price":3990}]'),
+(2,  true, false, 429, '[{"weight":5,"stock":40,"price":2145},{"weight":10,"stock":25,"price":4290}]'),
+(3,  true, false, 449, '[{"weight":5,"stock":35,"price":2245},{"weight":10,"stock":20,"price":4490}]'),
+(4,  true, false, 419, '[{"weight":5,"stock":45,"price":2095},{"weight":10,"stock":28,"price":4190}]'),
+(5,  true, false, 449, '[{"weight":5,"stock":30,"price":2245},{"weight":10,"stock":15,"price":4490}]'),
+(6,  true, false, 479, '[{"weight":5,"stock":25,"price":2395},{"weight":10,"stock":12,"price":4790}]'),
+(7,  true, false, 499, '[{"weight":5,"stock":20,"price":2495},{"weight":10,"stock":10,"price":4990}]'),
+(8,  true, false, 529, '[{"weight":5,"stock":15,"price":2645},{"weight":10,"stock":8,"price":5290}]'),
+(9,  true, false, 649, '[{"weight":5,"stock":30,"price":3245},{"weight":10,"stock":15,"price":6490}]'),
+(10, true, false, 479, '[{"weight":5,"stock":25,"price":2395},{"weight":10,"stock":12,"price":4790}]'),
+(11, true, false, 299, '[{"weight":5,"stock":40,"price":1495},{"weight":10,"stock":20,"price":2990}]'),
+(12, true, false, 599, '[{"weight":5,"stock":20,"price":2995},{"weight":10,"stock":10,"price":5990}]'),
+(13, true, false, 649, '[{"weight":5,"stock":25,"price":3245},{"weight":10,"stock":12,"price":6490}]');

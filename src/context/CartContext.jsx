@@ -1,7 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useAuth } from './AuthContext';
-import { db } from '../firebase';
-import { collection, doc, setDoc, deleteDoc, onSnapshot, query } from 'firebase/firestore';
+import { supabase } from '../supabase';
 
 const CartContext = createContext();
 
@@ -11,23 +10,38 @@ export const CartProvider = ({ children }) => {
     const { user } = useAuth();
     const [cartItems, setCartItems] = useState([]);
 
+    const fetchCart = useCallback(async () => {
+        if (!user) return;
+        const { data, error } = await supabase
+            .from('carts')
+            .select('item_id, data')
+            .eq('user_id', user.id);
+
+        if (error) {
+            console.error('Error loading cart:', error);
+            return;
+        }
+        setCartItems((data || []).map(row => ({ ...row.data, id: row.item_id })));
+    }, [user]);
+
     useEffect(() => {
         if (!user) {
             setCartItems([]);
             return;
         }
 
-        const q = query(collection(db, `users/${user.id}/cart`));
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const items = snapshot.docs.map(doc => ({
-                ...doc.data(),
-                id: doc.id // Use varietyId as doc ID
-            }));
-            setCartItems(items);
-        });
+        fetchCart();
 
-        return () => unsubscribe();
-    }, [user]);
+        const channel = supabase
+            .channel(`cart-${user.id}`)
+            .on('postgres_changes',
+                { event: '*', schema: 'public', table: 'carts', filter: `user_id=eq.${user.id}` },
+                () => fetchCart()
+            )
+            .subscribe();
+
+        return () => { supabase.removeChannel(channel); };
+    }, [user, fetchCart]);
 
     const addToCart = async (product, variety, quantityKg, numBoxes, inventory) => {
         if (!user) {
@@ -64,22 +78,27 @@ export const CartProvider = ({ children }) => {
             quantity: existingItem ? existingItem.quantity + numBoxes : numBoxes
         };
 
-        try {
-            await setDoc(doc(db, `users/${user.id}/cart`, cartItemId), newItem);
-            return true;
-        } catch (err) {
-            console.error("Error adding to cart:", err);
+        const { error } = await supabase
+            .from('carts')
+            .upsert({ user_id: user.id, item_id: cartItemId, data: newItem });
+
+        if (error) {
+            console.error("Error adding to cart:", error);
             return false;
         }
+        await fetchCart();
+        return true;
     };
 
     const removeFromCart = async (itemId) => {
         if (!user) return;
-        try {
-            await deleteDoc(doc(db, `users/${user.id}/cart`, itemId));
-        } catch (err) {
-            console.error("Error removing from cart:", err);
-        }
+        const { error } = await supabase
+            .from('carts')
+            .delete()
+            .eq('user_id', user.id)
+            .eq('item_id', itemId);
+        if (error) console.error("Error removing from cart:", error);
+        await fetchCart();
     };
 
     const updateQuantity = async (itemId, newQuantity) => {
@@ -91,20 +110,22 @@ export const CartProvider = ({ children }) => {
 
         const item = cartItems.find(i => i.id === itemId);
         if (item) {
-            try {
-                await setDoc(doc(db, `users/${user.id}/cart`, itemId), { ...item, quantity: newQuantity });
-            } catch (err) {
-                console.error("Error updating quantity:", err);
-            }
+            const { error } = await supabase
+                .from('carts')
+                .upsert({ user_id: user.id, item_id: itemId, data: { ...item, quantity: newQuantity } });
+            if (error) console.error("Error updating quantity:", error);
+            await fetchCart();
         }
     };
 
     const clearCart = async () => {
         if (!user) return;
-        // Batch delete would be better but simple loop for now
-        for (const item of cartItems) {
-            await deleteDoc(doc(db, `users/${user.id}/cart`, item.id));
-        }
+        const { error } = await supabase
+            .from('carts')
+            .delete()
+            .eq('user_id', user.id);
+        if (error) console.error("Error clearing cart:", error);
+        await fetchCart();
     };
 
     const getCartTotal = () => {

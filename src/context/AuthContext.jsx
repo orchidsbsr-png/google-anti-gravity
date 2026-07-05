@@ -1,10 +1,16 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { auth, googleProvider } from '../firebase';
-import { signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth';
+import { supabase } from '../supabase';
 
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
+
+const mapSupabaseUser = (sbUser) => ({
+    id: sbUser.id,
+    name: sbUser.user_metadata?.full_name || sbUser.user_metadata?.name || sbUser.email,
+    email: sbUser.email,
+    photoURL: sbUser.user_metadata?.avatar_url || sbUser.user_metadata?.picture || null,
+});
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -16,37 +22,36 @@ export const AuthProvider = ({ children }) => {
         if (guest) {
             setUser(JSON.parse(guest));
             setLoading(false);
-            return;
         }
 
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            if (currentUser) {
-                // Map Firebase user to our app's user format
-                const mappedUser = {
-                    id: currentUser.uid,
-                    name: currentUser.displayName,
-                    email: currentUser.email,
-                    photoURL: currentUser.photoURL
-                };
-                setUser(mappedUser);
-                localStorage.removeItem('guest_user'); // Clear guest if real user logs in
-            } else {
+        // Restore session and listen for auth changes
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session?.user) {
+                setUser(mapSupabaseUser(session.user));
+                localStorage.removeItem('guest_user');
+            }
+            setLoading(false);
+        });
+
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            if (session?.user) {
+                setUser(mapSupabaseUser(session.user));
+                localStorage.removeItem('guest_user');
+            } else if (!localStorage.getItem('guest_user')) {
                 setUser(null);
             }
             setLoading(false);
         });
 
-        return () => unsubscribe();
+        return () => subscription.unsubscribe();
     }, []);
 
     const loginWithGoogle = async () => {
-        try {
-            await signInWithPopup(auth, googleProvider);
-        } catch (error) {
-            // console.error("Error logging in with Google", error); 
-            // Don't log here, let the UI handle it but rethrow
-            throw error;
-        }
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: { redirectTo: window.location.origin },
+        });
+        if (error) throw error;
     };
 
     const loginAsGuest = () => {
@@ -62,7 +67,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            await signOut(auth);
+            await supabase.auth.signOut();
             localStorage.removeItem('guest_user');
             setUser(null);
             // Clear admin session if any
