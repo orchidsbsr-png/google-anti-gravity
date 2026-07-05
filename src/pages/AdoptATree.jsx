@@ -2,6 +2,51 @@ import React, { useState, useEffect } from 'react';
 import SmoothScroll from '../components/SmoothScroll';
 import './AdoptATree.css';
 
+const perkIconProps = {
+    width: 30,
+    height: 30,
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: 1.5,
+    strokeLinecap: 'round',
+    strokeLinejoin: 'round',
+};
+
+const PerkIcons = {
+    tag: (
+        <svg {...perkIconProps}>
+            <path d="M20.6 13.4L11 3.8a2 2 0 0 0-1.4-.6H4a1 1 0 0 0-1 1v5.6c0 .5.2 1 .6 1.4l9.6 9.6a2 2 0 0 0 2.8 0l4.6-4.6a2 2 0 0 0 0-2.8z" />
+            <circle cx="7.5" cy="7.5" r="1.3" />
+        </svg>
+    ),
+    apple: (
+        <svg {...perkIconProps}>
+            <path d="M12 7c-1-2.5-3.5-3-5.3-2C4 6.5 3.4 10 4.6 13.5 5.8 17 8 20 10 20c.8 0 1.4-.4 2-.4s1.2.4 2 .4c2 0 4.2-3 5.4-6.5C20.6 10 20 6.5 17.3 5c-1.8-1-4.3-.5-5.3 2z" />
+            <path d="M12 7c0-2 1-3.5 3-4.5" />
+        </svg>
+    ),
+    scroll: (
+        <svg {...perkIconProps}>
+            <path d="M6 3h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
+            <path d="M8 8h8M8 12h8M8 16h5" />
+        </svg>
+    ),
+    sprout: (
+        <svg {...perkIconProps}>
+            <path d="M12 21v-8" />
+            <path d="M12 13c0-4-3-6.5-7-6.5 0 4 3 6.5 7 6.5z" />
+            <path d="M12 10.5c0-3.5 2.6-6 6.5-6 0 3.5-2.6 6-6.5 6z" />
+        </svg>
+    ),
+    mountain: (
+        <svg {...perkIconProps}>
+            <path d="M3 20l6-11 4 7 3-5 5 9H3z" />
+            <path d="M9 9l1.5-2.5L12 9" />
+        </svg>
+    ),
+};
+
 const AdoptATree = () => {
     // Form State
     const [formData, setFormData] = useState({
@@ -151,9 +196,6 @@ const AdoptATree = () => {
     // Component UI Render
     return (
         <SmoothScroll>
-            {/* The global noise texture creates the "organic paper" feel */}
-            <div className="noise-overlay" style={{ position: 'fixed', zIndex: 9999, pointerEvents: 'none' }}></div>
-
             <main className="lux-adopt-page">
                 {/* 1. Hero Section (Parallax & Elegant Hook) */}
                 <section className="lux-hero">
@@ -201,27 +243,27 @@ const AdoptATree = () => {
 
                     <div className="lux-bento-grid">
                         <div className="lux-bento-card">
-                            <div className="lux-icon">🏷️</div>
+                            <div className="lux-icon">{PerkIcons.tag}</div>
                             <h3>Exclusive Marking</h3>
                             <p>Your tree is physically tagged as 'adopted' with your name in our orchard.</p>
                         </div>
                         <div className="lux-bento-card featured">
-                            <div className="lux-icon">🍎</div>
+                            <div className="lux-icon">{PerkIcons.apple}</div>
                             <h3>The Bounty</h3>
                             <p>Receive five 5kg boxes of premium, certified organic apples delivered straight from your tree to your doorstep.</p>
                         </div>
                         <div className="lux-bento-card">
-                            <div className="lux-icon">📜</div>
+                            <div className="lux-icon">{PerkIcons.scroll}</div>
                             <h3>Official Certificate</h3>
                             <p>A beautifully framed certificate of adoption, documenting your living legacy.</p>
                         </div>
                         <div className="lux-bento-card">
-                            <div className="lux-icon">🌱</div>
+                            <div className="lux-icon">{PerkIcons.sprout}</div>
                             <h3>Expert Care</h3>
                             <p>Round-the-year organic nourishment, pruning, and protection provided by our local farmers.</p>
                         </div>
                         <div className="lux-bento-card wide">
-                            <div className="lux-icon">⛰️</div>
+                            <div className="lux-icon">{PerkIcons.mountain}</div>
                             <h3>Visit Your Tree</h3>
                             <p>A standing invitation to visit the orchard. Harvest apples from your own tree in person (includes 1 box of 10kg capacity for day trips).</p>
                         </div>

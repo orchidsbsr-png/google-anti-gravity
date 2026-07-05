@@ -239,9 +239,9 @@
 }
 
 .lux-icon {
-    font-size: 2.5rem;
     margin-bottom: 1.5rem;
-    opacity: 0.9;
+    color: var(--lux-muted-gold, #C9A227);
+    display: flex;
 }
 
 .lux-bento-card h3 {
@@ -266,7 +266,7 @@
     background-color: var(--lux-soft-sage, #E8EDE4);
     position: relative;
     /* Adding the emotional lifestyle image as a subtle background */
-    background-image: url("/images/landing/apple_story.jpg");
+    background-image: url("/images/landing/men_plucking_apple.jpg");
     background-size: cover;
     background-position: center;
     background-blend-mode: overlay;

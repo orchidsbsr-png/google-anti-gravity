@@ -1,33 +1,42 @@
+/* Orchard Editorial — Profile */
+
 .profile-page {
-    padding: 1rem;
-    padding-bottom: 100px;
+    padding: clamp(24px, 4vw, 48px) clamp(16px, 4vw, 32px) 140px;
+    max-width: 860px;
+    margin: 0 auto;
+    min-height: 100vh;
 }
 
-.profile-header {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-    border-radius: 16px;
+/* ---------- Account hero ---------- */
+
+.profile-hero {
+    text-align: center;
+    padding: clamp(28px, 4vw, 48px) clamp(20px, 4vw, 44px);
+    margin-bottom: clamp(36px, 5vw, 56px);
+    background: var(--paper, #FDFCF7);
+    border: 1px solid var(--hairline, rgba(28, 35, 19, 0.14));
+    border-radius: 26px;
+    box-shadow: 0 20px 50px -25px rgba(28, 35, 19, 0.2);
 }
 
 .profile-pic-container {
     position: relative;
+    width: 96px;
+    margin: 0 auto 20px;
 }
 
 .avatar {
-    width: 80px;
-    height: 80px;
-    background: var(--light-green);
+    width: 96px;
+    height: 96px;
+    background: var(--sage, #E9ECD3);
+    color: var(--forest-700, #2D3319);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.5rem;
     overflow: hidden;
-    border: 3px solid white;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border: 3px solid var(--paper, #FDFCF7);
+    box-shadow: 0 12px 30px -12px rgba(28, 35, 19, 0.35);
 }
 
 .profile-img {
@@ -38,151 +47,258 @@
 
 .edit-avatar-btn {
     position: absolute;
-    bottom: 0;
-    right: 0;
-    background: white;
-    width: 28px;
-    height: 28px;
+    bottom: 2px;
+    right: 2px;
+    background: var(--forest-700, #2D3319);
+    color: var(--cream, #F7F4EC);
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.9rem;
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    border: 1px solid #eee;
+    box-shadow: 0 4px 12px rgba(28, 35, 19, 0.35);
+    border: 2px solid var(--paper, #FDFCF7);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.profile-info {
-    flex: 1;
+.edit-avatar-btn:hover {
+    transform: scale(1.12);
 }
 
-.profile-info h1 {
-    color: var(--primary-green);
-    margin: 0 0 0.5rem 0;
-    font-size: 1.5rem;
+.profile-eyebrow {
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--terracotta, #C44536);
+    margin-bottom: 10px;
+}
+
+.profile-name {
+    font-family: var(--font-serif, 'Fraunces', serif);
+    font-weight: 400;
+    font-size: clamp(1.9rem, 4vw, 2.6rem);
+    letter-spacing: -0.02em;
+    color: var(--ink, #1C2313);
+    margin: 0;
+}
+
+.profile-email {
+    font-size: 0.85rem;
+    color: var(--ink-faint, #83866F);
+    margin: 8px 0 0;
+    font-weight: 300;
 }
 
 .profile-actions {
     display: flex;
+    justify-content: center;
     gap: 10px;
     flex-wrap: wrap;
+    margin-top: 26px;
 }
 
-.admin-link {
-    display: inline-block;
-    color: var(--primary-green);
-    text-decoration: none;
+.profile-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.6rem 1.3rem;
+    border-radius: 999px;
+    border: 1px solid var(--hairline, rgba(28, 35, 19, 0.18));
+    background: transparent;
+    color: var(--ink, #1C2313);
+    font-family: var(--font-sans, 'Inter', sans-serif);
+    font-size: 0.72rem;
     font-weight: 600;
-    font-size: 0.85rem;
-    padding: 6px 12px;
-    background: rgba(255, 255, 255, 0.6);
-    border-radius: 20px;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.8);
-}
-
-.admin-link:hover {
-    background: var(--primary-green);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.logout-link {
-    display: inline-block;
-    color: #d32f2f;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
     text-decoration: none;
-    font-weight: 600;
-    font-size: 0.85rem;
-    padding: 6px 12px;
-    background: rgba(255, 0, 0, 0.1);
-    border-radius: 20px;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255, 0, 0, 0.2);
     cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.logout-link:hover {
-    background: #d32f2f;
-    color: white;
+.profile-action:hover {
+    background: var(--forest-700, #2D3319);
+    border-color: var(--forest-700, #2D3319);
+    color: var(--cream, #F7F4EC);
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
+
+.profile-action.logout {
+    color: var(--terracotta, #C44536);
+    border-color: rgba(196, 69, 54, 0.35);
+}
+
+.profile-action.logout:hover {
+    background: var(--terracotta, #C44536);
+    border-color: var(--terracotta, #C44536);
+    color: #fff;
+}
+
+/* ---------- Addresses ---------- */
 
 .section-title {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
+    align-items: flex-end;
+    margin-bottom: 1.6rem;
+    border-bottom: 1px solid var(--hairline, rgba(28, 35, 19, 0.14));
+    padding-bottom: 1.1rem;
+}
+
+.section-eyebrow {
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold, #C9A227);
+    margin-bottom: 6px;
 }
 
 .section-title h2 {
-    color: var(--primary-green);
-    font-size: 1.2rem;
+    font-family: var(--font-serif, 'Fraunces', serif);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--ink, #1C2313);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin: 0;
 }
 
-.btn-text {
+.section-title h2 em {
+    font-weight: 300;
+}
+
+.add-address-btn {
     background: none;
     border: none;
-    color: var(--primary-green);
+    color: var(--terracotta, #C44536);
+    font-family: var(--font-sans, 'Inter', sans-serif);
+    font-size: 0.72rem;
     font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
     cursor: pointer;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.25s ease;
+}
+
+.add-address-btn:hover {
+    border-bottom-color: var(--terracotta, #C44536);
 }
 
 .address-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.1rem;
 }
 
 .address-card {
-    padding: 1.5rem;
-    position: relative;
+    padding: 1.5rem 1.6rem;
+    background: var(--paper, #FDFCF7);
+    border: 1px solid var(--hairline, rgba(28, 35, 19, 0.14));
+    border-radius: 18px;
+    box-shadow: 0 14px 36px -20px rgba(28, 35, 19, 0.18);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+
+.address-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 24px 50px -20px rgba(28, 35, 19, 0.28);
 }
 
 .card-header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 0.5rem;
+    align-items: center;
+    margin-bottom: 0.9rem;
 }
 
 .type-badge {
-    background: var(--light-green);
-    color: white;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--sage, #E9ECD3);
+    color: var(--forest-700, #2D3319);
+    padding: 0.3rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.card-actions {
+    display: flex;
+    gap: 4px;
 }
 
 .card-actions button {
     background: none;
     border: none;
-    font-size: 1.2rem;
-    margin-left: 0.5rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    opacity: 0.6;
-    transition: opacity 0.3s;
+    color: var(--ink-faint, #83866F);
+    transition: background 0.25s ease, color 0.25s ease;
 }
 
 .card-actions button:hover {
-    opacity: 1;
+    background: rgba(28, 35, 19, 0.06);
+    color: var(--ink, #1C2313);
+}
+
+.card-actions button.danger:hover {
+    background: rgba(196, 69, 54, 0.1);
+    color: var(--terracotta, #C44536);
 }
 
 .address-card h3 {
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
-    color: var(--primary-green);
+    font-family: var(--font-serif, 'Fraunces', serif);
+    font-weight: 500;
+    font-size: 1.15rem;
+    margin: 0 0 0.5rem;
+    color: var(--ink, #1C2313);
 }
 
-.address-card p {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    margin-bottom: 0.2rem;
+.address-lines {
+    color: var(--ink-soft, #4A4F3E);
+    font-size: 0.88rem;
+    font-weight: 300;
+    line-height: 1.65;
+    margin: 0 0 0.8rem;
 }
+
+.address-phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--ink-faint, #83866F);
+    font-size: 0.8rem;
+    margin: 0;
+}
+
+/* ---------- Empty state ---------- */
 
 .no-data {
+    grid-column: 1 / -1;
     text-align: center;
-    color: var(--text-secondary);
-    padding: 2rem;
+    padding: 3.5rem 1.5rem;
+    background: var(--cream-warm, #F2EDE0);
+    border: 1px dashed var(--hairline, rgba(28, 35, 19, 0.2));
+    border-radius: 20px;
+}
+
+.no-data-line {
+    font-family: var(--font-serif, 'Fraunces', serif);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--ink-soft, #4A4F3E);
+    margin-bottom: 1.6rem;
 }
