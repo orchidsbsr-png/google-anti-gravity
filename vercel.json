@@ -1,4 +1,17 @@
 {
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "google-anti-gravity.vercel.app"
+        }
+      ],
+      "destination": "https://fresh-farm-himachal.vercel.app/$1",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     {
       "source": "/api/(.*)",

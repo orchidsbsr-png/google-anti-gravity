@@ -10,6 +10,7 @@ import { LanguageProvider } from './context/LanguageContext'
 import BottomNav from './components/BottomNav'
 import ProtectedRoute from './components/ProtectedRoute'
 import Home from './pages/Home'
+import AuthCallback from './pages/AuthCallback'
 import './App.css'
 
 // Route-level code splitting — Home stays eager for instant first paint,
@@ -68,6 +69,7 @@ function App() {
                                         <Suspense fallback={<PageLoader />}>
                                         <Routes>
                                             <Route path="/login" element={<Login />} />
+                                            <Route path="/auth/callback" element={<AuthCallback />} />
                                             <Route path="/" element={<Home />} />
                                             <Route path="/legal" element={<Legal />} />
                                             <Route path="/search" element={<Search />} />

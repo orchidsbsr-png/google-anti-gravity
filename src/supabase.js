@@ -14,5 +14,13 @@ if (!supabaseUrl || !supabaseAnonKey) {
 // even before the project keys are configured.
 export const supabase = createClient(
     supabaseUrl || 'https://placeholder.supabase.co',
-    supabaseAnonKey || 'placeholder-anon-key'
+    supabaseAnonKey || 'placeholder-anon-key',
+    {
+        auth: {
+            flowType: 'pkce',
+            detectSessionInUrl: true,
+            persistSession: true,
+            autoRefreshToken: true,
+        },
+    }
 );
