@@ -1,7 +1,7 @@
-.legal-page {
+﻿.legal-page {
     padding: 100px 20px 40px;
     /* Top padding for navbar */
-    background-color: #F9F7F2;
+    background-color: #F7F4EC;
     min-height: 100vh;
     font-family: 'Inter', sans-serif;
     color: #333;
@@ -28,7 +28,7 @@
     font-size: 1.8rem;
     margin-top: 40px;
     margin-bottom: 20px;
-    color: #27C46B;
+    color: #2D3319;
     border-bottom: 2px solid #eee;
     padding-bottom: 10px;
 }

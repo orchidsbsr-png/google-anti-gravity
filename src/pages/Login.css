@@ -3,7 +3,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #f5f3f0;
+    background: var(--cream, #F7F4EC);
     padding: 20px;
     position: relative;
     overflow: hidden;
@@ -51,12 +51,12 @@
 
 /* Brand Title */
 .brand-title {
-    font-family: 'Georgia', 'Times New Roman', serif;
+    font-family: var(--font-serif, 'Fraunces', serif);
     font-size: 4rem;
     font-weight: 400;
-    color: #1a3a1a;
+    color: var(--forest-700, #2D3319);
     margin: 0 0 30px 0;
-    letter-spacing: -1px;
+    letter-spacing: -0.02em;
 }
 
 /* Feature Badges */
@@ -95,8 +95,8 @@
     width: 100%;
     max-width: 400px;
     padding: 16px 30px;
-    background: white;
-    border: 2px solid #1a1a1a;
+    background: var(--paper, #FDFCF7);
+    border: 1px solid var(--ink, #1C2313);
     border-radius: 50px;
     font-size: 1.05rem;
     font-weight: 500;

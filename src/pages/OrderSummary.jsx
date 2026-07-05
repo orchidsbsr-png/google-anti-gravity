@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { getProductImage } from '../utils/imageService';
+import { BRAND, whatsappLink } from '../config/brand';
 import './OrderSummary.css';
 
 const OrderSummary = () => {
@@ -222,10 +223,18 @@ const OrderSummary = () => {
                         <h3>Need Help?</h3>
                         <p>Contact our support team regarding this order.</p>
                         <div className="contact-options">
-                            <a href="tel:+919876543210" className="contact-btn">
+                            <a
+                                href={whatsappLink(`Hello! I need help with my order #${orderId}.`)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="contact-btn"
+                            >
+                                💬 WhatsApp Us
+                            </a>
+                            <a href={`tel:+${BRAND.whatsappNumber}`} className="contact-btn">
                                 📞 Call Us
                             </a>
-                            <a href="mailto:support@farmfresh.com" className="contact-btn">
+                            <a href={`mailto:${BRAND.supportEmail}`} className="contact-btn">
                                 ✉️ Email Support
                             </a>
                         </div>

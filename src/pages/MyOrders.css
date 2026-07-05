@@ -11,19 +11,22 @@
 }
 
 .page-header h1 {
-    font-size: 1.8rem;
-    color: #1a1a1a;
-    font-weight: 700;
+    font-family: var(--font-serif, 'Fraunces', serif);
+    font-size: 2.4rem;
+    color: var(--ink, #1C2313);
+    font-weight: 400;
+    letter-spacing: -0.02em;
 }
 
 /* Tabs */
 .orders-tabs {
     display: flex;
     justify-content: space-between;
-    background: #f5f5f5;
+    background: var(--cream-warm, #F2EDE0);
     padding: 0.3rem;
-    border-radius: 12px;
+    border-radius: 999px;
     margin-bottom: 2rem;
+    border: 1px solid var(--hairline, rgba(28, 35, 19, 0.14));
 }
 
 .tab-btn {
@@ -31,19 +34,20 @@
     padding: 0.8rem;
     border: none;
     background: transparent;
-    border-radius: 10px;
-    font-size: 0.95rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
     font-weight: 600;
-    color: #666;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint, #83866F);
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .tab-btn.active {
-    background: #8e2de2;
-    /* Purple from design */
-    color: white;
-    box-shadow: 0 4px 10px rgba(142, 45, 226, 0.3);
+    background: var(--forest-700, #2D3319);
+    color: var(--cream, #F7F4EC);
+    box-shadow: 0 8px 20px -8px rgba(45, 51, 25, 0.5);
 }
 
 /* Order List */
@@ -54,12 +58,12 @@
 }
 
 .order-card-customer {
-    background: white;
-    border-radius: 16px;
-    padding: 1.2rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    border: 1px solid #f0f0f0;
-    transition: transform 0.2s;
+    background: var(--paper, #FDFCF7);
+    border-radius: 18px;
+    padding: 1.4rem;
+    box-shadow: 0 14px 36px -18px rgba(28, 35, 19, 0.18);
+    border: 1px solid var(--hairline, rgba(28, 35, 19, 0.14));
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .order-card-customer:hover {
@@ -123,9 +127,11 @@
 .view-summary-btn {
     background: none;
     border: none;
-    color: #8e2de2;
+    color: var(--terracotta, #C44536);
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     cursor: pointer;
 }
 
@@ -140,11 +146,14 @@
 }
 
 .start-shopping-btn {
-    background: #8e2de2;
-    color: white;
-    padding: 0.8rem 1.5rem;
-    border-radius: 25px;
+    background: var(--forest-700, #2D3319);
+    color: var(--cream, #F7F4EC);
+    padding: 0.9rem 2rem;
+    border-radius: 999px;
     text-decoration: none;
     font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
     display: inline-block;
 }

@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase';
 import { collection, addDoc, updateDoc, doc } from 'firebase/firestore';
 import AddressForm from '../components/AddressForm';
+import ProductImage from '../components/ProductImage';
 import { sendOrderConfirmationEmail } from '../services/emailService';
 import { saveOrderToSheet } from '../services/sheetService';
 import './Payment.css';
@@ -27,9 +28,16 @@ const Payment = () => {
     const [isServiceable, setIsServiceable] = useState(false);
     const [isChecking, setIsChecking] = useState(false);
     const [serviceError, setServiceError] = useState('');
+    const [isEstimate, setIsEstimate] = useState(false);
+
+    // Gift option
+    const [isGift, setIsGift] = useState(false);
+    const [giftNote, setGiftNote] = useState('');
 
     const subtotal = getCartTotal();
     const total = subtotal + shippingCost;
+
+    const formatINR = (n) => Number(n || 0).toLocaleString('en-IN');
 
     // Effect to check serviceability when address changes
     useEffect(() => {
@@ -57,13 +65,22 @@ const Payment = () => {
                 if (data.is_serviceable) {
                     setShippingCost(data.shipping_cost);
                     setIsServiceable(true);
+                    setIsEstimate(false);
                 } else {
                     setIsServiceable(false);
                     setServiceError(data.error || 'Location not serviceable');
                 }
             } catch (err) {
                 console.error("Serviceability Check Failed:", err);
-                setServiceError('Could not verify serviceability');
+                if (import.meta.env.DEV) {
+                    // Serverless API isn't available in local dev — use a flat
+                    // estimate so the checkout flow can be tested end to end.
+                    setShippingCost(120);
+                    setIsServiceable(true);
+                    setIsEstimate(true);
+                } else {
+                    setServiceError('Could not verify serviceability');
+                }
             } finally {
                 setIsChecking(false);
             }
@@ -119,7 +136,9 @@ const Payment = () => {
                 status: 'pending',
                 payment_status: 'pending',
                 created_at: new Date().toISOString(),
-                payment_method: paymentMethod
+                payment_method: paymentMethod,
+                is_gift: isGift,
+                gift_note: isGift ? giftNote.trim() : ''
             };
 
             const docRef = await addDoc(collection(db, 'orders'), orderData);
@@ -209,7 +228,7 @@ const Payment = () => {
                         contact: selectedAddress.phone
                     },
                     theme: {
-                        color: "#3399cc"
+                        color: "#2D3319"
                     }
                 };
 
@@ -255,11 +274,14 @@ const Payment = () => {
 
     return (
         <div className="payment-page">
-            <h1>Checkout</h1>
+            <header className="checkout-header">
+                <p className="checkout-eyebrow">Almost there</p>
+                <h1>Checkout</h1>
+            </header>
 
             <section className="section glass">
                 <div className="section-header">
-                    <h2>Delivery Address</h2>
+                    <h2><span className="step-no">01</span> Delivery Address</h2>
                     {!showAddressForm && (
                         <button className="btn-text" onClick={() => setShowAddressForm(true)}>
                             + Add New
@@ -298,7 +320,7 @@ const Payment = () => {
             </section>
 
             <section className="section">
-                <h2>Payment Method</h2>
+                <h2 className="method-title"><span className="step-no">02</span> Payment Method</h2>
                 <div className="payment-methods">
                     <label className={`payment-option ${paymentMethod === 'online' ? 'selected' : ''}`}>
                         <input
@@ -309,7 +331,7 @@ const Payment = () => {
                             onChange={() => setPaymentMethod('online')}
                         />
                         <span>Online Payment (UPI, Cards, NetBanking)</span>
-                        <span className="badge">Secured by Razorpay</span>
+                        <span className="pay-badge">Secured by Razorpay</span>
                     </label>
 
                     <label className={`payment-option ${paymentMethod === 'cod' ? 'selected' : ''}`}>
@@ -325,16 +347,99 @@ const Payment = () => {
                 </div>
             </section>
 
+            <section className="section">
+                <h2 className="method-title"><span className="step-no">03</span> Your Harvest</h2>
+                <div className="review-items">
+                    {cartItems.map(item => (
+                        <div key={item.id} className="review-item">
+                            <div className="review-thumb">
+                                <ProductImage productName={item.productName} varietyName={item.varietyName} />
+                            </div>
+                            <div className="review-info">
+                                <h4>{item.productName}</h4>
+                                <p>{item.varietyName} &middot; {item.quantityKg}kg &times; {item.quantity} box{item.quantity > 1 ? 'es' : ''}</p>
+                            </div>
+                            <span className="review-price">₹{formatINR(item.price * item.quantity)}</span>
+                        </div>
+                    ))}
+                    <div className="review-subtotal">
+                        <span>Subtotal</span>
+                        <span>₹{formatINR(subtotal)}</span>
+                    </div>
+                </div>
+            </section>
+
+            <section className="section gift-section">
+                <label className="gift-toggle">
+                    <input
+                        type="checkbox"
+                        checked={isGift}
+                        onChange={(e) => setIsGift(e.target.checked)}
+                    />
+                    <span className="gift-toggle-text">
+                        <strong>This is a gift</strong>
+                        <em>We&rsquo;ll include a handwritten note from the orchard</em>
+                    </span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <rect x="3" y="8" width="18" height="13" rx="1.5" />
+                        <path d="M3 12h18M12 8v13" />
+                        <path d="M12 8c-2.5 0-4.5-1.3-4.5-3S9 2.5 10.5 3.5 12 8 12 8zm0 0c2.5 0 4.5-1.3 4.5-3S15 2.5 13.5 3.5 12 8 12 8z" />
+                    </svg>
+                </label>
+                {isGift && (
+                    <textarea
+                        className="gift-note-input"
+                        placeholder="Your message — we'll write it by hand and tuck it into the box…"
+                        maxLength={220}
+                        value={giftNote}
+                        onChange={(e) => setGiftNote(e.target.value)}
+                        rows={3}
+                    />
+                )}
+            </section>
+
+            <div className="trust-row">
+                <div className="trust-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="4" y="10" width="16" height="10" rx="2" />
+                        <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+                    </svg>
+                    <span>Secure payment</span>
+                </div>
+                <div className="trust-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M5 21c0-9 4-14 14-16-1 10-6 14-12 14" />
+                        <path d="M5 21c2-5 5-8 9-10" />
+                    </svg>
+                    <span>No chemicals, ever</span>
+                </div>
+                <div className="trust-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 8l-9-5-9 5v8l9 5 9-5V8z" />
+                        <path d="M3.5 8.5L12 13l8.5-4.5" />
+                        <path d="M12 13v8" />
+                    </svg>
+                    <span>Eco packaging</span>
+                </div>
+            </div>
+
             <div className="payment-footer">
+                <p className="delivery-promise">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M12 22c5-2 8-6.5 8-12V5l-8-3-8 3v5c0 5.5 3 10 8 12z" />
+                    </svg>
+                    Hand-picked after you order &middot; delivered fresh in 3&ndash;5 days
+                </p>
                 <div className="total-row">
                     <span>Shipping</span>
-                    <span>{isChecking ? '...' : isServiceable ? `₹${shippingCost}` : '-'}</span>
+                    <span>{isChecking ? '...' : isServiceable ? `₹${formatINR(shippingCost)}${isEstimate ? ' (est.)' : ''}` : '-'}</span>
                 </div>
                 <div className="total-row">
                     <span>Total to Pay</span>
-                    <span>{isChecking ? '...' : isServiceable ? `₹${total}` : '-'}</span>
+                    <span>{isChecking ? '...' : isServiceable ? `₹${formatINR(total)}` : '-'}</span>
                 </div>
-                {serviceError && <p className="error-text" style={{ color: 'red', textAlign: 'right', fontSize: '0.9rem' }}>{serviceError}</p>}
+                {isEstimate && <p className="estimate-note">Estimated rate &mdash; live courier rates apply on the deployed site.</p>}
+                {serviceError && <p className="error-text">{serviceError}</p>}
 
                 <button
                     className="pay-btn"
@@ -342,7 +447,7 @@ const Payment = () => {
                     disabled={isProcessing || !selectedAddressId || !isServiceable || isChecking}
                     style={{ opacity: (!isServiceable || isChecking) ? 0.5 : 1 }}
                 >
-                    {isProcessing ? 'Processing...' : isChecking ? 'Checking location...' : `Pay ₹${total}`}
+                    {isProcessing ? 'Processing...' : isChecking ? 'Checking location...' : `Pay ₹${formatINR(total)}`}
                 </button>
             </div>
         </div>

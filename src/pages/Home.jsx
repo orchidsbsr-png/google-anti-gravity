@@ -6,106 +6,275 @@ import Origin from '../components/Origin';
 import ProductShowcase from '../components/ProductShowcase';
 import Reviews from '../components/Reviews';
 import Process from '../components/Process';
+import OrchardTicker from '../components/OrchardTicker';
 import { Link } from 'react-router-dom';
+import { whatsappLink } from '../config/brand';
+import { useLanguage } from '../context/LanguageContext';
+
+const footerLink = {
+    color: 'rgba(247, 244, 236, 0.65)',
+    textDecoration: 'none',
+    fontSize: '0.85rem',
+    lineHeight: 2.1,
+    display: 'block',
+    transition: 'color 0.25s ease'
+};
 
 const Home = () => {
+    const { t } = useLanguage();
     return (
         <SmoothScroll>
-            <main style={{ backgroundColor: '#f5f5f0' }}>
+            <main style={{ backgroundColor: '#F7F4EC' }}>
                 <Hero />
+                <OrchardTicker />
                 <Origin />
                 <ProductShowcase />
                 <Reviews />
                 <Process />
 
+                {/* Harvest Club */}
+                <section style={{
+                    padding: 'clamp(80px, 9vw, 140px) 6vw',
+                    backgroundColor: '#F7F4EC',
+                    textAlign: 'center'
+                }}>
+                    <p style={{
+                        fontSize: '0.72rem',
+                        fontWeight: 600,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.35em',
+                        color: '#C9A227',
+                        marginBottom: '20px'
+                    }}>
+                        {t('club.eyebrow')}
+                    </p>
+                    <h2 style={{
+                        fontFamily: "'Fraunces', Georgia, serif",
+                        fontSize: 'clamp(2.4rem, 4.8vw, 4rem)',
+                        fontWeight: 400,
+                        lineHeight: 1.08,
+                        color: '#1C2313',
+                        maxWidth: '760px',
+                        margin: '0 auto 22px'
+                    }}>
+                        {t('club.title1')}
+                        <br />
+                        <em style={{ fontWeight: 300 }}>{t('club.title2')}</em>
+                    </h2>
+                    <p style={{
+                        fontSize: '1.02rem',
+                        lineHeight: 1.8,
+                        fontWeight: 300,
+                        color: '#4A4F3E',
+                        maxWidth: '480px',
+                        margin: '0 auto 36px'
+                    }}>
+                        {t('club.body')}
+                    </p>
+                    <a
+                        href={whatsappLink('Hello! I would like to join the Harvest Club — a box a month.')}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-primary"
+                    >
+                        {t('club.cta')}
+                    </a>
+                    <p style={{
+                        marginTop: '18px',
+                        fontSize: '0.72rem',
+                        letterSpacing: '0.18em',
+                        textTransform: 'uppercase',
+                        color: '#83866F'
+                    }}>
+                        {t('club.note')}
+                    </p>
+                </section>
+
                 {/* Adopt a Tree CTA */}
                 <section style={{
-                    padding: '8vw 5vw',
-                    textAlign: 'center',
-                    backgroundColor: '#e9ecd3', // Light, earthy green/beige
-                    color: '#2d3319',
-                    position: 'relative'
+                    padding: 'clamp(90px, 10vw, 160px) 6vw',
+                    backgroundColor: '#E9ECD3',
+                    color: '#1C2313',
+                    position: 'relative',
+                    overflow: 'hidden'
                 }}>
-                    <h2 style={{ fontSize: '3rem', marginBottom: '20px' }}>You can adopt a tree</h2>
-                    <p style={{ fontSize: '1.2rem', opacity: 0.9, marginBottom: '30px', maxWidth: '600px', margin: '0 auto 40px auto' }}>
-                        Join us in cultivating the finest apples grown purely by nature. Adopt an organic apple tree today for a sustainable harvest.
-                    </p>
-                    <Link to="/adopt-a-tree" style={{
-                        display: 'inline-block',
-                        padding: '15px 40px',
-                        fontSize: '1.1rem',
-                        backgroundColor: '#2d3319', // Dark forest green
-                        color: '#fff',
-                        textDecoration: 'none',
-                        borderRadius: '50px',
-                        cursor: 'pointer',
-                        transition: 'transform 0.3s ease, background-color 0.3s ease'
-                    }}
-                        onMouseEnter={(e) => {
-                            e.target.style.transform = 'scale(1.05)';
-                            e.target.style.backgroundColor = '#1a1f0e';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.target.style.transform = 'scale(1)';
-                            e.target.style.backgroundColor = '#2d3319';
-                        }}
-                    >
-                        Learn More
-                    </Link>
+                    <div style={{
+                        maxWidth: '1200px',
+                        margin: '0 auto',
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                        gap: '5vw',
+                        alignItems: 'center'
+                    }}>
+                        <div>
+                            <p style={{
+                                fontSize: '0.72rem',
+                                fontWeight: 600,
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.35em',
+                                color: '#C44536',
+                                marginBottom: '20px'
+                            }}>
+                                {t('adopt.eyebrow')}
+                            </p>
+                            <h2 style={{
+                                fontFamily: "'Fraunces', Georgia, serif",
+                                fontSize: 'clamp(2.6rem, 5vw, 4.2rem)',
+                                fontWeight: 400,
+                                lineHeight: 1.05,
+                                marginBottom: '24px'
+                            }}>
+                                {t('adopt.title1')}
+                                <br />
+                                <em style={{ fontWeight: 300 }}>{t('adopt.title2')}</em>
+                            </h2>
+                            <p style={{
+                                fontSize: '1.05rem',
+                                lineHeight: 1.8,
+                                fontWeight: 300,
+                                maxWidth: '460px',
+                                marginBottom: '36px',
+                                color: '#4A4F3E'
+                            }}>
+                                {t('adopt.body')}
+                            </p>
+                            <Link to="/adopt-a-tree" className="btn-primary">{t('adopt.cta')}</Link>
+                        </div>
+                        <div style={{ position: 'relative' }}>
+                            <img
+                                src="/images/adopt apple tree photos/red apple tree.jpg"
+                                alt="An apple tree heavy with fruit"
+                                loading="lazy"
+                                style={{
+                                    width: '100%',
+                                    height: 'clamp(340px, 46vh, 480px)',
+                                    objectFit: 'cover',
+                                    borderRadius: '22px',
+                                    boxShadow: '0 35px 80px -30px rgba(28, 35, 19, 0.4)'
+                                }}
+                            />
+                        </div>
+                    </div>
 
-                    {/* Transition from CTA to Footer */}
+                    {/* Transition into the dark footer */}
                     <div style={{
                         position: 'absolute',
                         bottom: 0,
                         left: 0,
                         width: '100%',
-                        height: '20vh',
-                        background: 'linear-gradient(to bottom, transparent 0%, rgba(45, 51, 25, 0.4) 60%, #2d3319 100%)',
+                        height: '14vh',
+                        background: 'linear-gradient(to bottom, transparent 0%, rgba(36, 42, 20, 0.35) 65%, #242a14 100%)',
                         zIndex: 1,
-                        pointerEvents: 'none' // Ensures it doesn't block clicks
+                        pointerEvents: 'none'
                     }} />
                 </section>
 
-                {/* Contact/Footer Section */}
-                <section style={{
-                    padding: '10vw',
-                    textAlign: 'center',
-                    backgroundColor: '#2d3319',
-                    color: '#f5f5f0'
-                }}>
-                    <h2 style={{ fontSize: '3rem', marginBottom: '20px' }}>Join the Movement</h2>
-                    <p style={{ fontSize: '1.2rem', opacity: 0.8, marginBottom: '40px' }}>Experience the purest flavors of Himachal.</p>
-                    <Link to="/search" style={{
-                        display: 'inline-block',
-                        padding: '15px 40px',
-                        fontSize: '1.1rem',
-                        backgroundColor: '#c44536', // Terracotta
-                        color: '#fff',
-                        textDecoration: 'none',
-                        borderRadius: '50px',
-                        cursor: 'pointer',
-                        transition: 'transform 0.3s ease'
-                    }}
-                        onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
-                        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
-                    >
-                        Shop Now
-                    </Link>
-                </section>
-
-                {/* Legal Links Footer */}
+                {/* Footer */}
                 <footer style={{
-                    padding: '40px 20px',
-                    textAlign: 'center',
                     backgroundColor: '#242a14',
-                    color: 'rgba(245, 245, 240, 0.6)',
-                    fontSize: '0.9rem'
+                    color: '#F7F4EC',
+                    padding: 'clamp(80px, 8vw, 130px) 6vw 0'
                 }}>
-                    <div style={{ marginBottom: '20px' }}>
-                        <Link to="/legal" style={{ color: 'inherit', textDecoration: 'none', margin: '0 10px' }}>Terms</Link>
-                        <Link to="/legal" style={{ color: 'inherit', textDecoration: 'none', margin: '0 10px' }}>Privacy</Link>
+                    <div style={{
+                        maxWidth: '1200px',
+                        margin: '0 auto',
+                        textAlign: 'center',
+                        paddingBottom: 'clamp(60px, 6vw, 100px)',
+                        borderBottom: '1px solid rgba(247, 244, 236, 0.12)'
+                    }}>
+                        <h2 style={{
+                            fontFamily: "'Fraunces', Georgia, serif",
+                            fontSize: 'clamp(2.4rem, 4.5vw, 3.8rem)',
+                            fontWeight: 400,
+                            marginBottom: '18px'
+                        }}>
+                            {t('footer.title1')} <em style={{ fontWeight: 300 }}>{t('footer.title2')}</em> {t('footer.title3')}
+                        </h2>
+                        <p style={{ fontSize: '1rem', opacity: 0.7, fontWeight: 300, marginBottom: '38px' }}>
+                            {t('footer.sub')}
+                        </p>
+                        <Link to="/search" className="btn-terracotta">{t('footer.shopNow')}</Link>
                     </div>
-                    <p>© 2025 Farm Fresh. Pure Himachal.</p>
+
+                    <div style={{
+                        maxWidth: '1200px',
+                        margin: '0 auto',
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+                        gap: '40px',
+                        padding: 'clamp(50px, 5vw, 80px) 0'
+                    }}>
+                        <div>
+                            <h3 style={{
+                                fontFamily: "'Fraunces', Georgia, serif",
+                                fontSize: '1.5rem',
+                                fontWeight: 400,
+                                marginBottom: '14px'
+                            }}>
+                                Farm Fresh
+                            </h3>
+                            <p style={{ fontSize: '0.85rem', lineHeight: 1.8, opacity: 0.6, fontWeight: 300, maxWidth: '260px' }}>
+                                A four-generation family orchard in the Jubbal-Kotkhai
+                                valley, above Hatkoti — growing fruit the slow way,
+                                father to son.
+                            </p>
+                        </div>
+                        <div>
+                            <p style={{
+                                fontSize: '0.7rem',
+                                fontWeight: 600,
+                                letterSpacing: '0.28em',
+                                textTransform: 'uppercase',
+                                color: '#C9A227',
+                                marginBottom: '16px'
+                            }}>{t('footer.explore')}</p>
+                            <Link to="/search" style={footerLink}>Shop the Harvest</Link>
+                            <Link to="/adopt-a-tree" style={footerLink}>Adopt a Tree</Link>
+                            <Link to="/recipes" style={footerLink}>The Kitchen</Link>
+                            <Link to="/health-benefits" style={footerLink}>Health Benefits</Link>
+                        </div>
+                        <div>
+                            <p style={{
+                                fontSize: '0.7rem',
+                                fontWeight: 600,
+                                letterSpacing: '0.28em',
+                                textTransform: 'uppercase',
+                                color: '#C9A227',
+                                marginBottom: '16px'
+                            }}>{t('footer.account')}</p>
+                            <Link to="/orders" style={footerLink}>My Orders</Link>
+                            <Link to="/profile" style={footerLink}>Profile</Link>
+                            <Link to="/cart" style={footerLink}>Cart</Link>
+                        </div>
+                        <div>
+                            <p style={{
+                                fontSize: '0.7rem',
+                                fontWeight: 600,
+                                letterSpacing: '0.28em',
+                                textTransform: 'uppercase',
+                                color: '#C9A227',
+                                marginBottom: '16px'
+                            }}>{t('footer.legal')}</p>
+                            <Link to="/legal" style={footerLink}>Terms of Service</Link>
+                            <Link to="/legal" style={footerLink}>Privacy Policy</Link>
+                        </div>
+                    </div>
+
+                    <div style={{
+                        maxWidth: '1200px',
+                        margin: '0 auto',
+                        padding: '26px 0 110px',
+                        borderTop: '1px solid rgba(247, 244, 236, 0.12)',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        flexWrap: 'wrap',
+                        gap: '10px',
+                        fontSize: '0.78rem',
+                        color: 'rgba(247, 244, 236, 0.45)'
+                    }}>
+                        <span>&copy; 2025 Farm Fresh &middot; Pure Himachal.</span>
+                        <span>Grown at 2,300m &middot; Shipped across India</span>
+                    </div>
                 </footer>
             </main>
         </SmoothScroll>

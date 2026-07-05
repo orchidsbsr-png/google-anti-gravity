@@ -1,76 +1,83 @@
 "use client";
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ProductShowcase.css';
 
-gsap.registerPlugin(ScrollTrigger);
-
 const products = [
     { name: 'Apples', video: '/videos/apples.mp4' },
-    { name: 'Persimmons', video: '/videos/orange-persimmons.mp4' }, // Consolidated category
+    { name: 'Persimmons', video: '/videos/orange-persimmons.mp4' },
     { name: 'Fuzzy Kiwis', video: '/videos/fuzzy-kiwis.mp4' },
     { name: 'Plums', video: '/videos/plums.mp4' },
     { name: 'Pears', video: '/videos/pears.mp4' },
     { name: 'Cherries', video: '/videos/cherries.mp4' }
 ];
 
-export default function ProductShowcase() {
-    const sectionRef = useRef(null);
-    const triggerRef = useRef(null);
-    const navigate = useNavigate();
+const SLIDE_MS = 5000;
 
+export default function ProductShowcase() {
+    const navigate = useNavigate();
+    const [active, setActive] = useState(0);
+
+    // Auto-rotate; selecting a fruit restarts the clock
     useEffect(() => {
-        const pin = gsap.fromTo(
-            sectionRef.current,
-            { translateX: 0 },
-            {
-                translateX: "-500vw",
-                ease: "none",
-                duration: 1,
-                scrollTrigger: {
-                    trigger: triggerRef.current,
-                    start: "top top",
-                    end: "3000 top",
-                    scrub: 0.6,
-                    pin: true,
-                    anticipatePin: 1,
-                },
-            }
-        );
-        return () => {
-            pin.kill();
-        };
-    }, []);
+        const timer = setInterval(() => {
+            setActive(a => (a + 1) % products.length);
+        }, SLIDE_MS);
+        return () => clearInterval(timer);
+    }, [active]);
 
     return (
-        <div ref={triggerRef} className="showcase-slider-container">
-            <div ref={sectionRef} className="showcase-scroll-wrapper">
-                {products.map((product, index) => (
-                    <div key={index}
-                        onClick={() => navigate(`/search?query=${product.name}`)}
-                        className="showcase-slide">
-                        <div className="showcase-media-container">
-                            <video
-                                src={product.video}
-                                autoPlay
-                                loop
-                                muted
-                                playsInline
-                            />
-                        </div>
-                        <h3 className="showcase-title">
-                            {product.name}
-                        </h3>
-                        {index === products.length - 1 && (
-                            <p className="showcase-prompt">
-                                Keep scrolling for full menu →
-                            </p>
+        <section className="showcase-v3">
+            {/* Crossfading video layers */}
+            {products.map((product, i) => (
+                <video
+                    key={product.name}
+                    src={product.video}
+                    className={`stage-video ${active === i ? 'active' : ''}`}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                />
+            ))}
+            <div className="stage-scrim" />
+
+            {/* Head */}
+            <div className="stage-head">
+                <span className="stage-eyebrow">The Orchard</span>
+                <span className="stage-counter">
+                    {String(active + 1).padStart(2, '0')} / {String(products.length).padStart(2, '0')}
+                </span>
+            </div>
+
+            {/* Centered name — re-keyed so it fades anew on every change */}
+            <div
+                className="stage-center"
+                onClick={() => navigate(`/search?query=${products[active].name}`)}
+            >
+                <h3 key={active} className="stage-title">
+                    {products[active].name}
+                </h3>
+                <span key={`cta-${active}`} className="stage-cta">
+                    Shop {products[active].name} &rarr;
+                </span>
+            </div>
+
+            {/* Fruit selector */}
+            <div className="stage-menu">
+                {products.map((product, i) => (
+                    <button
+                        key={product.name}
+                        className={`stage-menu-item ${active === i ? 'active' : ''}`}
+                        onClick={() => setActive(i)}
+                    >
+                        {product.name}
+                        {active === i && (
+                            <span className="stage-progress" style={{ animationDuration: `${SLIDE_MS}ms` }} />
                         )}
-                    </div>
+                    </button>
                 ))}
             </div>
-        </div>
+        </section>
     );
 }

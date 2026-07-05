@@ -1,75 +1,108 @@
+/* Orchard Editorial — Cart */
+
 .cart-page {
-    padding: 1rem;
-    padding-bottom: 100px;
+    padding: clamp(24px, 4vw, 56px);
+    padding-bottom: 140px;
     min-height: 100vh;
-    overflow-y: auto;
+    max-width: 1140px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    grid-template-areas:
+        "header header"
+        "items summary";
+    column-gap: clamp(24px, 3vw, 48px);
+    align-items: start;
 }
 
 .cart-page.empty {
-    height: 80vh;
     display: flex;
+    height: 80vh;
     align-items: center;
     justify-content: center;
 }
 
 .empty-cart-message {
     text-align: center;
-    padding: 3rem;
-    max-width: 400px;
+    padding: 3.5rem 3rem;
+    max-width: 420px;
     width: 100%;
+    border-radius: 24px;
 }
 
 .empty-cart-message h2 {
-    color: var(--primary-green);
+    font-family: var(--font-serif, 'Fraunces', serif);
+    font-weight: 400;
+    font-size: 1.9rem;
+    color: var(--ink);
     margin-bottom: 1rem;
 }
 
 .empty-cart-message p {
     color: var(--text-secondary);
+    font-weight: 300;
     margin-bottom: 2rem;
 }
 
 .cart-header {
+    grid-area: header;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
+    align-items: baseline;
+    margin-bottom: 2.2rem;
+    border-bottom: 1px solid var(--hairline);
+    padding-bottom: 1.4rem;
 }
 
 .cart-header h1 {
-    color: var(--primary-green);
+    font-family: var(--font-serif, 'Fraunces', serif);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--ink);
 }
 
 .clear-btn {
     background: none;
     border: none;
-    color: var(--error);
-    text-decoration: underline;
+    color: var(--terracotta, #C44536);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
     cursor: pointer;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.25s ease;
+}
+
+.clear-btn:hover {
+    border-bottom-color: var(--terracotta, #C44536);
 }
 
 .cart-items {
+    grid-area: items;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    margin-bottom: 320px;
-    overflow: visible;
+    margin-bottom: 2rem;
 }
 
 .cart-item {
     display: flex;
-    padding: 1rem;
+    padding: 1.2rem;
     position: relative;
     align-items: center;
-    gap: 1rem;
+    gap: 1.2rem;
+    border-radius: 18px;
 }
 
 .cart-item-image {
-    width: 80px;
-    height: 80px;
+    width: 92px;
+    height: 92px;
     flex-shrink: 0;
     overflow: hidden;
-    border-radius: 8px;
+    border-radius: 14px;
 }
 
 .cart-item-image img {
@@ -84,99 +117,133 @@
 }
 
 .cart-item-details h3 {
-    font-size: 1rem;
-    color: var(--primary-green);
-    margin-bottom: 0.2rem;
+    font-family: var(--font-serif, 'Fraunces', serif);
+    font-weight: 500;
+    font-size: 1.15rem;
+    color: var(--ink);
+    margin-bottom: 0.15rem;
 }
 
 .variety-name {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-}
-
-.item-weight {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    margin-bottom: 0.3rem;
-}
-
-.item-quantity {
     font-size: 0.85rem;
-    color: var(--text-secondary);
-    margin-bottom: 0.5rem;
-    font-weight: 500;
+    font-style: italic;
+    font-family: var(--font-serif, 'Fraunces', serif);
+    color: var(--ink-soft);
+}
+
+.item-weight,
+.item-quantity {
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+    margin-top: 0.3rem;
 }
 
 .item-pricing {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.95rem;
-    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    margin-top: 0.6rem;
 }
 
 .price-per-unit {
-    color: var(--text-secondary);
-    font-weight: 500;
+    color: var(--ink-soft);
+    font-weight: 400;
 }
 
 .price-multiply,
 .price-equals {
-    color: var(--text-secondary);
+    color: var(--ink-faint);
     font-weight: 300;
 }
 
 .quantity-display {
-    color: var(--primary-green);
+    color: var(--ink);
     font-weight: 600;
 }
 
 .item-total {
-    font-weight: bold;
-    color: var(--primary-green);
-    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--ink);
+    font-size: 1.05rem;
 }
 
 .remove-btn {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 12px;
+    right: 14px;
     background: none;
     border: none;
-    font-size: 1.5rem;
-    color: #999;
+    font-size: 1.3rem;
+    color: var(--ink-faint);
     cursor: pointer;
     line-height: 1;
+    transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.remove-btn:hover {
+    color: var(--terracotta, #C44536);
+    transform: scale(1.15);
 }
 
 .cart-summary {
-    padding: 1.5rem;
-    position: fixed;
-    bottom: 70px;
-    left: 0;
-    right: 0;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    z-index: 90;
+    grid-area: summary;
+    padding: 1.8rem;
+    border-radius: 22px;
+    position: sticky;
+    top: 24px;
+    border: 1px solid var(--hairline);
 }
 
 .summary-row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.9rem;
     color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 300;
 }
 
 .summary-row.total {
-    font-weight: bold;
-    color: var(--primary-green);
-    font-size: 1.2rem;
-    margin-top: 1rem;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-    padding-top: 1rem;
+    font-weight: 600;
+    color: var(--ink);
+    font-size: 1.25rem;
+    margin-top: 1.1rem;
+    border-top: 1px solid var(--hairline);
+    padding-top: 1.1rem;
+}
+
+.summary-row.total span:last-child {
+    font-family: var(--font-serif, 'Fraunces', serif);
+    font-size: 1.5rem;
+    font-weight: 500;
 }
 
 .checkout-btn {
     width: 100%;
-    margin-top: 1rem;
+    margin-top: 1.2rem;
+}
+
+@media (max-width: 860px) {
+    .cart-page {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "header"
+            "items"
+            "summary";
+        padding-bottom: 320px;
+    }
+
+    .cart-summary {
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border-radius: 22px 22px 0 0;
+        z-index: 90;
+        padding-bottom: 100px;
+        border: none;
+        box-shadow: 0 -18px 50px -18px rgba(28, 35, 19, 0.3);
+    }
 }

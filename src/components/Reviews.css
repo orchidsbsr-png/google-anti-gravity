@@ -1,0 +1,152 @@
+/* Reviews v2 — drifting marquee wall */
+
+.reviews-v2 {
+    position: relative;
+    background-color: #242a14;
+    padding: 0 0 120px;
+    overflow: hidden;
+}
+
+.reviews-fade-top {
+    height: 18vh;
+    background: linear-gradient(to bottom, #1B2112 0%, rgba(36, 42, 20, 0.4) 60%, transparent 100%);
+    pointer-events: none;
+}
+
+.reviews-head {
+    text-align: center;
+    padding: 40px 8vw 64px;
+}
+
+.reviews-eyebrow {
+    color: #C9A227;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.35em;
+    margin-bottom: 18px;
+}
+
+.reviews-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+    color: #F7F4EC;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    margin: 0;
+}
+
+.reviews-title em {
+    font-weight: 300;
+}
+
+/* Marquee */
+
+.marquee {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    /* soft edge masks */
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+
+.marquee-track {
+    display: flex;
+    gap: 26px;
+    width: max-content;
+    will-change: transform;
+}
+
+.drift-left {
+    animation: driftLeft 55s linear infinite;
+}
+
+.drift-right {
+    animation: driftRight 65s linear infinite;
+}
+
+.marquee-track:hover {
+    animation-play-state: paused;
+}
+
+@keyframes driftLeft {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+@keyframes driftRight {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0); }
+}
+
+/* Cards */
+
+.review-card {
+    width: clamp(300px, 34vw, 430px);
+    flex-shrink: 0;
+    margin: 0;
+    padding: 30px 32px;
+    border-radius: 20px;
+    background: rgba(247, 244, 236, 0.05);
+    border: 1px solid rgba(247, 244, 236, 0.1);
+    backdrop-filter: blur(6px);
+    transition: background 0.4s ease, border-color 0.4s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.review-card:hover {
+    background: rgba(247, 244, 236, 0.09);
+    border-color: rgba(201, 162, 39, 0.4);
+    transform: translateY(-4px);
+}
+
+.review-stars {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 16px;
+}
+
+.review-card blockquote {
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 1.02rem;
+    line-height: 1.65;
+    color: rgba(247, 244, 236, 0.92);
+    margin: 0 0 22px;
+}
+
+.review-card figcaption {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+}
+
+.review-author {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #F7F4EC;
+}
+
+.review-location {
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(247, 244, 236, 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .drift-left,
+    .drift-right {
+        animation: none;
+    }
+
+    .marquee-track {
+        flex-wrap: wrap;
+        width: auto;
+        justify-content: center;
+    }
+}

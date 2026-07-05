@@ -1,28 +1,259 @@
 .payment-page {
     padding: 2rem 1rem;
-    padding-bottom: 200px;
+    padding-bottom: 280px;
     /* Increased space for footer + nav */
-    background: #f4f4f4;
+    background: var(--cream, #F7F4EC);
     min-height: 100vh;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-sans, 'Inter', sans-serif);
+    max-width: 860px;
+    margin: 0 auto;
+}
+
+.checkout-header {
+    margin-bottom: 1.8rem;
+}
+
+.checkout-eyebrow {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--terracotta, #C44536);
+    margin-bottom: 10px;
 }
 
 .payment-page h1 {
-    font-family: 'Merriweather', serif;
-    /* Or similar serif font */
-    font-size: 2rem;
-    color: #3a4a1e;
-    /* Dark olive green */
-    margin-bottom: 1.5rem;
-    font-weight: 700;
+    font-family: var(--font-serif, 'Fraunces', serif);
+    font-size: 2.6rem;
+    color: var(--ink, #1C2313);
+    margin-bottom: 0;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+}
+
+.step-no {
+    font-family: var(--font-sans, 'Inter', sans-serif);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    color: var(--terracotta, #C44536);
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.method-title {
+    margin-bottom: 1.5rem !important;
+}
+
+.pay-badge {
+    margin-left: auto;
+    background: var(--sage, #E9ECD3);
+    color: var(--forest-700, #2D3319);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.8rem;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+.error-text {
+    color: var(--terracotta, #C44536);
+    text-align: right;
+    font-size: 0.85rem;
+    margin-bottom: 0.6rem;
+}
+
+/* ---- Order review (step 03) ---- */
+
+.review-items {
+    display: flex;
+    flex-direction: column;
+}
+
+.review-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--hairline, rgba(28, 35, 19, 0.14));
+}
+
+.review-thumb {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: var(--cream-warm, #F2EDE0);
+}
+
+.review-thumb img,
+.review-thumb .product-image-container,
+.review-thumb .product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.review-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.review-info h4 {
+    font-family: var(--font-serif, 'Fraunces', serif);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--ink, #1C2313);
+    margin: 0 0 3px;
+}
+
+.review-info p {
+    font-size: 0.78rem;
+    color: var(--ink-faint, #83866F);
+    margin: 0;
+}
+
+.review-price {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--ink, #1C2313);
+    white-space: nowrap;
+}
+
+.review-subtotal {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 0.9rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft, #4A4F3E);
+}
+
+/* ---- Delivery promise & estimate note ---- */
+
+.delivery-promise {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--success, #4A6B2A);
+    background: rgba(74, 107, 42, 0.08);
+    border: 1px solid rgba(74, 107, 42, 0.18);
+    border-radius: 999px;
+    padding: 0.5rem 1rem;
+    margin-bottom: 1rem;
+}
+
+/* ---- Gift a box ---- */
+
+.gift-section {
+    padding: 1.2rem 1.4rem;
+}
+
+.gift-toggle {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+}
+
+.gift-toggle input[type="checkbox"] {
+    width: 19px;
+    height: 19px;
+    accent-color: var(--terracotta, #C44536);
+    flex-shrink: 0;
+}
+
+.gift-toggle-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.gift-toggle-text strong {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ink, #1C2313);
+}
+
+.gift-toggle-text em {
+    font-family: var(--font-serif, 'Fraunces', serif);
+    font-size: 0.82rem;
+    color: var(--ink-faint, #83866F);
+}
+
+.gift-toggle svg {
+    color: var(--terracotta, #C44536);
+    flex-shrink: 0;
+}
+
+.gift-note-input {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--hairline, rgba(28, 35, 19, 0.14));
+    border-radius: 12px;
+    background: var(--cream-warm, #F2EDE0);
+    font-family: var(--font-serif, 'Fraunces', serif);
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--ink, #1C2313);
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.25s ease;
+}
+
+.gift-note-input:focus {
+    border-color: var(--forest-600, #40492A);
+}
+
+.trust-row {
+    display: flex;
+    justify-content: center;
+    gap: clamp(18px, 5vw, 44px);
+    padding: 0.6rem 0 0.4rem;
+    flex-wrap: wrap;
+}
+
+.trust-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--ink-faint, #83866F);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.trust-item svg {
+    color: var(--forest-600, #40492A);
+    flex-shrink: 0;
+}
+
+.estimate-note {
+    font-size: 0.72rem;
+    color: var(--ink-faint, #83866F);
+    text-align: right;
+    margin-bottom: 0.6rem;
+    font-style: italic;
 }
 
 .section {
-    background: white;
-    border-radius: 16px;
-    padding: 1.5rem;
+    background: var(--paper, #FDFCF7);
+    border-radius: 18px;
+    padding: 1.6rem;
     margin-bottom: 1.5rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+    border: 1px solid var(--hairline, rgba(28, 35, 19, 0.14));
+    box-shadow: 0 14px 36px -20px rgba(28, 35, 19, 0.15);
 }
 
 .section-header {
@@ -34,10 +265,11 @@
 
 .section h2,
 .section-header h2 {
-    font-size: 1.2rem;
-    color: #1a1a1a;
+    font-family: var(--font-serif, 'Fraunces', serif);
+    font-size: 1.35rem;
+    color: var(--ink, #1C2313);
     margin: 0;
-    font-weight: 700;
+    font-weight: 500;
 }
 
 .btn-text {
@@ -59,10 +291,9 @@
 }
 
 .address-card.selected {
-    border: 2px solid #556b2f;
-    /* Dark olive border */
-    background: #fdfefc;
-    box-shadow: 0 4px 12px rgba(85, 107, 47, 0.15);
+    border: 2px solid var(--forest-700, #2D3319);
+    background: var(--paper, #FDFCF7);
+    box-shadow: 0 10px 24px -12px rgba(45, 51, 25, 0.3);
 }
 
 .address-header {
@@ -73,12 +304,14 @@
 }
 
 .address-type {
-    background: #e8f5e9;
-    color: #2e7d32;
-    padding: 0.2rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
+    background: var(--sage, #E9ECD3);
+    color: var(--forest-700, #2D3319);
+    padding: 0.25rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.68rem;
     font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
 }
 
 .address-name {
@@ -103,23 +336,28 @@
 .payment-option {
     display: flex;
     align-items: center;
-    padding: 1rem;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    padding: 1.1rem 1.2rem;
+    border: 1px solid var(--hairline, rgba(28, 35, 19, 0.14));
+    border-radius: 14px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.25s ease;
     position: relative;
-    background: white;
+    background: var(--paper, #FDFCF7);
+}
+
+.payment-option:hover {
+    border-color: var(--forest-600, #40492A);
 }
 
 .payment-option.selected {
-    border: 2px solid #556b2f;
-    /* Dark olive border */
-    background: #fff;
+    border: 2px solid var(--forest-700, #2D3319);
+    background: var(--paper, #FDFCF7);
 }
 
 .payment-option input[type="radio"] {
-    accent-color: #556b2f;
+    accent-color: var(--forest-700, #2D3319);
     width: 20px;
     height: 20px;
     margin-right: 1rem;
@@ -171,16 +409,16 @@
     gap: 1rem;
 }
 
-/* Footer */
+/* Footer — nav is hidden during checkout, so it sits flush at the bottom */
 .payment-footer {
     position: fixed;
-    bottom: 70px;
-    /* Height of BottomNav */
+    bottom: 0;
     left: 0;
     right: 0;
-    background: white;
-    padding: 1.5rem;
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+    background: var(--paper, #FDFCF7);
+    padding: 1.4rem 1.5rem calc(1.4rem + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--hairline, rgba(28, 35, 19, 0.14));
+    box-shadow: 0 -18px 50px -20px rgba(28, 35, 19, 0.25);
     z-index: 900;
 }
 
@@ -192,32 +430,37 @@
 }
 
 .total-row span:first-child {
-    color: #666;
-    font-size: 1.1rem;
+    color: var(--ink-faint, #83866F);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
 }
 
 .total-row span:last-child {
-    color: #1a1a1a;
-    font-size: 1.5rem;
-    font-weight: 800;
+    font-family: var(--font-serif, 'Fraunces', serif);
+    color: var(--ink, #1C2313);
+    font-size: 1.6rem;
+    font-weight: 500;
 }
 
 .pay-btn {
     width: 100%;
-    background: #4a5d23;
-    /* Dark olive */
-    color: white;
+    background: var(--forest-700, #2D3319);
+    color: var(--cream, #F7F4EC);
     border: none;
-    padding: 1rem;
-    border-radius: 12px;
-    font-size: 1.1rem;
-    font-weight: 700;
+    padding: 1.1rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
     cursor: pointer;
     transition: background 0.2s;
 }
 
 .pay-btn:hover {
-    background: #3a4a1e;
+    background: var(--forest-900, #1B2112);
 }
 
 .pay-btn:disabled {

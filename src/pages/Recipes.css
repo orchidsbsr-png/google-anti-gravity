@@ -1,4 +1,4 @@
-/* The Antigravity Alpine Kitchen */
+﻿/* The Antigravity Alpine Kitchen */
 
 /* Global Page Layout */
 .antigravity-kitchen {
@@ -6,7 +6,7 @@
     min-height: 100vh;
     width: 100%;
     overflow-x: hidden;
-    background-color: #f4f5f0;
+    background-color: #F7F4EC;
     /* Soft off-white base */
     padding-bottom: 5rem;
 }
@@ -45,7 +45,7 @@
 .kitchen-header h1 {
     font-family: 'Playfair Display', serif;
     font-size: 3.5rem;
-    color: #2c3e50;
+    color: #1C2313;
     margin: 0;
     letter-spacing: -1px;
     text-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -182,7 +182,7 @@
 .hero-card h2 {
     font-family: 'Playfair Display', serif;
     font-size: 2rem;
-    color: #2c3e50;
+    color: #1C2313;
     margin: 1rem 1.5rem 0.5rem;
 }
 
@@ -225,7 +225,7 @@
 }
 
 .btn-apricot {
-    background: #FF9F43;
+    background: #C9A227;
     /* Warm Apricot */
     color: white;
     border: none;
@@ -240,7 +240,7 @@
 }
 
 .btn-apricot:hover {
-    background: #EE5A24;
+    background: #C44536;
 }
 
 /* Standard Card Typography */
@@ -253,7 +253,7 @@
     font-family: 'Inter', sans-serif;
     font-size: 1rem;
     font-weight: 500;
-    color: #2c3e50;
+    color: #1C2313;
     margin: 0;
 }
 
@@ -300,20 +300,20 @@
 .font-merriweather h3 {
     font-family: 'Merriweather', serif;
     font-style: italic;
-    color: #d35400;
+    color: #C44536;
 }
 
 .font-cinzel h3 {
     font-family: 'Cinzel', serif;
     font-weight: 600;
     letter-spacing: 1px;
-    color: #2c3e50;
+    color: #1C2313;
 }
 
 .font-vibes h3 {
     font-family: 'Great Vibes', cursive;
     font-size: 1.8rem;
-    color: #c0392b;
+    color: #A93B2E;
     transform: rotate(-2deg);
     margin-top: -5px;
 }

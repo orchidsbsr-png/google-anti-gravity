@@ -1,9 +1,9 @@
-.order-summary-page {
+﻿.order-summary-page {
     padding: 1rem;
     max-width: 600px;
     margin: 0 auto;
     padding-bottom: 100px;
-    background: #f8f9fa;
+    background: var(--cream, #F7F4EC);
     min-height: 100vh;
 }
 
@@ -89,13 +89,13 @@
 }
 
 .timeline-item.active .timeline-icon {
-    background: #00c853;
+    background: #4A6B2A;
     /* Green */
     color: white;
 }
 
 .timeline-item.active .timeline-line {
-    background: #00c853;
+    background: #4A6B2A;
 }
 
 .timeline-content h4 {
@@ -179,7 +179,7 @@
 }
 
 .cost-row.discount {
-    color: #00c853;
+    color: #4A6B2A;
 }
 
 .cost-row.total {
@@ -206,7 +206,7 @@
 
 .info-icon {
     font-size: 1.2rem;
-    color: #00c853;
+    color: #4A6B2A;
 }
 
 .info-content h4 {

@@ -1,44 +1,57 @@
 .variety-selector {
-    margin: 1.5rem 0;
+    margin: 1.8rem 0;
 }
 
 .variety-selector h3 {
-    font-size: 1.1rem;
+    font-size: 0.7rem;
+    font-family: var(--font-sans, 'Inter', sans-serif);
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
     margin-bottom: 1rem;
-    color: var(--primary-green);
+    color: var(--ink-faint, #83866F);
 }
 
 .variety-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 1rem;
+    gap: 0.9rem;
 }
 
 .variety-card {
-    padding: 1rem;
+    padding: 1.1rem 1rem;
     cursor: pointer;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid var(--hairline, rgba(28, 35, 19, 0.14));
+    border-radius: 14px;
     text-align: center;
+    background: var(--paper, #FDFCF7);
 }
 
 .variety-card:hover {
-    transform: translateY(-2px);
-    background: rgba(255, 255, 255, 0.9);
+    transform: translateY(-3px);
+    box-shadow: 0 16px 34px -16px rgba(28, 35, 19, 0.25);
 }
 
 .variety-card.selected {
-    border-color: var(--primary-green);
-    background: rgba(127, 179, 71, 0.1);
+    border-color: var(--forest-700, #2D3319);
+    background: var(--forest-700, #2D3319);
+}
+
+.variety-card.selected .variety-name,
+.variety-card.selected .variety-price {
+    color: var(--cream, #F7F4EC);
 }
 
 .variety-name {
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: var(--primary-green);
+    font-family: var(--font-serif, 'Fraunces', serif);
+    font-weight: 500;
+    font-size: 1.02rem;
+    margin-bottom: 0.4rem;
+    color: var(--ink, #1C2313);
 }
 
 .variety-price {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
+    font-size: 0.8rem;
+    color: var(--ink-faint, #83866F);
 }

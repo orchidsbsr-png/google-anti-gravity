@@ -1,35 +1,284 @@
 .confirmation-page {
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 1rem;
+    padding-bottom: 120px;
+    background: var(--cream, #F7F4EC);
 }
 
+/* Legacy card (verifying / failed states) */
 .confirmation-card {
     text-align: center;
     padding: 3rem 2rem;
     width: 100%;
-    max-width: 400px;
-}
-
-.success-icon {
-    font-size: 4rem;
-    margin-bottom: 1.5rem;
+    max-width: 420px;
+    border-radius: 24px;
 }
 
 .confirmation-card h1 {
-    color: var(--primary-green);
+    color: var(--ink, #1C2313);
     margin-bottom: 1rem;
+    font-weight: 400;
 }
 
 .confirmation-card p {
     color: var(--text-secondary);
     margin-bottom: 2rem;
+    font-weight: 300;
+}
+
+.loader {
+    font-size: 2.4rem;
+    color: var(--forest-700, #2D3319);
+    animation: spin 1.2s linear infinite;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.error-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1.4rem;
+    border-radius: 50%;
+    background: rgba(196, 69, 54, 0.1);
+    border: 1px solid rgba(196, 69, 54, 0.3);
+    color: var(--terracotta, #C44536);
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .actions {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    align-items: center;
+}
+
+/* ---------- Celebration state ---------- */
+
+.confirmation-hero {
+    text-align: center;
+    max-width: 640px;
+    width: 100%;
+    animation: confirmRise 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes confirmRise {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.check-ring {
+    width: 88px;
+    height: 88px;
+    margin: 0 auto 2rem;
+}
+
+.check-ring svg {
+    width: 100%;
+    height: 100%;
+}
+
+.check-circle {
+    stroke: var(--success, #4A6B2A);
+    stroke-width: 2;
+    stroke-dasharray: 155;
+    stroke-dashoffset: 155;
+    animation: drawCircle 0.9s cubic-bezier(0.65, 0, 0.35, 1) 0.2s forwards;
+}
+
+.check-mark {
+    stroke: var(--success, #4A6B2A);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 40;
+    stroke-dashoffset: 40;
+    animation: drawCircle 0.5s cubic-bezier(0.65, 0, 0.35, 1) 0.9s forwards;
+}
+
+@keyframes drawCircle {
+    to { stroke-dashoffset: 0; }
+}
+
+.confirm-eyebrow {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--terracotta, #C44536);
+    margin-bottom: 16px;
+}
+
+.confirm-title {
+    font-family: var(--font-serif, 'Fraunces', serif);
+    font-size: clamp(2.2rem, 5.5vw, 3.4rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.08;
+    color: var(--ink, #1C2313);
+    margin-bottom: 18px;
+}
+
+.confirm-title em {
+    font-weight: 300;
+}
+
+.confirm-sub {
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--ink-soft, #4A4F3E);
+    max-width: 440px;
+    margin: 0 auto 26px;
+}
+
+.order-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--paper, #FDFCF7);
+    border: 1px solid var(--hairline, rgba(28, 35, 19, 0.14));
+    border-radius: 999px;
+    padding: 0.55rem 1.3rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ink, #1C2313);
+    margin-bottom: 3rem;
+}
+
+.order-chip span {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-faint, #83866F);
+}
+
+/* Journey tracker */
+
+.journey-tracker {
+    display: flex;
+    justify-content: space-between;
+    max-width: 520px;
+    margin: 0 auto 3rem;
+}
+
+.journey-step {
+    position: relative;
+    flex: 1;
+    text-align: center;
+    padding-top: 22px;
+}
+
+.journey-step .dot {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--cream-warm, #F2EDE0);
+    border: 2px solid var(--hairline, rgba(28, 35, 19, 0.2));
+    z-index: 1;
+}
+
+.journey-step.active .dot {
+    background: var(--success, #4A6B2A);
+    border-color: var(--success, #4A6B2A);
+    box-shadow: 0 0 0 5px rgba(74, 107, 42, 0.15);
+    animation: dotPulse 2s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+    0%, 100% { box-shadow: 0 0 0 5px rgba(74, 107, 42, 0.15); }
+    50% { box-shadow: 0 0 0 9px rgba(74, 107, 42, 0.08); }
+}
+
+.journey-step .line {
+    position: absolute;
+    top: 7px;
+    left: calc(50% + 10px);
+    width: calc(100% - 20px);
+    height: 1px;
+    background: var(--hairline, rgba(28, 35, 19, 0.2));
+}
+
+.journey-step h4 {
+    font-family: var(--font-serif, 'Fraunces', serif);
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--ink-faint, #83866F);
+    margin: 6px 0 2px;
+}
+
+.journey-step.active h4 {
+    color: var(--ink, #1C2313);
+}
+
+.journey-step p {
+    font-size: 0.66rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint, #83866F);
+    opacity: 0.8;
+}
+
+.celebrate .actions {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.whatsapp-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 2rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--success, #4A6B2A);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(74, 107, 42, 0.35);
+    padding-bottom: 3px;
+    transition: opacity 0.25s ease;
+}
+
+.whatsapp-link:hover {
+    opacity: 0.75;
+}
+
+.photo-ask {
+    margin-top: 1.4rem;
+    font-size: 0.8rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--ink-faint, #83866F);
+    max-width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.photo-ask em {
+    font-family: var(--font-serif, 'Fraunces', serif);
+    color: var(--ink-soft, #4A4F3E);
+}
+
+@media (max-width: 520px) {
+    .journey-step p {
+        display: none;
+    }
+
+    .celebrate .actions {
+        flex-direction: column;
+    }
 }

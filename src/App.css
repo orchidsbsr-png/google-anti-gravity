@@ -38,14 +38,13 @@
         bottom: 30px;
     }
 
-    /* Cart Summary fixed bar should also float or be less obtrusive */
-    .cart-summary,
+    /* Payment footer floats as a card on desktop (nav is hidden in checkout) */
     .payment-footer {
         max-width: 800px;
         left: 50%;
         transform: translateX(-50%);
-        bottom: 100px;
-        /* Above nav */
+        bottom: 24px;
         border-radius: 20px;
+        border: 1px solid var(--hairline, rgba(28, 35, 19, 0.14));
     }
 }

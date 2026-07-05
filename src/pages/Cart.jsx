@@ -1,13 +1,16 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useLanguage } from '../context/LanguageContext';
 import ProductImage from '../components/ProductImage';
 import './Cart.css';
 
 const Cart = () => {
     const { cartItems, removeFromCart, getCartTotal, clearCart } = useCart();
+    const { t } = useLanguage();
     const navigate = useNavigate();
 
+    const formatINR = (n) => Number(n || 0).toLocaleString('en-IN');
     const subtotal = getCartTotal();
     const deliveryFee = subtotal > 500 ? 0 : 50;
     const total = subtotal + deliveryFee;
@@ -27,8 +30,8 @@ const Cart = () => {
     return (
         <div className="cart-page">
             <div className="cart-header">
-                <h1>Shopping Cart</h1>
-                <button className="clear-btn" onClick={clearCart}>Clear Cart</button>
+                <h1>{t('cart.title1')} <em style={{ fontWeight: 300 }}>{t('cart.title2')}</em></h1>
+                <button className="clear-btn" onClick={clearCart}>{t('cart.clear')}</button>
             </div>
 
             <div className="cart-items">
@@ -43,11 +46,11 @@ const Cart = () => {
                             <p className="item-weight">Size: {item.quantityKg}kg per box</p>
                             <p className="item-quantity">Quantity: {item.quantity} box{item.quantity > 1 ? 'es' : ''}</p>
                             <div className="item-pricing">
-                                <span className="price-per-unit">₹{item.price}/box</span>
+                                <span className="price-per-unit">₹{formatINR(item.price)}/box</span>
                                 <span className="price-multiply">×</span>
                                 <span className="quantity-display">{item.quantity}</span>
                                 <span className="price-equals">=</span>
-                                <span className="item-total">₹{item.price * item.quantity}</span>
+                                <span className="item-total">₹{formatINR(item.price * item.quantity)}</span>
                             </div>
                         </div>
                         <button
@@ -63,22 +66,22 @@ const Cart = () => {
             <div className="cart-summary glass-strong">
                 <div className="summary-row">
                     <span>Subtotal</span>
-                    <span>₹{subtotal}</span>
+                    <span>₹{formatINR(subtotal)}</span>
                 </div>
                 <div className="summary-row">
                     <span>Delivery Fee</span>
-                    <span>{deliveryFee === 0 ? 'Free' : `₹${deliveryFee}`}</span>
+                    <span>{deliveryFee === 0 ? 'Free' : `₹${formatINR(deliveryFee)}`}</span>
                 </div>
                 <div className="summary-row total">
                     <span>Total</span>
-                    <span>₹{total}</span>
+                    <span>₹{formatINR(total)}</span>
                 </div>
 
                 <button
                     className="btn-primary checkout-btn"
                     onClick={() => navigate('/payment')}
                 >
-                    Proceed to Checkout
+                    {t('cart.checkout')}
                 </button>
             </div>
         </div>

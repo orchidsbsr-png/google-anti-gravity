@@ -103,7 +103,8 @@ export default function Process() {
                 pointerEvents: 'none'
             }} />
 
-            <h2 style={{ fontSize: '4rem', color: '#fff', marginBottom: '5vh' }}>The Journey</h2>
+            <p className="process-eyebrow">Orchard to Doorstep</p>
+            <h2 className="process-heading">The <em style={{ fontWeight: 300 }}>Journey</em></h2>
 
             <div ref={containerRef} style={{ position: 'relative', width: '100%', maxWidth: '800px', paddingBottom: '200px' }}>
                 {/* SVG Path Container */}
@@ -148,9 +149,9 @@ export default function Process() {
                             style={{
                                 textAlign: index % 2 === 0 ? 'left' : 'right',
                             }}>
-                            <span style={{ fontSize: '1rem', color: '#2d3319', fontWeight: 'bold', opacity: 0.5 }}>{`0${index + 1}`}</span>
+                            <span className="process-card-number">{`0${index + 1}`}</span>
                             <h4 className="process-card-title">{step.title}</h4>
-                            <p style={{ color: '#5c6044', lineHeight: '1.4' }}>{step.desc}</p>
+                            <p style={{ color: '#5c6044', lineHeight: '1.6', fontWeight: 300 }}>{step.desc}</p>
                         </div>
                     </div>
                 ))}

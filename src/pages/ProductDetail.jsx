@@ -6,6 +6,7 @@ import { useInventory } from '../context/InventoryContext';
 import { useAuth } from '../context/AuthContext';
 import ProductImage from '../components/ProductImage';
 import VarietySelector from '../components/VarietySelector';
+import { BRAND, whatsappLink } from '../config/brand';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
@@ -96,6 +97,11 @@ const ProductDetail = () => {
                 <p className="description">
                     {selectedVariety?.description || product.description}
                 </p>
+
+                <div className="origin-note">
+                    <span className="origin-note-label">Single Origin</span>
+                    <p>{BRAND.story}</p>
+                </div>
 
                 <div className="profiles">
                     <div className="profile-item">
@@ -196,19 +202,26 @@ const ProductDetail = () => {
                             )}
                         </div>
 
-                        {addedToCart && (
-                            <div className="success-message">
-                                ✓ Added to cart successfully!
-                            </div>
-                        )}
-
                         <button
-                            className="btn-primary add-to-cart-btn"
+                            className={`btn-primary add-to-cart-btn ${addedToCart ? 'added' : ''}`}
                             disabled={!canAddToCart}
                             onClick={handleAddToCart}
                         >
-                            {canAddToCart ? 'Add to Cart' : (isShopOpen ? 'Out of Stock' : 'Shop Closed')}
+                            {addedToCart
+                                ? 'Added to Basket ✓'
+                                : canAddToCart ? 'Add to Cart' : (isShopOpen ? 'Out of Stock' : 'Shop Closed')}
                         </button>
+
+                        {isShopOpen && stockAvailable === 0 && (
+                            <a
+                                className="waitlist-link"
+                                href={whatsappLink(`Hello! I'd like to reserve ${selectedVariety?.name || product.name} for the next harvest.`)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Out of season &mdash; reserve the next harvest on WhatsApp &rarr;
+                            </a>
+                        )}
                     </div>
                 )}
             </div>
