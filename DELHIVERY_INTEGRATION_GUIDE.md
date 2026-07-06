@@ -61,10 +61,16 @@ Vercel env vars (see `.env.example`):
 - `PICKUP_NAME`, `PICKUP_ADDRESS`, `PICKUP_PINCODE`
 - `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VITE_VAPID_PUBLIC_KEY` (push)
 
-**Webhook setup** (required for live tracking):
-1. Delhivery One portal → Settings → Webhooks.
-2. URL: `https://fresh-farm-himachal.vercel.app/api/webhooks/delhivery`
-3. Subscribe to shipment status / scan update events.
+**Webhook setup** (required for automatic status updates + push):
+Delhivery scan-push is enabled by their tech team, not self-serve. Fill
+their "Scan Push/Webhook Requirement document" and send it back:
+- Prod API endpoint: `https://fresh-farm-himachal.vercel.app/api/webhooks/delhivery`
+- Header: `x-webhook-token: <value of DELHIVERY_WEBHOOK_SECRET>` (set the
+  env var in Vercel first; the handler rejects other callers)
+- Method: POST · Expected response: 200 · Default payload: Yes
+- The handler acks immediately (well under their 500ms timeout) and
+  processes scans in the background via `waitUntil`.
+- No IP whitelisting needed on our side (auth is via the header token).
 
 ## 4. Retries & Error Handling
 
