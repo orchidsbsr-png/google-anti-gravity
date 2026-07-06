@@ -422,6 +422,18 @@
     z-index: 900;
 }
 
+/* Floats as a centered card on desktop — auto margins instead of
+   left/transform centering so cascade order and transforms can't break it */
+@media (min-width: 1024px) {
+    .payment-footer {
+        max-width: 800px;
+        margin: 0 auto;
+        bottom: 24px;
+        border-radius: 20px;
+        border: 1px solid var(--hairline, rgba(28, 35, 19, 0.14));
+    }
+}
+
 .total-row {
     display: flex;
     justify-content: space-between;
