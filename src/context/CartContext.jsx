@@ -9,6 +9,9 @@ export const useCart = () => useContext(CartContext);
 export const CartProvider = ({ children }) => {
     const { user } = useAuth();
     const [cartItems, setCartItems] = useState([]);
+    // Most recently added item — drives the "added to basket" toast.
+    // addedAt makes repeat adds of the same item retrigger the toast.
+    const [lastAdded, setLastAdded] = useState(null);
 
     const fetchCart = useCallback(async () => {
         if (!user) return;
@@ -87,6 +90,7 @@ export const CartProvider = ({ children }) => {
             return false;
         }
         await fetchCart();
+        setLastAdded({ ...newItem, addedBoxes: numBoxes, addedAt: Date.now() });
         return true;
     };
 
@@ -144,7 +148,8 @@ export const CartProvider = ({ children }) => {
             updateQuantity,
             clearCart,
             getCartTotal,
-            getCartItemCount
+            getCartItemCount,
+            lastAdded
         }}>
             {children}
         </CartContext.Provider>

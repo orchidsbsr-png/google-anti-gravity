@@ -8,6 +8,8 @@ import { AuthProvider } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
 import { LanguageProvider } from './context/LanguageContext'
 import BottomNav from './components/BottomNav'
+import TopNav from './components/TopNav'
+import CartToast from './components/CartToast'
 import ProtectedRoute from './components/ProtectedRoute'
 import Home from './pages/Home'
 import AuthCallback from './pages/AuthCallback'
@@ -65,6 +67,7 @@ function App() {
                             <AddressProvider>
                                 <Router>
                                     <div className="App">
+                                        <TopNav />
                                         <RouteFade>
                                         <Suspense fallback={<PageLoader />}>
                                         <Routes>
@@ -116,6 +119,7 @@ function App() {
                                         </Suspense>
                                         </RouteFade>
                                         <BottomNav />
+                                        <CartToast />
                                     </div>
                                 </Router>
                             </AddressProvider>

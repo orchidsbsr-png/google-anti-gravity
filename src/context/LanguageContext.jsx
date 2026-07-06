@@ -111,6 +111,9 @@ const dict = {
         'orders.stageDelivered': 'Delivered',
         'orders.notifyPrompt': 'Get a notification when your box ships and arrives.',
         'orders.notifyBtn': 'Notify me',
+
+        'toast.added': 'Added to basket',
+        'toast.view': 'View Basket',
     },
     hi: {
         'nav.home': 'होम',
@@ -219,6 +222,9 @@ const dict = {
         'orders.stageDelivered': 'पहुँच गया',
         'orders.notifyPrompt': 'आपका डिब्बा रवाना और डिलीवर होने पर सूचना पाएँ।',
         'orders.notifyBtn': 'सूचित करें',
+
+        'toast.added': 'टोकरी में जुड़ गया',
+        'toast.view': 'टोकरी देखें',
     }
 };
 
@@ -226,19 +232,21 @@ const LanguageContext = createContext();
 
 export const useLanguage = () => useContext(LanguageContext);
 
+// The language switcher is retired (Hindi copy was incomplete in
+// places). The app is English-only for now; the dictionary and t()
+// wiring stay so Hindi can come back once the translations are solid.
 export const LanguageProvider = ({ children }) => {
-    const [lang, setLang] = useState(() => localStorage.getItem('lang') || 'en');
+    const lang = 'en';
 
     useEffect(() => {
-        localStorage.setItem('lang', lang);
+        localStorage.removeItem('lang'); // clear stale 'hi' from the old toggle
         document.documentElement.lang = lang;
-    }, [lang]);
+    }, []);
 
     const t = (key) => dict[lang]?.[key] ?? dict.en[key] ?? key;
-    const toggleLang = () => setLang(l => (l === 'en' ? 'hi' : 'en'));
 
     return (
-        <LanguageContext.Provider value={{ lang, t, toggleLang }}>
+        <LanguageContext.Provider value={{ lang, t }}>
             {children}
         </LanguageContext.Provider>
     );

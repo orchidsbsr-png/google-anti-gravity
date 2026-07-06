@@ -1,0 +1,123 @@
+.cart-toast {
+    position: fixed;
+    z-index: 1200;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: min(92vw, 360px);
+    padding: 0.8rem 0.9rem;
+    background: var(--paper, #FDFCF7);
+    border: 1px solid var(--hairline, rgba(28, 35, 19, 0.14));
+    border-radius: 16px;
+    box-shadow: 0 24px 60px -24px rgba(28, 35, 19, 0.45);
+    cursor: pointer;
+
+    /* Phone: float above the bottom dock */
+    left: 50%;
+    bottom: 96px;
+    transform: translateX(-50%);
+    animation: toastUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes toastUp {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(14px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* Desktop: slide in under the top header, right side */
+@media (min-width: 1024px) {
+    .cart-toast {
+        left: auto;
+        right: 28px;
+        bottom: auto;
+        top: 82px;
+        transform: none;
+        animation: toastIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes toastIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
+.cart-toast-thumb {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: var(--cream-warm, #F2EDE0);
+}
+
+.cart-toast-thumb img,
+.cart-toast-thumb .product-image-container,
+.cart-toast-thumb .product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cart-toast-copy {
+    flex: 1;
+    min-width: 0;
+}
+
+.cart-toast-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 2px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--success, #4A6B2A);
+}
+
+.cart-toast-item {
+    margin: 0 0 3px;
+    font-family: var(--font-serif, 'Fraunces', serif);
+    font-size: 0.92rem;
+    color: var(--ink, #1C2313);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cart-toast-view {
+    margin: 0;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--terracotta, #C44536);
+}
+
+.cart-toast-close {
+    align-self: flex-start;
+    background: none;
+    border: none;
+    color: var(--ink-faint, #83866F);
+    cursor: pointer;
+    padding: 4px;
+    flex-shrink: 0;
+}
+
+.cart-toast-close:hover {
+    color: var(--ink, #1C2313);
+}

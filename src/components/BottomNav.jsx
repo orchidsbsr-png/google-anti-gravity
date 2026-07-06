@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import './BottomNav.css';
 
@@ -16,7 +15,7 @@ const iconProps = {
     strokeLinejoin: 'round',
 };
 
-const Icons = {
+export const Icons = {
     home: (
         <svg {...iconProps}>
             <path d="M3 10.5L12 3l9 7.5" />
@@ -72,8 +71,7 @@ const Icons = {
 
 const BottomNav = () => {
     const { getCartItemCount } = useCart();
-    const { isDarkMode, toggleTheme } = useTheme();
-    const { lang, t, toggleLang } = useLanguage();
+    const { t } = useLanguage();
     const cartCount = getCartItemCount();
 
     const [isOpen, setIsOpen] = useState(false);
@@ -148,16 +146,6 @@ const BottomNav = () => {
                     <span className="icon">{Icons.profile}</span>
                     <span className="label">{t('nav.profile')}</span>
                 </NavLink>
-
-                <button onClick={() => { toggleTheme(); handleLinkClick(); }} className="nav-item theme-toggle" aria-label="Toggle dark mode">
-                    <span className="icon">{isDarkMode ? Icons.sun : Icons.moon}</span>
-                    <span className="label">{isDarkMode ? t('nav.light') : t('nav.dark')}</span>
-                </button>
-
-                <button onClick={() => { toggleLang(); handleLinkClick(); }} className="nav-item lang-toggle" aria-label="Switch language">
-                    <span className="icon lang-icon">{lang === 'en' ? 'हिं' : 'EN'}</span>
-                    <span className="label">{lang === 'en' ? 'हिंदी' : 'English'}</span>
-                </button>
             </div>
         </nav>
     );

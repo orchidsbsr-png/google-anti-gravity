@@ -16,15 +16,8 @@
         /* Use page bg, not white box */
     }
 
-    /* Floating Bottom Nav for Desktop (Mac-dock style) */
+    /* Desktop uses the top header (TopNav) — hide the phone dock */
     .bottom-nav {
-        max-width: 500px;
-        left: 50%;
-        transform: translateX(-50%);
-        bottom: 30px;
-        border-radius: 30px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        display: none;
     }
-
 }
