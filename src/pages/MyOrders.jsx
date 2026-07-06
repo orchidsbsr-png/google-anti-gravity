@@ -15,7 +15,7 @@ const TrackingPanel = ({ awb }) => {
         let cancelled = false;
         const load = async () => {
             try {
-                const res = await fetch(`/api/track_shipment?waybill=${encodeURIComponent(awb)}`);
+                const res = await fetch(`/api/shipment?action=track&waybill=${encodeURIComponent(awb)}`);
                 const json = await res.json();
                 if (!res.ok) throw new Error(json.error || 'Tracking unavailable');
 

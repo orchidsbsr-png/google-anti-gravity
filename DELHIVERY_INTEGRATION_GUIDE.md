@@ -36,14 +36,16 @@ How the Delhivery One B2C API is wired into the Farm App.
 ### Module 4: Customer Tracking UI
 - **File**: `src/pages/MyOrders.jsx`
 - Orders with an AWB show a "Track Shipment" button that calls
-  `GET /api/track_shipment?waybill=...` and renders the latest scans, plus a
-  Placed → Packed → On its way → Delivered progress row driven by
+  `GET /api/shipment?action=track&waybill=...` and renders the latest scans,
+  plus a Placed → Packed → On its way → Delivered progress row driven by
   `order.status` (kept fresh by the webhook + Supabase realtime).
 
 ### Module 5: Admin Shipping Actions (Admin → order → Logistics)
+Track/label/cancel live in one consolidated function (`api/shipment.js`)
+to stay under Vercel Hobby's 12-function limit:
 - **🚀 Ship** — manifests the shipment (`api/manual_ship.js`)
-- **🏷️ Label (PDF)** — packing slip via `api/generate_label.js`
-- **✖ Cancel Shipment** — cancels at Delhivery via `api/cancel_shipment.js`,
+- **🏷️ Label (PDF)** — `GET /api/shipment?action=label&waybill=...`
+- **✖ Cancel Shipment** — `POST /api/shipment {action:'cancel', waybill}`,
   then clears `awb_number` and resets the order to `confirmed` so it can be
   re-shipped.
 

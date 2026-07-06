@@ -682,7 +682,7 @@ const Admin = () => {
                                                 <button
                                                     onClick={async () => {
                                                         try {
-                                                            const res = await fetch(`/api/generate_label?waybill=${encodeURIComponent(order.awb_number)}`);
+                                                            const res = await fetch(`/api/shipment?action=label&waybill=${encodeURIComponent(order.awb_number)}`);
                                                             const data = await res.json();
                                                             if (!res.ok) throw new Error(data.error);
                                                             const link = data.packages?.[0]?.pdf_download_link;
@@ -703,10 +703,10 @@ const Admin = () => {
                                                     onClick={async () => {
                                                         if (!window.confirm(`Cancel the Delhivery shipment for AWB ${order.awb_number}? The order stays; you can re-ship later.`)) return;
                                                         try {
-                                                            const res = await fetch('/api/cancel_shipment', {
+                                                            const res = await fetch('/api/shipment', {
                                                                 method: 'POST',
                                                                 headers: { 'Content-Type': 'application/json' },
-                                                                body: JSON.stringify({ waybill: order.awb_number })
+                                                                body: JSON.stringify({ action: 'cancel', waybill: order.awb_number })
                                                             });
                                                             const data = await res.json();
                                                             if (!res.ok) throw new Error(data.error);
