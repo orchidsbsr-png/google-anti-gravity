@@ -27,14 +27,4 @@
         border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    /* Position Chat Widget nicely */
-    .chat-widget {
-        right: 40px;
-        bottom: 100px;
-    }
-
-    .chat-toggle-btn {
-        right: 40px;
-        bottom: 30px;
-    }
 }

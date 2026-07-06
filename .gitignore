@@ -1,11 +1,10 @@
 node_modules/
 dist/
 .env
-functions/node_modules/
-firebase-debug.log*
+.env*
 
 output.json
 pincode_output.json
 debug_output.txt
 .vercel
-.env*
+supabase/.temp/
