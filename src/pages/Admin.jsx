@@ -517,7 +517,50 @@ const Admin = () => {
                         ))}
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginBottom: '1rem' }}>
+                        <button
+                            onClick={async () => {
+                                const shippedCount = orders.filter(o => o.awb_number && o.status === 'processing').length;
+                                const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+
+                                const pickupDate = window.prompt('Pickup date (YYYY-MM-DD):', tomorrow);
+                                if (!pickupDate) return;
+                                const pickupTime = window.prompt('Pickup time (HH:MM:SS):', '14:00:00');
+                                if (!pickupTime) return;
+                                const count = window.prompt('Expected number of packages:', String(shippedCount || 1));
+                                if (!count) return;
+
+                                try {
+                                    const res = await fetch('/api/shipment', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({
+                                            action: 'pickup',
+                                            pickup_date: pickupDate,
+                                            pickup_time: pickupTime,
+                                            expected_package_count: Number(count)
+                                        })
+                                    });
+                                    const data = await res.json();
+                                    if (!res.ok) throw new Error(data.error);
+                                    alert(`✅ Pickup scheduled for ${pickupDate} ${pickupTime}.\nPickup ID: ${data.pickup_id || JSON.stringify(data).slice(0, 200)}`);
+                                } catch (e) {
+                                    alert(`Pickup Failed: ${e.message}`);
+                                }
+                            }}
+                            style={{
+                                background: '#e8f5e9',
+                                color: '#2e7d32',
+                                border: '1px solid #a5d6a7',
+                                padding: '0.5rem 1rem',
+                                borderRadius: '8px',
+                                cursor: 'pointer',
+                                fontWeight: 'bold',
+                                fontSize: '0.9rem'
+                            }}
+                        >
+                            🚛 Schedule Pickup
+                        </button>
                         <button
                             onClick={handleClearAllOrders}
                             style={{

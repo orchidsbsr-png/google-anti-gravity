@@ -82,11 +82,14 @@ export async function createDelhiveryShipment(orderId, providedOrder = null) {
     }
 
     // 3. Prepare Delhivery Payload
+    // NOTE: pickup_location.name must EXACTLY match a pickup address
+    // registered in the Delhivery One account, or the manifest is refused.
+    const pickupName = process.env.PICKUP_NAME || "Fresh_Farm_Himachal";
     const payload = {
         "format": "json",
         "data": JSON.stringify({
             "pickup_location": {
-                "name": process.env.PICKUP_NAME || "Fresh_Farm_Himachal",
+                "name": pickupName,
                 "add": process.env.PICKUP_ADDRESS || "Himachal Pradesh",
                 "pin": process.env.PICKUP_PINCODE || "171206"
             },
@@ -120,14 +123,31 @@ export async function createDelhiveryShipment(orderId, providedOrder = null) {
     });
 
     const delhiveryData = await delhiveryRes.json();
+    console.log("Delhivery create response:", JSON.stringify(delhiveryData));
 
-    if (!delhiveryRes.ok || (delhiveryData.status === false)) {
-        if (!delhiveryData.packages || delhiveryData.packages.length === 0) {
-            throw new Error("Delhivery Refused: " + JSON.stringify(delhiveryData));
+    // Delhivery reports failures per package (status: "Fail" + remarks),
+    // sometimes alongside HTTP 200 — treat those as failures too, or we'd
+    // save an AWB for a shipment that was never created.
+    const pkg = delhiveryData.packages && delhiveryData.packages[0];
+    const pkgFailed = pkg && String(pkg.status || '').toLowerCase().includes('fail');
+
+    if (!delhiveryRes.ok || delhiveryData.success === false || delhiveryData.status === false || !pkg || pkgFailed) {
+        const reason = (pkg?.remarks && pkg.remarks.length ? pkg.remarks.join('; ') : '')
+            || delhiveryData.rmk
+            || delhiveryData.error
+            || JSON.stringify(delhiveryData);
+
+        if (/warehouse/i.test(String(reason)) || String(reason).includes('ClientWarehouse')) {
+            throw new Error(
+                `Delhivery rejected the pickup location "${pickupName}". It must exactly match ` +
+                `a pickup address registered in Delhivery One (Settings → Pickup addresses). ` +
+                `Set the PICKUP_NAME env var in Vercel to that exact name. (Delhivery said: ${reason})`
+            );
         }
+        throw new Error(`Delhivery refused the shipment: ${reason}`);
     }
 
-    const finalAwb = delhiveryData.packages && delhiveryData.packages[0] ? delhiveryData.packages[0].waybill : waybill;
+    const finalAwb = pkg.waybill || waybill;
 
     // 5. Save AWB + status to the Supabase order (source of truth —
     //    the tracking webhook looks orders up by awb_number)
