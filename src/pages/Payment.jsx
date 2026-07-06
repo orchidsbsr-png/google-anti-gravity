@@ -10,15 +10,56 @@ import { sendOrderConfirmationEmail } from '../services/emailService';
 import { saveOrderToSheet } from '../services/sheetService';
 import './Payment.css';
 
+const STEP_META = [
+    { label: 'Address', title: 'Delivery Address' },
+    { label: 'Payment', title: 'Payment Method' },
+    { label: 'Review', title: 'Your Harvest' },
+];
+
+const StepIcon = ({ index }) => {
+    switch (index) {
+        case 0: // map pin
+            return (
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                </svg>
+            );
+        case 1: // card
+            return (
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <rect x="2" y="5" width="20" height="14" rx="2" />
+                    <path d="M2 10h20" />
+                </svg>
+            );
+        default: // review checklist
+            return (
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="9" />
+                    <path d="M8.5 12.5l2.5 2.5 4.5-5.5" />
+                </svg>
+            );
+    }
+};
+
+const CheckIcon = () => (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M5 13l4 4L19 7" />
+    </svg>
+);
+
 const Payment = () => {
-    // Vercel Rebuild Trigger: v1.2
     const navigate = useNavigate();
     const { cartItems, getCartTotal, clearCart } = useCart();
     const { addresses, getDefaultAddress, addAddress } = useAddress();
     const { user } = useAuth();
 
+    // Wizard: 1 = address, 2 = payment method, 3 = review & pay
+    const [step, setStep] = useState(1);
+
     const [selectedAddressId, setSelectedAddressId] = useState(getDefaultAddress()?.id);
     const [showAddressForm, setShowAddressForm] = useState(false);
+    const [selectNewest, setSelectNewest] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState('online');
 
@@ -35,8 +76,25 @@ const Payment = () => {
 
     const subtotal = getCartTotal();
     const total = subtotal + shippingCost;
+    const selectedAddress = addresses.find(a => a.id === selectedAddressId);
 
     const formatINR = (n) => Number(n || 0).toLocaleString('en-IN');
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [step]);
+
+    // Addresses load async — keep a sensible selection as they arrive,
+    // and jump to a freshly added one.
+    useEffect(() => {
+        if (addresses.length === 0) return;
+        if (selectNewest) {
+            setSelectedAddressId(addresses[addresses.length - 1].id);
+            setSelectNewest(false);
+        } else if (!addresses.some(a => a.id === selectedAddressId)) {
+            setSelectedAddressId(addresses[0].id);
+        }
+    }, [addresses, selectNewest, selectedAddressId]);
 
     // Effect to check serviceability when address changes
     useEffect(() => {
@@ -90,9 +148,18 @@ const Payment = () => {
         }
     }, [selectedAddressId]);
 
-    const handleAddressSave = (newAddress) => {
-        addAddress(newAddress);
+    const handleAddressSave = async (newAddress) => {
+        await addAddress(newAddress);
+        setSelectNewest(true);
         setShowAddressForm(false);
+    };
+
+    const handleBack = () => {
+        if (step > 1) {
+            setStep(step - 1);
+        } else {
+            navigate('/cart');
+        }
     };
 
     const loadRazorpay = () => {
@@ -117,8 +184,6 @@ const Payment = () => {
         const currentTotal = currentSubtotal + currentShipping;
 
         setIsProcessing(true);
-
-        const selectedAddress = addresses.find(a => a.id === selectedAddressId);
 
         try {
             // Create order in Supabase first
@@ -277,131 +342,199 @@ const Payment = () => {
         );
     }
 
+    const canLeaveAddress = !!selectedAddressId && isServiceable && !isChecking && !showAddressForm;
+
     return (
         <div className="payment-page">
             <header className="checkout-header">
-                <p className="checkout-eyebrow">Almost there</p>
-                <h1>Checkout</h1>
+                <button className="checkout-back" onClick={handleBack} aria-label="Go back">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M15 18l-6-6 6-6" />
+                    </svg>
+                </button>
+                <div>
+                    <p className="checkout-eyebrow">Step {step} of 3 &middot; {STEP_META[step - 1].label}</p>
+                    <h1>Checkout</h1>
+                </div>
             </header>
 
-            <section className="section glass">
-                <div className="section-header">
-                    <h2><span className="step-no">01</span> Delivery Address</h2>
-                    {!showAddressForm && (
-                        <button className="btn-text" onClick={() => setShowAddressForm(true)}>
-                            + Add New
-                        </button>
-                    )}
-                </div>
+            <nav className="checkout-stepper" aria-label="Checkout progress">
+                {STEP_META.map((meta, i) => {
+                    const stepNo = i + 1;
+                    const isDone = step > stepNo;
+                    const isActive = step === stepNo;
+                    return (
+                        <React.Fragment key={meta.label}>
+                            {i > 0 && <div className={`stepper-line ${step > i ? 'done' : ''}`} />}
+                            <button
+                                className={`stepper-step ${isActive ? 'active' : ''} ${isDone ? 'done' : ''}`}
+                                onClick={() => isDone && setStep(stepNo)}
+                                disabled={!isDone && !isActive}
+                                aria-current={isActive ? 'step' : undefined}
+                            >
+                                <span className="stepper-icon">
+                                    {isDone ? <CheckIcon /> : <StepIcon index={i} />}
+                                </span>
+                                <span className="stepper-label">{meta.label}</span>
+                            </button>
+                        </React.Fragment>
+                    );
+                })}
+            </nav>
 
-                {showAddressForm ? (
-                    <AddressForm
-                        onSave={handleAddressSave}
-                        onCancel={() => setShowAddressForm(false)}
-                    />
-                ) : (
-                    <div className="address-list">
-                        {addresses.length === 0 ? (
-                            <p className="no-address">No addresses found. Please add one.</p>
-                        ) : (
-                            addresses.map(addr => (
-                                <div
-                                    key={addr.id}
-                                    className={`address-card ${selectedAddressId === addr.id ? 'selected' : ''}`}
-                                    onClick={() => setSelectedAddressId(addr.id)}
-                                >
-                                    <div className="address-header">
-                                        <span className="address-type">{addr.addressType}</span>
-                                        <span className="address-name">{addr.name}</span>
-                                    </div>
-                                    <p>{addr.addressLine1}, {addr.addressLine2}</p>
-                                    <p>{addr.city}, {addr.state} - {addr.pincode}</p>
-                                    <p>Phone: {addr.phone}</p>
-                                </div>
-                            ))
-                        )}
-                    </div>
-                )}
-            </section>
-
-            <section className="section">
-                <h2 className="method-title"><span className="step-no">02</span> Payment Method</h2>
-                <div className="payment-methods">
-                    <label className={`payment-option ${paymentMethod === 'online' ? 'selected' : ''}`}>
-                        <input
-                            type="radio"
-                            name="payment"
-                            value="online"
-                            checked={paymentMethod === 'online'}
-                            onChange={() => setPaymentMethod('online')}
-                        />
-                        <span>Online Payment (UPI, Cards, NetBanking)</span>
-                        <span className="pay-badge">Secured by Razorpay</span>
-                    </label>
-
-                    <label className={`payment-option ${paymentMethod === 'cod' ? 'selected' : ''}`}>
-                        <input
-                            type="radio"
-                            name="payment"
-                            value="cod"
-                            checked={paymentMethod === 'cod'}
-                            onChange={() => setPaymentMethod('cod')}
-                        />
-                        <span>Cash on Delivery</span>
-                    </label>
-                </div>
-            </section>
-
-            <section className="section">
-                <h2 className="method-title"><span className="step-no">03</span> Your Harvest</h2>
-                <div className="review-items">
-                    {cartItems.map(item => (
-                        <div key={item.id} className="review-item">
-                            <div className="review-thumb">
-                                <ProductImage productName={item.productName} varietyName={item.varietyName} />
-                            </div>
-                            <div className="review-info">
-                                <h4>{item.productName}</h4>
-                                <p>{item.varietyName} &middot; {item.quantityKg}kg &times; {item.quantity} box{item.quantity > 1 ? 'es' : ''}</p>
-                            </div>
-                            <span className="review-price">₹{formatINR(item.price * item.quantity)}</span>
+            {step === 1 && (
+                <div className="step-panel" key="step-1">
+                    <section className="section glass">
+                        <div className="section-header">
+                            <h2>Where should we deliver?</h2>
+                            {!showAddressForm && (
+                                <button className="btn-text" onClick={() => setShowAddressForm(true)}>
+                                    + Add New
+                                </button>
+                            )}
                         </div>
-                    ))}
-                    <div className="review-subtotal">
-                        <span>Subtotal</span>
-                        <span>₹{formatINR(subtotal)}</span>
-                    </div>
-                </div>
-            </section>
 
-            <section className="section gift-section">
-                <label className="gift-toggle">
-                    <input
-                        type="checkbox"
-                        checked={isGift}
-                        onChange={(e) => setIsGift(e.target.checked)}
-                    />
-                    <span className="gift-toggle-text">
-                        <strong>This is a gift</strong>
-                        <em>We&rsquo;ll include a handwritten note from the orchard</em>
-                    </span>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <rect x="3" y="8" width="18" height="13" rx="1.5" />
-                        <path d="M3 12h18M12 8v13" />
-                        <path d="M12 8c-2.5 0-4.5-1.3-4.5-3S9 2.5 10.5 3.5 12 8 12 8zm0 0c2.5 0 4.5-1.3 4.5-3S15 2.5 13.5 3.5 12 8 12 8z" />
-                    </svg>
-                </label>
-                {isGift && (
-                    <textarea
-                        className="gift-note-input"
-                        placeholder="Your message — we'll write it by hand and tuck it into the box…"
-                        maxLength={220}
-                        value={giftNote}
-                        onChange={(e) => setGiftNote(e.target.value)}
-                        rows={3}
-                    />
-                )}
-            </section>
+                        {showAddressForm ? (
+                            <AddressForm
+                                onSave={handleAddressSave}
+                                onCancel={() => setShowAddressForm(false)}
+                            />
+                        ) : (
+                            <div className="address-list">
+                                {addresses.length === 0 ? (
+                                    <p className="no-address">No addresses found. Please add one.</p>
+                                ) : (
+                                    addresses.map(addr => (
+                                        <div
+                                            key={addr.id}
+                                            className={`address-card ${selectedAddressId === addr.id ? 'selected' : ''}`}
+                                            onClick={() => setSelectedAddressId(addr.id)}
+                                        >
+                                            <div className="address-header">
+                                                <span className="address-type">{addr.addressType}</span>
+                                                <span className="address-name">{addr.name}</span>
+                                            </div>
+                                            <p>{addr.addressLine1}, {addr.addressLine2}</p>
+                                            <p>{addr.city}, {addr.state} - {addr.pincode}</p>
+                                            <p>Phone: {addr.phone}</p>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        )}
+                    </section>
+                </div>
+            )}
+
+            {step === 2 && (
+                <div className="step-panel" key="step-2">
+                    <section className="section">
+                        <h2 className="method-title">How would you like to pay?</h2>
+                        <div className="payment-methods">
+                            <label className={`payment-option ${paymentMethod === 'online' ? 'selected' : ''}`}>
+                                <input
+                                    type="radio"
+                                    name="payment"
+                                    value="online"
+                                    checked={paymentMethod === 'online'}
+                                    onChange={() => setPaymentMethod('online')}
+                                />
+                                <span>Online Payment (UPI, Cards, NetBanking)</span>
+                                <span className="pay-badge">Secured by Razorpay</span>
+                            </label>
+
+                            <label className={`payment-option ${paymentMethod === 'cod' ? 'selected' : ''}`}>
+                                <input
+                                    type="radio"
+                                    name="payment"
+                                    value="cod"
+                                    checked={paymentMethod === 'cod'}
+                                    onChange={() => setPaymentMethod('cod')}
+                                />
+                                <span>Cash on Delivery</span>
+                            </label>
+                        </div>
+                    </section>
+                </div>
+            )}
+
+            {step === 3 && (
+                <div className="step-panel" key="step-3">
+                    <section className="section">
+                        <h2 className="method-title">Your Harvest</h2>
+                        <div className="review-items">
+                            {cartItems.map(item => (
+                                <div key={item.id} className="review-item">
+                                    <div className="review-thumb">
+                                        <ProductImage productName={item.productName} varietyName={item.varietyName} />
+                                    </div>
+                                    <div className="review-info">
+                                        <h4>{item.productName}</h4>
+                                        <p>{item.varietyName} &middot; {item.quantityKg}kg &times; {item.quantity} box{item.quantity > 1 ? 'es' : ''}</p>
+                                    </div>
+                                    <span className="review-price">₹{formatINR(item.price * item.quantity)}</span>
+                                </div>
+                            ))}
+                            <div className="review-subtotal">
+                                <span>Subtotal</span>
+                                <span>₹{formatINR(subtotal)}</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section className="section summary-card">
+                        <div className="summary-row">
+                            <div className="summary-copy">
+                                <p className="summary-label">Deliver to</p>
+                                <p className="summary-value">
+                                    {selectedAddress
+                                        ? `${selectedAddress.name} · ${selectedAddress.addressLine1}, ${selectedAddress.city} - ${selectedAddress.pincode}`
+                                        : 'No address selected'}
+                                </p>
+                            </div>
+                            <button className="btn-text" onClick={() => setStep(1)}>Change</button>
+                        </div>
+                        <div className="summary-row">
+                            <div className="summary-copy">
+                                <p className="summary-label">Paying by</p>
+                                <p className="summary-value">
+                                    {paymentMethod === 'cod' ? 'Cash on Delivery' : 'Online — UPI, Cards, NetBanking'}
+                                </p>
+                            </div>
+                            <button className="btn-text" onClick={() => setStep(2)}>Change</button>
+                        </div>
+                    </section>
+
+                    <section className="section gift-section">
+                        <label className="gift-toggle">
+                            <input
+                                type="checkbox"
+                                checked={isGift}
+                                onChange={(e) => setIsGift(e.target.checked)}
+                            />
+                            <span className="gift-toggle-text">
+                                <strong>This is a gift</strong>
+                                <em>We&rsquo;ll include a handwritten note from the orchard</em>
+                            </span>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                <rect x="3" y="8" width="18" height="13" rx="1.5" />
+                                <path d="M3 12h18M12 8v13" />
+                                <path d="M12 8c-2.5 0-4.5-1.3-4.5-3S9 2.5 10.5 3.5 12 8 12 8zm0 0c2.5 0 4.5-1.3 4.5-3S15 2.5 13.5 3.5 12 8 12 8z" />
+                            </svg>
+                        </label>
+                        {isGift && (
+                            <textarea
+                                className="gift-note-input"
+                                placeholder="Your message — we'll write it by hand and tuck it into the box…"
+                                maxLength={220}
+                                value={giftNote}
+                                onChange={(e) => setGiftNote(e.target.value)}
+                                rows={3}
+                            />
+                        )}
+                    </section>
+                </div>
+            )}
 
             <div className="trust-row">
                 <div className="trust-item">
@@ -429,31 +562,61 @@ const Payment = () => {
             </div>
 
             <div className="payment-footer">
-                <p className="delivery-promise">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <path d="M12 22c5-2 8-6.5 8-12V5l-8-3-8 3v5c0 5.5 3 10 8 12z" />
-                    </svg>
-                    Hand-picked after you order &middot; delivered fresh in 3&ndash;5 days
-                </p>
-                <div className="total-row">
-                    <span>Shipping</span>
-                    <span>{isChecking ? '...' : isServiceable ? `₹${formatINR(shippingCost)}${isEstimate ? ' (est.)' : ''}` : '-'}</span>
-                </div>
-                <div className="total-row">
-                    <span>Total to Pay</span>
-                    <span>{isChecking ? '...' : isServiceable ? `₹${formatINR(total)}` : '-'}</span>
-                </div>
-                {isEstimate && <p className="estimate-note">Estimated rate &mdash; live courier rates apply on the deployed site.</p>}
-                {serviceError && <p className="error-text">{serviceError}</p>}
+                {step === 1 && (
+                    <>
+                        <div className="total-row">
+                            <span>Shipping</span>
+                            <span>{isChecking ? '...' : isServiceable ? `₹${formatINR(shippingCost)}${isEstimate ? ' (est.)' : ''}` : '—'}</span>
+                        </div>
+                        {isEstimate && <p className="estimate-note">Estimated rate &mdash; live courier rates apply on the deployed site.</p>}
+                        {serviceError && <p className="error-text">{serviceError}</p>}
+                        <button
+                            className="pay-btn"
+                            onClick={() => setStep(2)}
+                            disabled={!canLeaveAddress}
+                        >
+                            {isChecking ? 'Checking location...' : 'Continue to Payment'}
+                        </button>
+                    </>
+                )}
 
-                <button
-                    className="pay-btn"
-                    onClick={handlePlaceOrder}
-                    disabled={isProcessing || !selectedAddressId || !isServiceable || isChecking}
-                    style={{ opacity: (!isServiceable || isChecking) ? 0.5 : 1 }}
-                >
-                    {isProcessing ? 'Processing...' : isChecking ? 'Checking location...' : `Pay ₹${formatINR(total)}`}
-                </button>
+                {step === 2 && (
+                    <>
+                        <div className="total-row">
+                            <span>Total to Pay</span>
+                            <span>₹{formatINR(total)}</span>
+                        </div>
+                        <button className="pay-btn" onClick={() => setStep(3)}>
+                            Review Order
+                        </button>
+                    </>
+                )}
+
+                {step === 3 && (
+                    <>
+                        <p className="delivery-promise">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                <path d="M12 22c5-2 8-6.5 8-12V5l-8-3-8 3v5c0 5.5 3 10 8 12z" />
+                            </svg>
+                            Hand-picked after you order &middot; delivered fresh in 3&ndash;5 days
+                        </p>
+                        <div className="total-row">
+                            <span>Shipping</span>
+                            <span>₹{formatINR(shippingCost)}{isEstimate ? ' (est.)' : ''}</span>
+                        </div>
+                        <div className="total-row">
+                            <span>Total to Pay</span>
+                            <span>₹{formatINR(total)}</span>
+                        </div>
+                        <button
+                            className="pay-btn"
+                            onClick={handlePlaceOrder}
+                            disabled={isProcessing || !selectedAddressId || !isServiceable}
+                        >
+                            {isProcessing ? 'Processing...' : paymentMethod === 'cod' ? 'Place Order' : `Pay ₹${formatINR(total)}`}
+                        </button>
+                    </>
+                )}
             </div>
         </div>
     );
