@@ -145,6 +145,161 @@
     margin-bottom: 1rem;
 }
 
+/* Push-notification prompt */
+.notify-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    background: var(--sage, #E9ECD3);
+    border: 1px solid var(--hairline, rgba(28, 35, 19, 0.14));
+    border-radius: 14px;
+    padding: 0.9rem 1.2rem;
+    margin-bottom: 1.2rem;
+}
+
+.notify-banner p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--forest-700, #2D3319);
+}
+
+.notify-banner button {
+    background: var(--forest-700, #2D3319);
+    color: var(--cream, #F7F4EC);
+    border: none;
+    border-radius: 999px;
+    padding: 0.55rem 1.2rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+/* Order journey progress */
+.order-progress {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 0 1.2rem;
+    position: relative;
+}
+
+.progress-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    flex: 1;
+    position: relative;
+}
+
+.progress-stage:not(:first-child)::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    right: 50%;
+    width: 100%;
+    height: 1.5px;
+    background: var(--hairline, rgba(28, 35, 19, 0.14));
+}
+
+.progress-stage.reached:not(:first-child)::before {
+    background: var(--forest-600, #40492A);
+}
+
+.progress-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--hairline, rgba(28, 35, 19, 0.2));
+    position: relative;
+    z-index: 1;
+}
+
+.progress-stage.reached .progress-dot {
+    background: var(--forest-700, #2D3319);
+}
+
+.progress-label {
+    font-size: 0.58rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint, #83866F);
+    text-align: center;
+}
+
+.progress-stage.reached .progress-label {
+    color: var(--ink, #1C2313);
+}
+
+.card-actions {
+    display: flex;
+    gap: 1.2rem;
+    align-items: center;
+}
+
+/* Live tracking panel */
+.tracking-panel {
+    margin-top: 1.1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--hairline, rgba(28, 35, 19, 0.14));
+}
+
+.tracking-awb {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint, #83866F);
+    margin: 0 0 0.7rem;
+}
+
+.tracking-note {
+    font-size: 0.85rem;
+    color: var(--ink-faint, #83866F);
+    margin: 0;
+    font-style: italic;
+}
+
+.tracking-latest {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--forest-700, #2D3319);
+    margin: 0 0 0.8rem;
+}
+
+.tracking-scan {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 0.4rem 0;
+}
+
+.scan-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--forest-600, #40492A);
+    margin-top: 6px;
+    flex-shrink: 0;
+}
+
+.scan-text {
+    font-size: 0.85rem;
+    color: var(--ink, #1C2313);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.scan-meta {
+    font-size: 0.72rem;
+    color: var(--ink-faint, #83866F);
+    margin: 2px 0 0;
+}
+
 .start-shopping-btn {
     background: var(--forest-700, #2D3319);
     color: var(--cream, #F7F4EC);

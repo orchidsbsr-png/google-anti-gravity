@@ -1,62 +1,74 @@
 # Delhivery Integration Guide
 
-This guide details the integration of Delhivery One B2C API into the Farm App.
+How the Delhivery One B2C API is wired into the Farm App.
+**Architecture: Supabase (orders DB) + Razorpay (payments) + optional Google Sheet mirror.**
 
-## 1. Modules Implemented
+## 1. Modules
 
-### Module 1: Pre-Checkout (Serviceability)
-- **Endpoint**: `GET /api/check_serviceability?pincode=XXXXXX&weight=0.5&payment_mode=Prepaid&cart_value=100`
+### Module 1: Pre-Checkout Serviceability
+- **Endpoint**: `GET /api/check_serviceability?pincode=XXXXXX&weight=<grams>`
 - **File**: `api/check_serviceability.js`
-- **Logic**:
-  - Checks if pincode is serviceable via Delhivery API.
-  - Returns `shipping_cost: 0` if `cart_value >= 500` (Free Shipping).
-  - Otherwise returns calculated cost (Mocked/Simple logic implementation as per user instruction).
+- Called from the checkout Address step; the Continue button unlocks only
+  when the pincode is serviceable. Returns the live shipping cost.
 
-### Module 2: Order Creation & Waybill
-- **Trigger**: Automatically triggered on **Payment Success** via `api/payment_callback.js`.
+### Module 2: Shipment Creation (Manifest)
+- **File**: `api/_lib/delhivery.js` → `createDelhiveryShipment(orderId, order?)`
+- **Triggers**:
+  - Automatically after Razorpay verification (`api/verify_payment.js`)
+  - Manually from the Admin panel "🚀 Ship (Delhivery)" button (`api/manual_ship.js`)
 - **Logic**:
-  - Verifies PhonePe payment signature.
-  - Fetches Order details from Baserow using `transactionId`.
-  - Creates Shipment in Delhivery System.
-  - Updates Baserow Order with **AWB Number** and changes status to `Processing`.
+  1. Loads the order from **Supabase** (or uses the row the Admin panel passes in).
+  2. Skips if the order already has an `awb_number` (no duplicate manifests).
+  3. Fetches a waybill, creates the shipment at Delhivery.
+  4. Writes `awb_number` + `status: 'processing'` onto the **Supabase order** —
+     this is what the webhook and the customer tracking UI rely on.
+  5. Mirrors the AWB to the Google Sheet via `SHEETDB_URL` (best-effort; never
+     fails the shipment).
 
-### Module 3: Live Tracking
+### Module 3: Live Tracking Webhook
 - **Endpoint**: `POST /api/webhooks/delhivery`
 - **File**: `api/webhooks/delhivery.js`
-- **Logic**:
-  - Listens for status updates from Delhivery.
-  - Finds Order by searching "AWB Number" in Baserow.
-  - Updates "Order Status" (e.g., `Out For Delivery`, `Delivered`).
+- Finds the order in **Supabase by `awb_number`**, maps the Delhivery scan to
+  the app's statuses (`processing`, `out_for_delivery`, `delivered`,
+  `cancelled`), updates the row, and sends a web-push notification to the
+  customer for "out for delivery" and "delivered".
 
-## 2. Required Database Changes (Baserow)
+### Module 4: Customer Tracking UI
+- **File**: `src/pages/MyOrders.jsx`
+- Orders with an AWB show a "Track Shipment" button that calls
+  `GET /api/track_shipment?waybill=...` and renders the latest scans, plus a
+  Placed → Packed → On its way → Delivered progress row driven by
+  `order.status` (kept fresh by the webhook + Supabase realtime).
 
-You must add the following fields to your **Orders** table (Table ID: `768923`):
+### Module 5: Admin Shipping Actions (Admin → order → Logistics)
+- **🚀 Ship** — manifests the shipment (`api/manual_ship.js`)
+- **🏷️ Label (PDF)** — packing slip via `api/generate_label.js`
+- **✖ Cancel Shipment** — cancels at Delhivery via `api/cancel_shipment.js`,
+  then clears `awb_number` and resets the order to `confirmed` so it can be
+  re-shipped.
 
-1.  **AWB Number** (Field Type: `Text` / `Single line text`)
-    - *Required for storing the waybill and tracking updates.*
+## 2. Database (Supabase)
 
-2.  **Order Status** (Field Type: `Single Select`)
-    - Ensure these options exist:
-        - `Order Placed`
-        - `Accepted`
-        - `Processing` (Used when shipment is created)
-        - `Out For Delivery`
-        - `Delivered`
-        - `Cancelled`
+`orders.awb_number TEXT` + index — added by `SUPABASE_MIGRATIONS.sql`
+(run it once in the Supabase SQL Editor if your project predates it).
 
-## 3. Configuration & Deployment
+## 3. Configuration
 
-- **Env Variables**: Currently hardcoded in files for simplicity as requested, but recommended to move to Vercel Environment Variables:
-  - `DELHIVERY_TOKEN`
-  - `BASEROW_TOKEN`
-  - `SALT_KEY` (PhonePe)
+Vercel env vars (see `.env.example`):
+- `DELHIVERY_API_TOKEN`
+- `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`
+- `SHEETDB_URL` (optional sheet mirror)
+- `PICKUP_NAME`, `PICKUP_ADDRESS`, `PICKUP_PINCODE`
+- `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VITE_VAPID_PUBLIC_KEY` (push)
 
-- **Webhook Setup**:
-  - Go to Delhivery Developer Portal.
-  - Set Webhook URL to: `https://your-app-url.vercel.app/api/webhooks/delhivery`
-  - Select events: `Status Update`, `Package Scanned`, etc.
+**Webhook setup** (required for live tracking):
+1. Delhivery One portal → Settings → Webhooks.
+2. URL: `https://fresh-farm-himachal.vercel.app/api/webhooks/delhivery`
+3. Subscribe to shipment status / scan update events.
 
 ## 4. Retries & Error Handling
 
-- If shipment creation fails, the error is logged. 
-- **Recommended**: Create a "Retry Queue" view in Baserow for orders where `AWB Number` is empty but `Payment Status` is `Success`. Run a script or manual action to retry.
+- If manifesting succeeds at Delhivery but the Supabase write fails, the
+  error message includes the AWB so it can be attached manually.
+- Orders that are paid but have no `awb_number` can simply be re-shipped from
+  the Admin panel — `createDelhiveryShipment` is idempotent per order.

@@ -673,6 +673,58 @@ const Admin = () => {
                                                 🚀 Ship (Delhivery)
                                             </button>
                                         </div>
+
+                                        {order.awb_number && (
+                                            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                                                <span style={{ fontSize: '0.8rem', color: '#1a237e', fontWeight: 'bold' }}>
+                                                    AWB: {order.awb_number}
+                                                </span>
+                                                <button
+                                                    onClick={async () => {
+                                                        try {
+                                                            const res = await fetch(`/api/generate_label?waybill=${encodeURIComponent(order.awb_number)}`);
+                                                            const data = await res.json();
+                                                            if (!res.ok) throw new Error(data.error);
+                                                            const link = data.packages?.[0]?.pdf_download_link;
+                                                            if (link) {
+                                                                window.open(link, '_blank');
+                                                            } else {
+                                                                alert('Label generated but no PDF link returned:\n' + JSON.stringify(data).slice(0, 300));
+                                                            }
+                                                        } catch (e) {
+                                                            alert(`Label Failed: ${e.message}`);
+                                                        }
+                                                    }}
+                                                    style={{ padding: '0.5rem 0.9rem', background: '#fff', border: '1px solid #3f51b5', color: '#3f51b5', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
+                                                >
+                                                    🏷️ Label (PDF)
+                                                </button>
+                                                <button
+                                                    onClick={async () => {
+                                                        if (!window.confirm(`Cancel the Delhivery shipment for AWB ${order.awb_number}? The order stays; you can re-ship later.`)) return;
+                                                        try {
+                                                            const res = await fetch('/api/cancel_shipment', {
+                                                                method: 'POST',
+                                                                headers: { 'Content-Type': 'application/json' },
+                                                                body: JSON.stringify({ waybill: order.awb_number })
+                                                            });
+                                                            const data = await res.json();
+                                                            if (!res.ok) throw new Error(data.error);
+                                                            // Clear the AWB so the order can be re-manifested
+                                                            await supabase.from('orders')
+                                                                .update({ awb_number: null, status: 'confirmed' })
+                                                                .eq('id', order.id);
+                                                            alert('✅ Shipment cancelled. Order reset to confirmed — you can re-ship it.');
+                                                        } catch (e) {
+                                                            alert(`Cancel Failed: ${e.message}`);
+                                                        }
+                                                    }}
+                                                    style={{ padding: '0.5rem 0.9rem', background: '#fff', border: '1px solid #d32f2f', color: '#d32f2f', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
+                                                >
+                                                    ✖ Cancel Shipment
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
 
                                     <div className="status-update-section" style={{ marginBottom: '1rem', padding: '1rem', background: '#f5f5f5', borderRadius: '8px' }}>

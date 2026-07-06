@@ -1,84 +1,104 @@
 
 // Webhook handler for Delhivery Tracking Updates
+// Register this URL in the Delhivery One portal:
+//   https://<your-domain>/api/webhooks/delhivery
+// Looks the order up by AWB in Supabase (awb_number is written by
+// createDelhiveryShipment) and keeps order.status in sync.
 
-const BASEROW_TOKEN = process.env.BASEROW_API_TOKEN;
-const BASEROW_TABLE_ID = process.env.BASEROW_TABLE_ID;
+import { supabaseAdmin } from '../_lib/supabase_admin.js';
+import { sendPushToUser } from '../_lib/push.js';
+
+// Map a Delhivery scan status onto the app's order statuses
+// ('order_placed', 'accepted', 'processing', 'out_for_delivery', 'delivered', 'cancelled')
+function mapStatus(delhiveryStatus) {
+    const s = String(delhiveryStatus || '').toLowerCase();
+    if (s.includes('delivered')) return 'delivered';
+    if (s.includes('out for delivery')) return 'out_for_delivery';
+    if (s.includes('transit') || s.includes('dispatched') || s.includes('pending')) return 'processing';
+    if (s.includes('cancelled') || s.includes('rto')) return 'cancelled';
+    return null; // unknown scan — leave the order untouched
+}
+
+const PUSH_MESSAGES = {
+    out_for_delivery: {
+        title: 'Out for delivery 🚚',
+        body: 'Your harvest is on the delivery vehicle and will reach you today.'
+    },
+    delivered: {
+        title: 'Delivered 🍎',
+        body: 'Your box has arrived. Enjoy the harvest!'
+    }
+};
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    try {
-        // Delhivery Payload usually: { "waybill": "123", "status": "In Transit", "scan_detail": "...", ... }
-        // Or Array of updates.
-        // Docs: Each update is a JSON object.
+    if (!supabaseAdmin) {
+        console.error('Webhook: Supabase admin client not configured');
+        return res.status(500).json({ error: 'Server not configured' });
+    }
 
+    try {
+        // Delhivery sends either a single update or an array.
+        // Field casing varies between PascalCase and snake_case.
         const updates = Array.isArray(req.body) ? req.body : [req.body];
 
         for (const update of updates) {
-            const { Waybill, Status, StatusDateTime } = update; // Case sensitivity varies, usually PascalCase or snake_case. 
-            // Delhivery One typically uses: { "waybill": "...", "status": "..." } or "Waybill"
-            // I'll handle both cases or log to debug.
-
-            const awb = Waybill || update.waybill;
-            const status = Status || update.status; // e.g. "In Transit", "Delivered"
+            const shipment = update.Shipment || update; // some payloads nest under Shipment
+            const awb = shipment.Waybill || shipment.waybill || shipment.AWB || shipment.awb;
+            const status = shipment.Status?.Status || shipment.Status || shipment.status;
 
             if (!awb) continue;
 
             console.log(`Received update for AWB ${awb}: ${status}`);
 
-            // 1. Find Order by AWB
-            // We search the 'AWB Number' field. User must have created this field in Baserow.
-            const searchUrl = `https://api.baserow.io/api/database/rows/table/${BASEROW_TABLE_ID}/?user_field_names=true&search=${awb}`;
-            const searchRes = await fetch(searchUrl, {
-                headers: { 'Authorization': `Token ${BASEROW_TOKEN}` }
-            });
+            const newStatus = mapStatus(status);
+            if (!newStatus) continue;
 
-            if (!searchRes.ok) {
-                console.error(`Baserow Search Error: ${searchRes.statusText}`);
+            // 1. Find Order by AWB
+            const { data: order, error: findError } = await supabaseAdmin
+                .from('orders')
+                .select('id, user_id, status')
+                .eq('awb_number', String(awb))
+                .maybeSingle();
+
+            if (findError) {
+                console.error(`Supabase lookup error for AWB ${awb}:`, findError.message);
                 continue;
             }
-
-            const searchData = await searchRes.json();
-            if (searchData.count === 0) {
+            if (!order) {
                 console.log(`Order not found for AWB ${awb}`);
                 continue;
             }
+            if (order.status === newStatus) continue; // no change
 
-            const orderRow = searchData.results[0];
-            const rowId = orderRow.id;
+            // Never let a scan revive a cancelled/delivered order
+            if (['cancelled', 'delivered'].includes(order.status) && newStatus === 'processing') continue;
 
             // 2. Update Status
-            // Map Delhivery Status to FarmApp Status
-            // Delhivery: "In Transit", "Dispatched", "Pending", "Delivered", "RTO"
-            // FarmApp (Inferred): "Order Placed", "Accepted", "Processing", "Out For Delivery", "Delivered", "Cancelled"
+            const { error: updateError } = await supabaseAdmin
+                .from('orders')
+                .update({ status: newStatus, updated_at: new Date().toISOString() })
+                .eq('id', order.id);
 
-            let newStatus = orderRow["Order Status"];
-            const s = status.toLowerCase();
+            if (updateError) {
+                console.error(`Supabase update error for order ${order.id}:`, updateError.message);
+                continue;
+            }
 
-            if (s.includes('delivered')) newStatus = "Delivered";
-            else if (s.includes('out for delivery')) newStatus = "Out For Delivery";
-            else if (s.includes('transit') || s.includes('dispatched')) newStatus = "Processing";
-            else if (s.includes('cancelled')) newStatus = "Cancelled";
-
-            // Update Baserow
-            await fetch(`https://api.baserow.io/api/database/rows/table/${BASEROW_TABLE_ID}/${rowId}/?user_field_names=true`, {
-                method: 'PATCH',
-                headers: {
-                    'Authorization': `Token ${BASEROW_TOKEN}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    "Order Status": newStatus
-                    // Optional: timestamp or history logic
-                })
-            });
-
-            // Optional: Push Notification Logic
-            if (newStatus === "Out For Delivery") {
-                // Trigger notification (Mocked function call)
-                console.log(`Triggering Notification logic for Order ${orderRow["Order ID"]}`);
+            // 3. Web push for the milestones customers care about (best-effort)
+            const message = PUSH_MESSAGES[newStatus];
+            if (message) {
+                try {
+                    await sendPushToUser(order.user_id, {
+                        ...message,
+                        url: `/orders/${order.id}`
+                    });
+                } catch (pushErr) {
+                    console.error('Push failed (non-fatal):', pushErr.message);
+                }
             }
         }
 

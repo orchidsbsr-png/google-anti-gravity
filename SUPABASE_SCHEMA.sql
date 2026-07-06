@@ -43,6 +43,7 @@ CREATE TABLE orders (
   payment_details JSONB,
   is_gift BOOLEAN DEFAULT false,
   gift_note TEXT DEFAULT '',
+  awb_number TEXT,
   cancellation_requested BOOLEAN DEFAULT false,
   cancellation_requested_at TIMESTAMPTZ,
   paid_at TIMESTAMPTZ,
@@ -53,6 +54,7 @@ CREATE TABLE orders (
 CREATE INDEX idx_orders_created_at ON orders (created_at DESC);
 CREATE INDEX idx_orders_user_id ON orders (user_id);
 CREATE INDEX idx_orders_email ON orders ((customer_details->>'email'));
+CREATE INDEX idx_orders_awb ON orders (awb_number);
 
 -- ---------- 4. Addresses (one row per saved address) ----------
 -- data: { name, phone, pincode, addressLine1, addressLine2, city, state, addressType }
@@ -73,6 +75,21 @@ CREATE TABLE carts (
   data JSONB NOT NULL,
   updated_at TIMESTAMPTZ DEFAULT NOW(),
   PRIMARY KEY (user_id, item_id)
+);
+
+-- ---------- 5b. Push subscriptions (web push, one row per device) ----------
+CREATE TABLE push_subscriptions (
+  endpoint TEXT PRIMARY KEY,
+  user_id TEXT NOT NULL,
+  data JSONB NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX idx_push_user ON push_subscriptions (user_id);
+
+-- ---------- 5c. Abandoned-cart reminder log (server-only) ----------
+CREATE TABLE cart_reminders (
+  user_id TEXT PRIMARY KEY,
+  sent_at TIMESTAMPTZ NOT NULL
 );
 
 -- ---------- 6. Row Level Security ----------
@@ -106,6 +123,13 @@ CREATE POLICY "own addresses" ON addresses FOR ALL
 CREATE POLICY "own carts" ON carts FOR ALL
   USING (user_id = auth.uid()::text OR user_id LIKE 'guest%')
   WITH CHECK (user_id = auth.uid()::text OR user_id LIKE 'guest%');
+
+ALTER TABLE push_subscriptions ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "own push subscriptions" ON push_subscriptions FOR ALL
+  USING (user_id = auth.uid()::text)
+  WITH CHECK (user_id = auth.uid()::text);
+
+ALTER TABLE cart_reminders ENABLE ROW LEVEL SECURITY; -- service-role only
 
 -- ---------- 7. Realtime (live updates like Firestore onSnapshot) ----------
 ALTER PUBLICATION supabase_realtime ADD TABLE orders;

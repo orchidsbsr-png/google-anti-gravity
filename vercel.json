@@ -12,6 +12,12 @@
       "permanent": false
     }
   ],
+  "crons": [
+    {
+      "path": "/api/abandoned_carts",
+      "schedule": "30 3 * * *"
+    }
+  ],
   "rewrites": [
     {
       "source": "/api/(.*)",

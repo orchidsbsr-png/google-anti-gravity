@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAddress } from '../context/AddressContext';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { supabase } from '../supabase';
 import AddressForm from '../components/AddressForm';
 import ProductImage from '../components/ProductImage';
@@ -11,9 +12,9 @@ import { saveOrderToSheet } from '../services/sheetService';
 import './Payment.css';
 
 const STEP_META = [
-    { label: 'Address', title: 'Delivery Address' },
-    { label: 'Payment', title: 'Payment Method' },
-    { label: 'Review', title: 'Your Harvest' },
+    { labelKey: 'checkout.stepAddress' },
+    { labelKey: 'checkout.stepPayment' },
+    { labelKey: 'checkout.stepReview' },
 ];
 
 const StepIcon = ({ index }) => {
@@ -53,6 +54,7 @@ const Payment = () => {
     const { cartItems, getCartTotal, clearCart } = useCart();
     const { addresses, getDefaultAddress, addAddress } = useAddress();
     const { user } = useAuth();
+    const { t } = useLanguage();
 
     // Wizard: 1 = address, 2 = payment method, 3 = review & pay
     const [step, setStep] = useState(1);
@@ -353,8 +355,8 @@ const Payment = () => {
                     </svg>
                 </button>
                 <div>
-                    <p className="checkout-eyebrow">Step {step} of 3 &middot; {STEP_META[step - 1].label}</p>
-                    <h1>Checkout</h1>
+                    <p className="checkout-eyebrow">{t('checkout.eyebrow')} {step}/3 &middot; {t(STEP_META[step - 1].labelKey)}</p>
+                    <h1>{t('checkout.title')}</h1>
                 </div>
             </header>
 
@@ -364,7 +366,7 @@ const Payment = () => {
                     const isDone = step > stepNo;
                     const isActive = step === stepNo;
                     return (
-                        <React.Fragment key={meta.label}>
+                        <React.Fragment key={meta.labelKey}>
                             {i > 0 && <div className={`stepper-line ${step > i ? 'done' : ''}`} />}
                             <button
                                 className={`stepper-step ${isActive ? 'active' : ''} ${isDone ? 'done' : ''}`}
@@ -375,7 +377,7 @@ const Payment = () => {
                                 <span className="stepper-icon">
                                     {isDone ? <CheckIcon /> : <StepIcon index={i} />}
                                 </span>
-                                <span className="stepper-label">{meta.label}</span>
+                                <span className="stepper-label">{t(meta.labelKey)}</span>
                             </button>
                         </React.Fragment>
                     );
@@ -386,10 +388,10 @@ const Payment = () => {
                 <div className="step-panel" key="step-1">
                     <section className="section glass">
                         <div className="section-header">
-                            <h2>Where should we deliver?</h2>
+                            <h2>{t('checkout.addressTitle')}</h2>
                             {!showAddressForm && (
                                 <button className="btn-text" onClick={() => setShowAddressForm(true)}>
-                                    + Add New
+                                    {t('checkout.addNew')}
                                 </button>
                             )}
                         </div>
@@ -402,7 +404,7 @@ const Payment = () => {
                         ) : (
                             <div className="address-list">
                                 {addresses.length === 0 ? (
-                                    <p className="no-address">No addresses found. Please add one.</p>
+                                    <p className="no-address">{t('checkout.noAddress')}</p>
                                 ) : (
                                     addresses.map(addr => (
                                         <div
@@ -429,7 +431,7 @@ const Payment = () => {
             {step === 2 && (
                 <div className="step-panel" key="step-2">
                     <section className="section">
-                        <h2 className="method-title">How would you like to pay?</h2>
+                        <h2 className="method-title">{t('checkout.payTitle')}</h2>
                         <div className="payment-methods">
                             <label className={`payment-option ${paymentMethod === 'online' ? 'selected' : ''}`}>
                                 <input
@@ -439,7 +441,7 @@ const Payment = () => {
                                     checked={paymentMethod === 'online'}
                                     onChange={() => setPaymentMethod('online')}
                                 />
-                                <span>Online Payment (UPI, Cards, NetBanking)</span>
+                                <span>{t('checkout.online')}</span>
                                 <span className="pay-badge">Secured by Razorpay</span>
                             </label>
 
@@ -451,7 +453,7 @@ const Payment = () => {
                                     checked={paymentMethod === 'cod'}
                                     onChange={() => setPaymentMethod('cod')}
                                 />
-                                <span>Cash on Delivery</span>
+                                <span>{t('checkout.cod')}</span>
                             </label>
                         </div>
                     </section>
@@ -461,7 +463,7 @@ const Payment = () => {
             {step === 3 && (
                 <div className="step-panel" key="step-3">
                     <section className="section">
-                        <h2 className="method-title">Your Harvest</h2>
+                        <h2 className="method-title">{t('checkout.reviewTitle')}</h2>
                         <div className="review-items">
                             {cartItems.map(item => (
                                 <div key={item.id} className="review-item">
@@ -476,7 +478,7 @@ const Payment = () => {
                                 </div>
                             ))}
                             <div className="review-subtotal">
-                                <span>Subtotal</span>
+                                <span>{t('checkout.subtotal')}</span>
                                 <span>₹{formatINR(subtotal)}</span>
                             </div>
                         </div>
@@ -485,23 +487,23 @@ const Payment = () => {
                     <section className="section summary-card">
                         <div className="summary-row">
                             <div className="summary-copy">
-                                <p className="summary-label">Deliver to</p>
+                                <p className="summary-label">{t('checkout.deliverTo')}</p>
                                 <p className="summary-value">
                                     {selectedAddress
                                         ? `${selectedAddress.name} · ${selectedAddress.addressLine1}, ${selectedAddress.city} - ${selectedAddress.pincode}`
-                                        : 'No address selected'}
+                                        : t('checkout.noAddress')}
                                 </p>
                             </div>
-                            <button className="btn-text" onClick={() => setStep(1)}>Change</button>
+                            <button className="btn-text" onClick={() => setStep(1)}>{t('checkout.change')}</button>
                         </div>
                         <div className="summary-row">
                             <div className="summary-copy">
-                                <p className="summary-label">Paying by</p>
+                                <p className="summary-label">{t('checkout.payingBy')}</p>
                                 <p className="summary-value">
-                                    {paymentMethod === 'cod' ? 'Cash on Delivery' : 'Online — UPI, Cards, NetBanking'}
+                                    {paymentMethod === 'cod' ? t('checkout.cod') : t('checkout.online')}
                                 </p>
                             </div>
-                            <button className="btn-text" onClick={() => setStep(2)}>Change</button>
+                            <button className="btn-text" onClick={() => setStep(2)}>{t('checkout.change')}</button>
                         </div>
                     </section>
 
@@ -513,8 +515,8 @@ const Payment = () => {
                                 onChange={(e) => setIsGift(e.target.checked)}
                             />
                             <span className="gift-toggle-text">
-                                <strong>This is a gift</strong>
-                                <em>We&rsquo;ll include a handwritten note from the orchard</em>
+                                <strong>{t('checkout.gift')}</strong>
+                                <em>{t('checkout.giftSub')}</em>
                             </span>
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                                 <rect x="3" y="8" width="18" height="13" rx="1.5" />
@@ -565,7 +567,7 @@ const Payment = () => {
                 {step === 1 && (
                     <>
                         <div className="total-row">
-                            <span>Shipping</span>
+                            <span>{t('checkout.shipping')}</span>
                             <span>{isChecking ? '...' : isServiceable ? `₹${formatINR(shippingCost)}${isEstimate ? ' (est.)' : ''}` : '—'}</span>
                         </div>
                         {isEstimate && <p className="estimate-note">Estimated rate &mdash; live courier rates apply on the deployed site.</p>}
@@ -575,7 +577,7 @@ const Payment = () => {
                             onClick={() => setStep(2)}
                             disabled={!canLeaveAddress}
                         >
-                            {isChecking ? 'Checking location...' : 'Continue to Payment'}
+                            {isChecking ? t('checkout.checking') : t('checkout.continue')}
                         </button>
                     </>
                 )}
@@ -583,11 +585,11 @@ const Payment = () => {
                 {step === 2 && (
                     <>
                         <div className="total-row">
-                            <span>Total to Pay</span>
+                            <span>{t('checkout.total')}</span>
                             <span>₹{formatINR(total)}</span>
                         </div>
                         <button className="pay-btn" onClick={() => setStep(3)}>
-                            Review Order
+                            {t('checkout.review')}
                         </button>
                     </>
                 )}
@@ -598,14 +600,14 @@ const Payment = () => {
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                                 <path d="M12 22c5-2 8-6.5 8-12V5l-8-3-8 3v5c0 5.5 3 10 8 12z" />
                             </svg>
-                            Hand-picked after you order &middot; delivered fresh in 3&ndash;5 days
+                            {t('checkout.promise')}
                         </p>
                         <div className="total-row">
-                            <span>Shipping</span>
+                            <span>{t('checkout.shipping')}</span>
                             <span>₹{formatINR(shippingCost)}{isEstimate ? ' (est.)' : ''}</span>
                         </div>
                         <div className="total-row">
-                            <span>Total to Pay</span>
+                            <span>{t('checkout.total')}</span>
                             <span>₹{formatINR(total)}</span>
                         </div>
                         <button
@@ -613,7 +615,7 @@ const Payment = () => {
                             onClick={handlePlaceOrder}
                             disabled={isProcessing || !selectedAddressId || !isServiceable}
                         >
-                            {isProcessing ? 'Processing...' : paymentMethod === 'cod' ? 'Place Order' : `Pay ₹${formatINR(total)}`}
+                            {isProcessing ? t('checkout.processing') : paymentMethod === 'cod' ? t('checkout.placeOrder') : `${t('checkout.pay')} ₹${formatINR(total)}`}
                         </button>
                     </>
                 )}

@@ -14,3 +14,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         </ErrorBoundary>
     </React.StrictMode>,
 )
+
+// PWA: installable + offline shell + web push (skipped in dev so HMR stays clean)
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch((err) => {
+            console.error('Service worker registration failed:', err)
+        })
+    })
+}
