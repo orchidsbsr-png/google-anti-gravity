@@ -560,6 +560,9 @@ const Payment = () => {
                 </div>
             </div>
 
+            {/* Hidden while the address form is open — the quote belongs to a
+                saved, selected address, not one still being typed */}
+            {!(step === 1 && showAddressForm) && (
             <div className="payment-footer">
                 {step === 1 && (
                     <>
@@ -617,6 +620,7 @@ const Payment = () => {
                     </>
                 )}
             </div>
+            )}
         </div>
     );
 };
