@@ -107,6 +107,7 @@ export default function Hero() {
                     fontWeight: 400,
                     lineHeight: '1.02',
                     letterSpacing: '-0.02em',
+                    color: 'var(--gold-bright, #E3C568)',
                     margin: 0
                 }}>
                     {t('hero.title1')}

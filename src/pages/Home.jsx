@@ -54,7 +54,7 @@ const Home = () => {
                         fontSize: 'clamp(2.4rem, 4.8vw, 4rem)',
                         fontWeight: 400,
                         lineHeight: 1.08,
-                        color: '#1C2313',
+                        color: 'var(--gold-deep, #A5821B)',
                         maxWidth: '760px',
                         margin: '0 auto 22px'
                     }}>
@@ -123,6 +123,7 @@ const Home = () => {
                                 fontSize: 'clamp(2.6rem, 5vw, 4.2rem)',
                                 fontWeight: 400,
                                 lineHeight: 1.05,
+                                color: 'var(--gold-deep, #A5821B)',
                                 marginBottom: '24px'
                             }}>
                                 {t('adopt.title1')}
@@ -187,6 +188,7 @@ const Home = () => {
                             fontFamily: "'Fraunces', Georgia, serif",
                             fontSize: 'clamp(2.4rem, 4.5vw, 3.8rem)',
                             fontWeight: 400,
+                            color: 'var(--gold-bright, #E3C568)',
                             marginBottom: '18px'
                         }}>
                             {t('footer.title1')} <em style={{ fontWeight: 300 }}>{t('footer.title2')}</em> {t('footer.title3')}

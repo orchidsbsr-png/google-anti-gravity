@@ -72,7 +72,7 @@ export default function Origin() {
                 <h2 className="origin-reveal" style={{
                     fontFamily: "'Fraunces', Georgia, serif",
                     fontSize: 'clamp(2.8rem, 5.5vw, 4.6rem)',
-                    color: '#F7F4EC',
+                    color: 'var(--gold-bright, #E3C568)',
                     marginBottom: '2rem',
                     lineHeight: '1.05',
                     fontWeight: 400

@@ -30,7 +30,7 @@
 .reviews-title {
     font-family: 'Fraunces', Georgia, serif;
     font-size: clamp(2.4rem, 4.5vw, 3.8rem);
-    color: #F7F4EC;
+    color: var(--gold-bright, #E3C568);
     font-weight: 400;
     letter-spacing: -0.01em;
     margin: 0;

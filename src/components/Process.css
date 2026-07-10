@@ -44,7 +44,7 @@
     font-size: clamp(2.4rem, 4.5vw, 3.8rem);
     font-weight: 400;
     letter-spacing: -0.01em;
-    color: #F7F4EC;
+    color: var(--gold-bright, #E3C568);
     margin-bottom: 8vh;
     text-align: center;
 }
