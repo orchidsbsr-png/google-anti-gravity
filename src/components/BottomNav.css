@@ -1,9 +1,11 @@
-/* Floating Capsule Bottom Nav — Orchard Editorial */
+/* Floating Capsule Bottom Nav — Orchard Editorial.
+   Collapsed it sits as a FAB in the bottom-right corner (clear of
+   centered hero CTAs / scroll hints); expanded it grows leftward
+   out of the corner into the full capsule. */
 .bottom-nav {
     position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    right: 16px;
     height: 66px;
     z-index: 1000;
 
@@ -41,7 +43,7 @@
 
 /* --- STATE: Expanded --- */
 .bottom-nav.expanded {
-    width: 95%;
+    width: calc(100vw - 32px);
     max-width: 520px;
     padding: 0;
 }
@@ -85,7 +87,7 @@
     justify-content: space-evenly;
     align-items: center;
     width: 100%;
-    min-width: 390px;
+    min-width: 0;
     padding: 0 10px;
     opacity: 0;
     transform: scale(0.9);
