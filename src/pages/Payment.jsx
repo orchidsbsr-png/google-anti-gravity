@@ -9,6 +9,7 @@ import AddressForm from '../components/AddressForm';
 import ProductImage from '../components/ProductImage';
 import { sendOrderConfirmationEmail } from '../services/emailService';
 import { saveOrderToSheet } from '../services/sheetService';
+import { cartChargeableWeightGrams } from '../utils/packaging';
 import './Payment.css';
 
 const STEP_META = [
@@ -110,12 +111,8 @@ const Payment = () => {
             setShippingCost(0);
 
             try {
-                // Calculate Total Weight
-                const totalWeightGrams = cartItems.reduce((acc, item) => {
-                    const weightKg = item.quantityKg || 5; // Default to 5kg if missing
-                    const qty = item.quantity || 1;
-                    return acc + (weightKg * qty * 1000);
-                }, 0);
+                // Chargeable weight per the standardized box lineup
+                const totalWeightGrams = cartChargeableWeightGrams(cartItems);
 
                 // Call the new serviceability endpoint with weight
                 const res = await fetch(`/api/check_serviceability?pincode=${address.pincode}&weight=${totalWeightGrams}`);

@@ -4,6 +4,7 @@
 // Orders live in Supabase; the Google Sheet is a best-effort ops mirror.
 
 import { supabaseAdmin } from './supabase_admin.js';
+import { cartChargeableWeightGrams, largestBoxInCart } from '../../src/utils/packaging.js';
 
 const DELHIVERY_TOKEN = process.env.DELHIVERY_API_TOKEN;
 const SHEETDB_URL = process.env.SHEETDB_URL;
@@ -63,6 +64,11 @@ export async function createDelhiveryShipment(orderId, providedOrder = null) {
         return `${qty}x ${name} ${weight}`.trim();
     }).join(", ");
 
+    // Weight and dimensions from the standardized box lineup (src/utils/packaging.js).
+    // Multi-box orders ship under one waybill: total chargeable weight + biggest box.
+    const weightGrams = cartChargeableWeightGrams(order.cart_items);
+    const box = largestBoxInCart(order.cart_items);
+
     const shipmentDetails = {
         name: c.name || "Customer",
         add: (typeof addr === 'object') ? `${addr.addressLine1 || ''}, ${addr.addressLine2 || ''}` : String(addr),
@@ -106,6 +112,10 @@ export async function createDelhiveryShipment(orderId, providedOrder = null) {
                 "payment_mode": "Prepaid",
                 "products_desc": shipmentDetails.items,
                 "shipping_mode": "Surface",
+                "weight": String(weightGrams),
+                "shipment_length": String(box.l),
+                "shipment_width": String(box.w),
+                "shipment_height": String(box.h),
                 "total_amount": "0"
             }]
         })
