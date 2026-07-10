@@ -286,6 +286,13 @@ input, textarea, select {
   to { opacity: 1; }
 }
 
+/* Desktop shows the logo in the top nav — hide the hero's own brand mark */
+@media (min-width: 1024px) {
+  .hero-brand {
+    display: none;
+  }
+}
+
 /* Subtle full-page grain for editorial sections */
 .grain::before {
   content: '';

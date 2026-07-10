@@ -78,8 +78,8 @@ export default function Hero() {
                 zIndex: 0
             }} />
 
-            {/* Brand mark */}
-            <div className="hero-reveal" style={{
+            {/* Brand mark — phone only; the desktop top nav already shows the logo */}
+            <div className="hero-reveal hero-brand" style={{
                 position: 'absolute',
                 top: 'clamp(20px, 3.5vw, 40px)',
                 left: 'clamp(20px, 5vw, 64px)',
