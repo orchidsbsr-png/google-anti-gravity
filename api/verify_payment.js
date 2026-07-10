@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 import { createDelhiveryShipment } from './_lib/delhivery.js';
 import { supabaseAdmin } from './_lib/supabase_admin.js';
+import { sendOrderConfirmationEmail } from './_lib/email.js';
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -48,6 +49,16 @@ export default async function handler(req, res) {
                     .eq('id', orderId);
 
                 if (orderData) {
+                    // Confirmation email (best-effort, never fails the payment)
+                    try {
+                        await sendOrderConfirmationEmail(
+                            { ...orderData, status: 'confirmed', payment_status: 'paid' },
+                            orderData.customer_details?.email
+                        );
+                    } catch (emailErr) {
+                        console.error('Confirmation email failed (non-fatal):', emailErr.message);
+                    }
+
                     console.log(`Order ${orderId} found. Triggering shipment...`);
                     await createDelhiveryShipment(orderId, orderData);
                 } else {

@@ -7,7 +7,6 @@ import { useLanguage } from '../context/LanguageContext';
 import { supabase } from '../supabase';
 import AddressForm from '../components/AddressForm';
 import ProductImage from '../components/ProductImage';
-import { sendOrderConfirmationEmail } from '../services/emailService';
 import { saveOrderToSheet } from '../services/sheetService';
 import { cartChargeableWeightGrams } from '../utils/packaging';
 import './Payment.css';
@@ -276,10 +275,7 @@ const Payment = () => {
                                 }).eq('id', docRef.id);
 
                                 console.log('💳 Payment Verified. Order confirmed.');
-
-                                if (user?.email) {
-                                    sendOrderConfirmationEmail({ id: docRef.id, ...orderData }, user.email);
-                                }
+                                // Confirmation email is sent server-side by verify_payment
 
                                 clearCart();
                                 navigate('/order-confirmation', { state: { orderId: docRef.id } });
@@ -317,9 +313,12 @@ const Payment = () => {
 
                 console.log('💳 COD Order confirmed.');
 
-                if (user?.email) {
-                    sendOrderConfirmationEmail({ id: docRef.id, ...orderData }, user.email);
-                }
+                // Server-side confirmation email (fire-and-forget)
+                fetch('/api/send_order_email', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ orderId: docRef.id })
+                }).catch(err => console.error('Email trigger failed:', err));
 
                 clearCart();
                 setIsProcessing(false);
