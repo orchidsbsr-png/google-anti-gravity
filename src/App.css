@@ -13,8 +13,7 @@
         max-width: 100%;
         box-shadow: none;
         background: var(--background);
-        /* Make room for the fixed left sidebar (TopNav) */
-        padding-left: 248px;
+        /* The left rail auto-hides and overlays — content keeps full width */
     }
 
     /* Desktop uses the top header (TopNav) — hide the phone dock */

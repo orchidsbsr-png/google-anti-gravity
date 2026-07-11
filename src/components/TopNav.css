@@ -1,23 +1,73 @@
-/* Desktop-only fixed left sidebar. Hidden on phones (bottom dock instead).
-   The page content is pushed right via .App padding in App.css. */
+/* Desktop-only auto-hiding left rail. Hidden on phones (bottom dock).
+   At rest only a frosted edge handle shows; hovering the edge zone (or
+   focusing a link) slides in the glass panel. Content is NOT pushed —
+   the panel overlays with glassmorphism so it blends with the page. */
 
-.side-nav {
+.side-zone {
     display: none;
 }
 
 @media (min-width: 1024px) {
-    .side-nav {
+    .side-zone {
+        display: block;
         position: fixed;
         top: 0;
         left: 0;
         bottom: 0;
-        width: 248px;
+        width: 26px; /* hover trigger strip; panel overflows it */
         z-index: 950;
+    }
+
+    /* --- Edge handle (rest state) --- */
+    .side-hint {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        width: 26px;
+        height: 76px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0 14px 14px 0;
+        background: rgba(253, 252, 247, 0.55);
+        backdrop-filter: blur(14px) saturate(1.3);
+        -webkit-backdrop-filter: blur(14px) saturate(1.3);
+        border: 1px solid rgba(28, 35, 19, 0.10);
+        border-left: none;
+        color: var(--ink-faint, #83866F);
+        box-shadow: 6px 0 24px -12px rgba(28, 35, 19, 0.25);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .side-zone:hover .side-hint,
+    .side-zone:focus-within .side-hint {
+        opacity: 0;
+        transform: translateY(-50%) translateX(-10px);
+    }
+
+    /* --- Glass panel --- */
+    .side-nav {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 250px;
         display: flex;
         flex-direction: column;
         padding: 2.4rem 1.5rem 2rem;
-        background: var(--paper, #FDFCF7);
-        border-right: 1px solid var(--hairline, rgba(28, 35, 19, 0.14));
+        background: rgba(253, 252, 247, 0.55);
+        backdrop-filter: blur(24px) saturate(1.35);
+        -webkit-backdrop-filter: blur(24px) saturate(1.35);
+        border-right: 1px solid rgba(28, 35, 19, 0.10);
+        box-shadow: 30px 0 80px -40px rgba(28, 35, 19, 0.35);
+        transform: translateX(-102%);
+        transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .side-zone:hover .side-nav,
+    .side-zone:focus-within .side-nav {
+        transform: translateX(0);
     }
 
     .side-nav-logo {
@@ -44,19 +94,19 @@
         font-weight: 600;
         letter-spacing: 0.16em;
         text-transform: uppercase;
-        color: var(--ink-faint, #83866F);
+        color: var(--ink-soft, #4A4F3E);
         position: relative;
         transition: color 0.2s ease, background 0.2s ease;
     }
 
     .side-link:hover {
         color: var(--ink, #1C2313);
-        background: var(--cream-warm, #F2EDE0);
+        background: rgba(242, 237, 224, 0.7);
     }
 
     .side-link.active {
         color: var(--ink, #1C2313);
-        background: var(--sage, #E9ECD3);
+        background: rgba(233, 236, 211, 0.75);
     }
 
     .side-link.active::before {
@@ -93,7 +143,7 @@
         font-weight: 600;
         letter-spacing: 0.16em;
         text-transform: uppercase;
-        background: var(--forest-700, #2D3319);
+        background: rgba(45, 51, 25, 0.9);
         color: var(--cream, #F7F4EC);
         justify-content: center;
         transition: background 0.2s ease;
