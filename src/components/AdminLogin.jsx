@@ -217,7 +217,7 @@ const AdminLogin = ({ onLogin }) => {
                     </form>
 
                     <div className="login-footer">
-                        <p>Farm Fresh Admin Portal</p>
+                        <p>Naliban Farms Admin Portal</p>
                     </div>
                 </div>
             </div>

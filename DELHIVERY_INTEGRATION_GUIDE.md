@@ -66,7 +66,10 @@ Vercel env vars (see `.env.example`):
 **Webhook setup** (required for automatic status updates + push):
 Delhivery scan-push is enabled by their tech team, not self-serve. Fill
 their "Scan Push/Webhook Requirement document" and send it back:
-- Prod API endpoint: `https://fresh-farm-himachal.vercel.app/api/webhooks/delhivery`
+- Prod API endpoint: `https://nalibanfarms.in/api/webhooks/delhivery`
+  (the old `https://fresh-farm-himachal.vercel.app/api/webhooks/delhivery`
+  keeps working — `/api/*` paths are excluded from the domain redirect —
+  so an already-registered webhook does not need urgent migration)
 - Header: `x-webhook-token: <value of DELHIVERY_WEBHOOK_SECRET>` (set the
   env var in Vercel first; the handler rejects other callers)
 - Method: POST · Expected response: 200 · Default payload: Yes

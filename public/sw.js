@@ -1,6 +1,6 @@
-// Farm Fresh service worker — installability, light offline support, web push.
+// Naliban Farms service worker — installability, light offline support, web push.
 
-const CACHE = 'farm-fresh-v1';
+const CACHE = 'naliban-v1';
 const SHELL = ['/', '/manifest.webmanifest', '/logo.svg', '/icons/icon-192.png', '/icons/icon-512.png'];
 
 self.addEventListener('install', (event) => {
@@ -50,7 +50,7 @@ self.addEventListener('fetch', (event) => {
 // ---- Web push ----
 
 self.addEventListener('push', (event) => {
-    let payload = { title: 'Farm Fresh', body: 'You have an update from the orchard.', url: '/orders' };
+    let payload = { title: 'Naliban Farms', body: 'You have an update from the orchard.', url: '/orders' };
     try {
         payload = { ...payload, ...event.data.json() };
     } catch { /* keep defaults */ }

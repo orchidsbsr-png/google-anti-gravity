@@ -245,7 +245,7 @@ const Payment = () => {
                     key: data.key,
                     amount: data.amount,
                     currency: data.currency,
-                    name: "Fresh Farm Himachal",
+                    name: "Naliban Farms",
                     description: "Order Payment",
                     order_id: data.id,
                     handler: async function (response) {

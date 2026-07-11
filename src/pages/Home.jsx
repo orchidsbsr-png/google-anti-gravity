@@ -270,7 +270,7 @@ const Home = () => {
                         fontSize: '0.78rem',
                         color: 'rgba(247, 244, 236, 0.45)'
                     }}>
-                        <span>&copy; 2025 Farm Fresh &middot; Shimla.</span>
+                        <span>&copy; 2026 Naliban Farms &middot; Shimla.</span>
                         <span>Grown at 2,300m &middot; Shipped across India</span>
                     </div>
                 </footer>

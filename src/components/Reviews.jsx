@@ -9,7 +9,7 @@ const reviews = [
         rating: 5
     },
     {
-        text: "I've been looking for organic persimmons for a long time. These are absolutely world-class. Farm Fresh is doing an amazing service.",
+        text: "I've been looking for organic persimmons for a long time. These are absolutely world-class. Naliban Farms is doing an amazing service.",
         author: "Rahul Varma",
         location: "Delhi",
         rating: 5

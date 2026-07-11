@@ -1,7 +1,7 @@
 {
-    "name": "Farm Fresh — Shimla",
-    "short_name": "Farm Fresh",
-    "description": "Organic fruit hand-picked in the Jubbal-Kotkhai valley and delivered across India.",
+    "name": "Naliban Farms",
+    "short_name": "Naliban",
+    "description": "Organic fruit from the Naliban Farms orchards in the Jubbal-Kotkhai valley, Shimla — hand-picked and delivered across India.",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#F7F4EC",

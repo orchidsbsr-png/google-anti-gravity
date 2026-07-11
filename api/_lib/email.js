@@ -43,7 +43,9 @@ export async function sendOrderConfirmationEmail(order, customerEmail) {
         },
         body: JSON.stringify({
             sender: {
-                name: "BSR Orchids",
+                // Name is the brand; the address stays on the verified Brevo
+                // sender until nalibanfarms.in is authenticated in Brevo.
+                name: "Naliban Farms",
                 email: "orchids.bsr@gmail.com"
             },
             to: [{ email: customerEmail, name: customerName }],
@@ -113,7 +115,7 @@ export async function sendOrderConfirmationEmail(order, customerEmail) {
                         </div>
 
                         <p style="margin: 22px 0 0; text-align: center; font-family: Arial, sans-serif; font-size: 11px; color: #83866F;">
-                            Farm Fresh &middot; ${BRAND.originShort}<br>
+                            Naliban Farms &middot; ${BRAND.originShort}<br>
                             Four generations, father to son, above the Hatkoti valley.
                         </p>
                     </div>

@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }) => {
         const guestUser = {
             id: 'guest_123',
             name: 'Guest Farmer',
-            email: 'guest@farmfresh.com',
+            email: 'guest@nalibanfarms.in',
             photoURL: 'https://ui-avatars.com/api/?name=Guest+Farmer&background=random'
         };
         setUser(guestUser);

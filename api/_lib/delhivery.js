@@ -76,7 +76,7 @@ export async function createDelhiveryShipment(orderId, providedOrder = null) {
         city: addr.city || "Unknown",
         state: addr.state || "Unknown",
         phone: c.phone || "9999999999",
-        items: itemsList || "Farm Fresh Goods"
+        items: itemsList || "Naliban Farms Produce"
     };
 
     // 2. Fetch a Waybill

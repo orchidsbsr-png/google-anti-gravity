@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 /**
- * Farm Fresh brand mark — an apple holding a Himalayan peak,
- * ringed like an orchard seal. Draws in currentColor so it adapts
- * to light/dark surfaces.
+ * Naliban Farms brand mark — a sun rising over a twin-peak Himalayan
+ * ridge, above three terraced orchard contours, ringed like an estate
+ * seal. Draws in currentColor so it adapts to light/dark surfaces.
  *
  * variant: "mark" (seal only) | "full" (seal + wordmark)
  * to:      optional route — wraps the logo in a Link when set
@@ -22,17 +22,14 @@ export const LogoMark = ({ size = 44 }) => (
     >
         {/* Seal ring */}
         <circle cx="32" cy="32" r="30" strokeWidth="1.2" opacity="0.55" />
-        {/* Apple body */}
-        <path
-            d="M32 23.5 C27.5 17.5 17 20.5 17 31 C17 41 25 49 32 49 C39 49 47 41 47 31 C47 20.5 36.5 17.5 32 23.5 Z"
-            strokeWidth="1.8"
-        />
-        {/* Stem */}
-        <path d="M32 22.5 C32 18.5 33.5 16 36 14.5" strokeWidth="1.8" />
-        {/* Leaf */}
-        <path d="M36 14.5 C40.5 12 44.5 14 44.5 17.5 C41 20 36.5 18.5 36 14.5 Z" strokeWidth="1.6" />
-        {/* Himalayan ridge inside the apple */}
-        <path d="M20.5 40 L27 31.5 L31 36 L36.5 28.5 L43.5 40" strokeWidth="1.6" />
+        {/* Rising sun */}
+        <circle cx="43" cy="17.5" r="4.2" strokeWidth="1.7" />
+        {/* Himalayan ridge */}
+        <path d="M13.5 38 L23.5 24 L29.5 31 L36.5 21 L50.5 38" strokeWidth="1.8" />
+        {/* Orchard terraces (valley contours) */}
+        <path d="M16 44 Q32 40.5 48 44" strokeWidth="1.5" />
+        <path d="M19 49.5 Q32 46.5 45 49.5" strokeWidth="1.5" />
+        <path d="M23.5 55 Q32 52.8 40.5 55" strokeWidth="1.5" />
     </svg>
 );
 
@@ -57,26 +54,27 @@ const Logo = ({ variant = 'full', size = 44, to = null, className = '', stacked 
                             display: 'block',
                             fontFamily: "'Fraunces', Georgia, serif",
                             fontWeight: 450,
-                            fontSize: size * 0.5,
+                            fontSize: size * 0.44,
                             letterSpacing: '-0.01em',
                             whiteSpace: 'nowrap',
                         }}
                     >
-                        Farm Fresh
+                        Naliban Farms
                     </span>
                     <span
                         style={{
                             display: 'block',
                             fontFamily: "'Inter', sans-serif",
                             fontWeight: 600,
-                            fontSize: Math.max(size * 0.17, 8),
-                            letterSpacing: '0.42em',
+                            fontSize: Math.max(size * 0.16, 8),
+                            letterSpacing: '0.3em',
                             textTransform: 'uppercase',
                             opacity: 0.66,
                             marginTop: '6px',
+                            whiteSpace: 'nowrap',
                         }}
                     >
-                        Shimla
+                        Orchards of Shimla
                     </span>
                 </span>
             )}
@@ -84,7 +82,7 @@ const Logo = ({ variant = 'full', size = 44, to = null, className = '', stacked 
     );
 
     return to ? (
-        <Link to={to} style={{ color: 'inherit', textDecoration: 'none' }} aria-label="Farm Fresh — home">
+        <Link to={to} style={{ color: 'inherit', textDecoration: 'none' }} aria-label="Naliban Farms — home">
             {content}
         </Link>
     ) : content;

@@ -9,7 +9,7 @@
 import { supabaseAdmin } from './_lib/supabase_admin.js';
 
 const BREVO_API_KEY = process.env.BREVO_API_KEY;
-const SITE_URL = process.env.SITE_URL || 'https://fresh-farm-himachal.vercel.app';
+const SITE_URL = process.env.SITE_URL || 'https://nalibanfarms.in';
 
 const formatINR = (n) => `₹${Number(n || 0).toLocaleString('en-IN')}`;
 
@@ -43,7 +43,7 @@ function buildEmailHtml(name, items, total) {
             COMPLETE MY ORDER
         </a>
         <p style="color:#83866F;font-size:12px;margin-top:28px;">
-            Fresh Farm Himachal · Jubbal-Kotkhai Valley, Himachal Pradesh
+            Naliban Farms · Jubbal-Kotkhai Valley, Himachal Pradesh
         </p>
     </div>`;
 }
@@ -105,7 +105,7 @@ export default async function handler(req, res) {
                     'content-type': 'application/json'
                 },
                 body: JSON.stringify({
-                    sender: { name: 'BSR Orchids', email: 'orchids.bsr@gmail.com' },
+                    sender: { name: 'Naliban Farms', email: 'orchids.bsr@gmail.com' },
                     to: [{ email }],
                     subject: 'Your harvest is waiting in your basket 🍎',
                     htmlContent: buildEmailHtml(name, items, total)
