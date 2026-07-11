@@ -8,21 +8,11 @@
           "value": "google-anti-gravity.vercel.app"
         }
       ],
-      "destination": "https://nalibanfarms.in/$1",
-      "permanent": false
-    },
-    {
-      "source": "/((?!api/).*)",
-      "has": [
-        {
-          "type": "host",
-          "value": "fresh-farm-himachal.vercel.app"
-        }
-      ],
-      "destination": "https://nalibanfarms.in/$1",
+      "destination": "https://fresh-farm-himachal.vercel.app/$1",
       "permanent": false
     }
   ],
+  "_todo_after_domain_attach": "Once nalibanfarms.in is added to the Vercel project and DNS resolves to Vercel, restore the redirects from both *.vercel.app hosts to https://nalibanfarms.in/$1 (exclude /api/ on fresh-farm-himachal so the registered Delhivery webhook keeps working).",
   "crons": [
     {
       "path": "/api/abandoned_carts",
