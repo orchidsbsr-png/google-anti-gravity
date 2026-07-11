@@ -94,9 +94,8 @@
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-}
+/* No CSS smooth-scrolling — Lenis drives scrolling, and stacking the
+   browser's own easing on top of it makes wheel input feel laggy. */
 
 body {
   font-family: var(--font-sans);

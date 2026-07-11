@@ -10,7 +10,7 @@ export default function SmoothScroll({ children }) {
     useEffect(() => {
         // 1. Initialize Lenis
         const lenis = new Lenis({
-            duration: 1.2, // Higher = smoother/slower
+            duration: 0.85, // tighter follow — 1.2 felt laggy behind the wheel
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             orientation: 'vertical',
             smoothWheel: true,

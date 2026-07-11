@@ -67,7 +67,7 @@ export default function Hero() {
                 fetchPriority="high"
                 style={{
                     position: 'absolute', top: '-10%', left: 0, width: '100%', height: '120%', zIndex: 0,
-                    objectFit: 'cover'
+                    objectFit: 'cover', willChange: 'transform'
                 }}
             />
             {/* Cinematic vignette */}
@@ -89,7 +89,7 @@ export default function Hero() {
             </div>
 
             {/* Hero Text */}
-            <div ref={textRef} style={{ textAlign: 'center', color: '#F7F4EC', zIndex: 3, padding: '0 20px', maxWidth: '1100px', marginTop: '-5vh' }}>
+            <div ref={textRef} style={{ textAlign: 'center', color: '#F7F4EC', zIndex: 3, padding: '0 20px', maxWidth: '1100px', marginTop: '-5vh', willChange: 'transform, opacity' }}>
                 <p className="hero-reveal" style={{
                     fontSize: '0.75rem',
                     fontWeight: 600,

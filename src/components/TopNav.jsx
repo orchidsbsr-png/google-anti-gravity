@@ -21,6 +21,11 @@ const TopNav = () => {
         { to: '/profile', label: t('nav.profile'), icon: Icons.profile },
     ];
 
+    // A clicked link keeps focus, and :focus-within pins the panel open
+    // even after the mouse leaves. Dropping focus post-click lets the
+    // rail follow the pointer again (keyboard tabbing still opens it).
+    const releaseFocus = (e) => e.currentTarget.blur();
+
     return (
         <div className="side-zone">
             {/* Edge handle — the only thing visible at rest */}
@@ -41,6 +46,7 @@ const TopNav = () => {
                             key={link.to}
                             to={link.to}
                             end={link.end}
+                            onClick={releaseFocus}
                             className={({ isActive }) => isActive ? 'side-link active' : 'side-link'}
                         >
                             <span className="side-link-icon">{link.icon}</span>
@@ -50,7 +56,7 @@ const TopNav = () => {
                 </nav>
 
                 <div className="side-bottom">
-                    <Link to="/cart" className="side-cart" aria-label={`Cart, ${cartCount} items`}>
+                    <Link to="/cart" className="side-cart" onClick={releaseFocus} aria-label={`Cart, ${cartCount} items`}>
                         <span className="side-link-icon">
                             {Icons.cart}
                             {cartCount > 0 && <span className="side-cart-badge">{cartCount}</span>}
