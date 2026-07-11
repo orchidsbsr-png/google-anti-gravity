@@ -31,13 +31,13 @@
     }
 }
 
-/* Desktop: slide in under the top header, right side */
+/* Desktop: slide in at the top-right corner */
 @media (min-width: 1024px) {
     .cart-toast {
         left: auto;
         right: 28px;
         bottom: auto;
-        top: 82px;
+        top: 28px;
         transform: none;
         animation: toastIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
     }

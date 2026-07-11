@@ -1,34 +1,20 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
 
 const ThemeContext = createContext();
 
 export const useTheme = () => useContext(ThemeContext);
 
-// Theme follows the device (prefers-color-scheme) — there is no manual
-// toggle in the UI anymore. Live-updates if the user switches their
-// system theme while the app is open.
+// Light theme only — the cream/paper palette is the brand. The earlier
+// device-based dark mode turned pages forest-green on dark-mode phones,
+// which read as broken rather than intentional.
 export const ThemeProvider = ({ children }) => {
-    const [isDarkMode, setIsDarkMode] = useState(
-        () => window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false
-    );
-
     useEffect(() => {
-        const media = window.matchMedia('(prefers-color-scheme: dark)');
-        const onChange = (e) => setIsDarkMode(e.matches);
-        media.addEventListener('change', onChange);
-
-        // Manual preference from the old toggle is obsolete
+        document.documentElement.setAttribute('data-theme', 'light');
         localStorage.removeItem('darkMode');
-
-        return () => media.removeEventListener('change', onChange);
     }, []);
 
-    useEffect(() => {
-        document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
-    }, [isDarkMode]);
-
     return (
-        <ThemeContext.Provider value={{ isDarkMode }}>
+        <ThemeContext.Provider value={{ isDarkMode: false }}>
             {children}
         </ThemeContext.Provider>
     );

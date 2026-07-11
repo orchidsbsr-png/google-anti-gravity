@@ -303,13 +303,7 @@ input, textarea, select {
   min-height: 620px;
 }
 
-@media (min-width: 1024px) {
-  .hero-viewport {
-    height: calc(100vh - 104px);
-    height: calc(100svh - 104px);
-    min-height: 560px;
-  }
-}
+/* (Desktop nav is a left sidebar, so the hero keeps full height there too) */
 
 /* Subtle full-page grain for editorial sections */
 .grain::before {

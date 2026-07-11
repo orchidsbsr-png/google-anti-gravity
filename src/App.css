@@ -13,7 +13,8 @@
         max-width: 100%;
         box-shadow: none;
         background: var(--background);
-        /* Use page bg, not white box */
+        /* Make room for the fixed left sidebar (TopNav) */
+        padding-left: 248px;
     }
 
     /* Desktop uses the top header (TopNav) — hide the phone dock */
