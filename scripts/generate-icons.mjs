@@ -1,8 +1,11 @@
-// Rasterizes public/logo.svg into the PWA / touch icons.
+// Rasterizes the framed seal (icon-source.svg) into the PWA / touch
+// icons. Note: public/logo.svg is the BORDERLESS tab favicon (YouTube
+// style, transparent) — app icons need the framed version with a
+// background, which lives in public/icons/icon-source.svg.
 // Run after changing the logo:  node scripts/generate-icons.mjs
 import sharp from 'sharp';
 
-const SRC = 'public/logo.svg';
+const SRC = 'public/icons/icon-source.svg';
 
 const targets = [
     { file: 'public/icons/icon-192.png', size: 192 },
