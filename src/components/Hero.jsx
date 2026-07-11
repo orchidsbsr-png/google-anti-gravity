@@ -52,8 +52,7 @@ export default function Hero() {
     }, []);
 
     return (
-        <section ref={containerRef} style={{
-            height: '110vh',
+        <section ref={containerRef} className="hero-viewport" style={{
             overflow: 'hidden',
             position: 'relative',
             display: 'flex',
@@ -90,7 +89,7 @@ export default function Hero() {
             </div>
 
             {/* Hero Text */}
-            <div ref={textRef} style={{ textAlign: 'center', color: '#F7F4EC', zIndex: 3, padding: '0 20px', maxWidth: '1100px' }}>
+            <div ref={textRef} style={{ textAlign: 'center', color: '#F7F4EC', zIndex: 3, padding: '0 20px', maxWidth: '1100px', marginTop: '-5vh' }}>
                 <p className="hero-reveal" style={{
                     fontSize: '0.75rem',
                     fontWeight: 600,
@@ -161,7 +160,7 @@ export default function Hero() {
             {/* Scroll cue */}
             <div className="hero-reveal" style={{
                 position: 'absolute',
-                bottom: '11vh',
+                bottom: '4.5vh',
                 left: '50%',
                 transform: 'translateX(-50%)',
                 zIndex: 3,

@@ -295,6 +295,22 @@ input, textarea, select {
   }
 }
 
+/* Hero fills exactly the first screen — headline, CTAs and scroll cue
+   all visible without scrolling. Desktop subtracts the header height. */
+.hero-viewport {
+  height: 100vh;
+  height: 100svh;
+  min-height: 620px;
+}
+
+@media (min-width: 1024px) {
+  .hero-viewport {
+    height: calc(100vh - 104px);
+    height: calc(100svh - 104px);
+    min-height: 560px;
+  }
+}
+
 /* Subtle full-page grain for editorial sections */
 .grain::before {
   content: '';

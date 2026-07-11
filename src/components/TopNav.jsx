@@ -28,7 +28,7 @@ const TopNav = () => {
 
     return (
         <header className="top-nav">
-            <Logo variant="full" size={48} to="/" className="top-nav-logo" />
+            <Logo variant="full" size={58} to="/" className="top-nav-logo" />
 
             <nav className="top-nav-links" aria-label="Primary">
                 {links.map(link => (

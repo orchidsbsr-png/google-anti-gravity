@@ -13,7 +13,7 @@
         align-items: center;
         justify-content: space-between;
         gap: 2rem;
-        padding: 1.1rem clamp(2rem, 5vw, 4rem);
+        padding: 1.3rem clamp(2rem, 5vw, 4rem);
         background: var(--cream, #F7F4EC);
         background: color-mix(in srgb, var(--cream, #F7F4EC) 86%, transparent);
         backdrop-filter: blur(16px);
@@ -33,7 +33,7 @@
     }
 
     .top-link {
-        font-size: 0.72rem;
+        font-size: 0.82rem;
         font-weight: 600;
         letter-spacing: 0.18em;
         text-transform: uppercase;
@@ -77,8 +77,8 @@
 
     .top-icon-btn,
     .top-cart {
-        width: 40px;
-        height: 40px;
+        width: 46px;
+        height: 46px;
         border-radius: 50%;
         display: flex;
         align-items: center;
