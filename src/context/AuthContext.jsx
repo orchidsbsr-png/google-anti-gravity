@@ -7,8 +7,10 @@ export const useAuth = () => useContext(AuthContext);
 
 const mapSupabaseUser = (sbUser) => ({
     id: sbUser.id,
-    name: sbUser.user_metadata?.full_name || sbUser.user_metadata?.name || sbUser.email,
-    email: sbUser.email,
+    name: sbUser.user_metadata?.full_name || sbUser.user_metadata?.name || sbUser.email || sbUser.phone,
+    // Phone-only accounts have no email — fall back to the phone number so
+    // orders can still be grouped per user.
+    email: sbUser.email || sbUser.phone || '',
     photoURL: sbUser.user_metadata?.avatar_url || sbUser.user_metadata?.picture || null,
 });
 
@@ -54,6 +56,26 @@ export const AuthProvider = ({ children }) => {
         if (error) throw error;
     };
 
+    const loginWithFacebook = async () => {
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider: 'facebook',
+            options: { redirectTo: `${window.location.origin}/auth/callback` },
+        });
+        if (error) throw error;
+    };
+
+    // Phone login: SMS OTP in two steps (requires the Phone provider +
+    // an SMS gateway to be enabled in the Supabase dashboard)
+    const sendPhoneOtp = async (phone) => {
+        const { error } = await supabase.auth.signInWithOtp({ phone });
+        if (error) throw error;
+    };
+
+    const verifyPhoneOtp = async (phone, token) => {
+        const { error } = await supabase.auth.verifyOtp({ phone, token, type: 'sms' });
+        if (error) throw error;
+    };
+
     const loginAsGuest = () => {
         const guestUser = {
             id: 'guest_123',
@@ -79,7 +101,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, loading, loginWithGoogle, loginAsGuest, logout }}>
+        <AuthContext.Provider value={{ user, loading, loginWithGoogle, loginWithFacebook, sendPhoneOtp, verifyPhoneOtp, loginAsGuest, logout }}>
             {children}
         </AuthContext.Provider>
     );

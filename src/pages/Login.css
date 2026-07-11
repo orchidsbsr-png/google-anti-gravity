@@ -105,6 +105,129 @@
     height: 24px;
 }
 
+/* Facebook Button */
+.facebook-btn-minimal {
+    width: 100%;
+    max-width: 400px;
+    padding: 16px 30px;
+    background: #1877F2;
+    border: 1px solid #1877F2;
+    border-radius: 50px;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+}
+
+.facebook-btn-minimal:hover {
+    background: #145FC4;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(24, 119, 242, 0.25);
+}
+
+/* Divider */
+.login-divider {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--ink-faint, #83866F);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin: 6px 0;
+}
+
+.login-divider::before,
+.login-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--hairline, rgba(28, 35, 19, 0.14));
+}
+
+/* Phone OTP */
+.phone-row {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+}
+
+.phone-prefix {
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    background: var(--cream-warm, #F2EDE0);
+    border: 1px solid var(--hairline, rgba(28, 35, 19, 0.14));
+    border-radius: 50px;
+    font-weight: 600;
+    color: var(--ink-soft, #4A4F3E);
+}
+
+.phone-row input {
+    flex: 1;
+    min-width: 0;
+    padding: 14px 18px;
+    background: var(--paper, #FDFCF7);
+    border: 1px solid var(--hairline, rgba(28, 35, 19, 0.14));
+    border-radius: 50px;
+    font-size: 1rem;
+    color: var(--ink, #1C2313);
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.phone-row input:focus {
+    border-color: var(--forest-600, #40492A);
+}
+
+.otp-input {
+    letter-spacing: 0.3em;
+    text-align: center;
+}
+
+.otp-btn {
+    padding: 0 22px;
+    background: var(--forest-700, #2D3319);
+    color: var(--cream, #F7F4EC);
+    border: none;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s ease;
+}
+
+.otp-btn:hover {
+    background: var(--forest-900, #1B2112);
+}
+
+.otp-btn:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+.otp-again {
+    background: none;
+    border: none;
+    color: var(--ink-faint, #83866F);
+    font-size: 0.82rem;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
 /* Guest Link */
 .guest-link {
     background: none;
