@@ -2,9 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 /**
- * Naliban Farms brand mark — a sun rising over a twin-peak Himalayan
- * ridge, above three terraced orchard contours, ringed like an estate
- * seal. Draws in currentColor so it adapts to light/dark surfaces.
+ * Naliban Farms brand mark — an orchard apple tree in full crown, one
+ * fruit ripening in the canopy, rooted on a terraced hillside, ringed
+ * like an estate seal. Draws in currentColor so it adapts to
+ * light/dark surfaces.
  *
  * variant: "mark" (seal only) | "full" (seal + wordmark)
  * to:      optional route — wraps the logo in a Link when set
@@ -15,21 +16,28 @@ export const LogoMark = ({ size = 44 }) => (
         height={size}
         viewBox="0 0 64 64"
         fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
         aria-hidden="true"
     >
         {/* Seal ring */}
-        <circle cx="32" cy="32" r="30" strokeWidth="1.2" opacity="0.55" />
-        {/* Rising sun */}
-        <circle cx="43" cy="17.5" r="4.2" strokeWidth="1.7" />
-        {/* Himalayan ridge */}
-        <path d="M13.5 38 L23.5 24 L29.5 31 L36.5 21 L50.5 38" strokeWidth="1.8" />
-        {/* Orchard terraces (valley contours) */}
-        <path d="M16 44 Q32 40.5 48 44" strokeWidth="1.5" />
-        <path d="M19 49.5 Q32 46.5 45 49.5" strokeWidth="1.5" />
-        <path d="M23.5 55 Q32 52.8 40.5 55" strokeWidth="1.5" />
+        <circle cx="32" cy="32" r="30" stroke="currentColor" strokeWidth="1.2" opacity="0.55" fill="none" />
+        {/* Solid leafy canopy (overlapping lobes merge into one crown) */}
+        <g fill="currentColor" stroke="none">
+            <circle cx="32" cy="18.5" r="8.2" />
+            <circle cx="24" cy="25.5" r="7.3" />
+            <circle cx="40" cy="25.5" r="7.3" />
+            <circle cx="32" cy="27.5" r="8.8" />
+            {/* Trunk with flared roots */}
+            <path d="M30.4 34 L30.4 43.5 C30.4 46.8 29.3 49.6 27.4 51.6 C30.4 50.9 33.6 50.9 36.6 51.6 C34.7 49.6 33.6 46.8 33.6 43.5 L33.6 34 Z" />
+            {/* Apple hanging from the crown */}
+            <circle cx="41.8" cy="39.8" r="2.6" />
+        </g>
+        {/* Pedicel connecting the apple */}
+        <path d="M40.6 32.5 C41.3 34.4 41.7 35.9 41.8 37.4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" fill="none" />
+        {/* Terraced hillside */}
+        <g stroke="currentColor" strokeLinecap="round" fill="none">
+            <path d="M16.5 52.5 Q32 49 47.5 52.5" strokeWidth="1.6" />
+            <path d="M22.5 57.2 Q32 55 41.5 57.2" strokeWidth="1.4" />
+        </g>
     </svg>
 );
 

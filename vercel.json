@@ -8,7 +8,18 @@
           "value": "google-anti-gravity.vercel.app"
         }
       ],
-      "destination": "https://fresh-farm-himachal.vercel.app/$1",
+      "destination": "https://www.nalibanfarms.in/$1",
+      "permanent": false
+    },
+    {
+      "source": "/((?!api/).*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "fresh-farm-himachal.vercel.app"
+        }
+      ],
+      "destination": "https://www.nalibanfarms.in/$1",
       "permanent": false
     }
   ],

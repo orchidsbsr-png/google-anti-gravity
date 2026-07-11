@@ -209,7 +209,7 @@ const Home = () => {
                     }}>
                         <div>
                             <div style={{ marginBottom: '16px' }}>
-                                <Logo variant="full" size={38} />
+                                <Logo variant="full" size={50} />
                             </div>
                             <p style={{ fontSize: '0.85rem', lineHeight: 1.8, opacity: 0.6, fontWeight: 300, maxWidth: '260px' }}>
                                 A four-generation family orchard in the Jubbal-Kotkhai

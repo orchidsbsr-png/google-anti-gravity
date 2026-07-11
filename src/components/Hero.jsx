@@ -86,7 +86,7 @@ export default function Hero() {
                 zIndex: 3,
                 color: '#F7F4EC'
             }}>
-                <Logo variant="full" size={40} />
+                <Logo variant="full" size={54} />
             </div>
 
             {/* Hero Text */}
