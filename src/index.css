@@ -307,6 +307,11 @@ input, textarea, select {
   letter-spacing: 0.42em;
 }
 
+/* display lives here (not inline) so the phone media query can hide it */
+.hero-cue {
+  display: flex;
+}
+
 @media (max-width: 768px) {
   .hero-brand {
     transform: scale(0.74);

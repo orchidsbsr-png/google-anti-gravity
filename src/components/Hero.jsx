@@ -152,14 +152,11 @@ export default function Hero() {
                 </div>
             </div>
 
-            {/* Scroll cue — hidden on phones, where it crowded the CTAs */}
+            {/* Scroll cue — sits in flow below the CTA so it can never
+                overlap it, whatever the screen height. Hidden on phones. */}
             <div className="hero-reveal hero-cue" style={{
-                position: 'absolute',
-                bottom: '4.5vh',
-                left: '50%',
-                transform: 'translateX(-50%)',
+                marginTop: 'clamp(40px, 7vh, 80px)',
                 zIndex: 3,
-                display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 gap: '12px',
