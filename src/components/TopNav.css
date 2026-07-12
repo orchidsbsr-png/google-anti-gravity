@@ -153,6 +153,9 @@
         font-weight: 600;
         letter-spacing: 0.1em;
         text-transform: uppercase;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         color: var(--ink-faint, #83866F);
         transition: color 0.2s ease, background 0.2s ease;
     }
@@ -173,6 +176,7 @@
         font-weight: 600;
         letter-spacing: 0.16em;
         text-transform: uppercase;
+        white-space: nowrap;
         color: var(--ink-soft, #4A4F3E);
         position: relative;
         transition: color 0.2s ease, background 0.2s ease;

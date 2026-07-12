@@ -35,17 +35,18 @@ const TopNav = () => {
 
     const shopItems = [
         { to: '/search', label: 'All Fruits' },
-        { to: '/search?query=Walnut', label: 'Nuts · Walnut (Akhrot)' },
-        { to: '/shop/dehydrated', label: 'Dehydrated Fruits · soon' },
-        { to: '/shop/jams', label: 'Fruit Jams · soon' },
+        { to: '/search?query=Walnut', label: 'Walnut (Akhrot)' },
+        { to: '/shop/dehydrated', label: 'Dehydrated · soon' },
+        { to: '/shop/jams', label: 'Jams · soon' },
         { to: '/shop/chutneys', label: 'Chutneys · soon' },
-        { to: '/coming-soon', label: 'Everything Coming Soon' },
+        { to: '/coming-soon', label: 'Coming Soon' },
     ];
 
     const infoItems = [
         { to: '/information-centre', label: 'Articles & Blogs' },
         { to: '/information-centre#faqs', label: 'FAQs' },
-        { to: '/information-centre', label: 'Videos & Gallery · soon' },
+        { to: '/information-centre', label: 'Videos · soon' },
+        { to: '/information-centre', label: 'Gallery · soon' },
     ];
 
     const contactItems = [
