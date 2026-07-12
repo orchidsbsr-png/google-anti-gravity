@@ -64,6 +64,15 @@ export const PRODUCTS = [
         video_path: '/videos/walnuts.mp4'
     },
     {
+        id: 9,
+        name: 'Orchard Boxes',
+        category: 'boxes',
+        description: 'Curated mixed boxes from the orchard — several varieties, one box, picked together after you order. The easiest way to taste the whole harvest, and a ready-made gift.',
+        taste_profile: 'A spectrum — sweet, tart, floral, and rich in one box',
+        texture_profile: 'Crisp apples to soft stone fruit, packed layer by layer',
+        image_path: '/images/products/Orchard Box.png'
+    },
+    {
         id: 8,
         name: 'Wild Himalayan Apricot (Chullu)',
         category: 'apricots',
@@ -192,6 +201,25 @@ export const VARIETIES = [
         description: 'The wild mountain apricot of Himachal, hand-collected in season. Small fruit, huge flavour.',
         taste_profile: 'Tangy-sweet and intensely aromatic',
         texture_profile: 'Soft and juicy'
+    },
+    // Orchard Boxes — curated mixes
+    {
+        id: 17,
+        product_id: 9,
+        name: 'Apple Discovery Box',
+        price_per_kg: 360,
+        description: 'Four apples, one box: Red Delicious, Gala, Golden Delicious, and Granny Smith side by side — taste how different the same mountain can be.',
+        taste_profile: 'Sweet to sharp — the full apple spectrum',
+        texture_profile: 'From soft and mellow to hard and crisp'
+    },
+    {
+        id: 18,
+        product_id: 9,
+        name: 'Himalayan Harvest Box',
+        price_per_kg: 430,
+        description: 'The best of the orchard right now — a seasonal mix drawn from apples, pears, plums, persimmons, and kiwi. Contents follow the harvest.',
+        taste_profile: 'Whatever the mountain does best this season',
+        texture_profile: 'A mix — crisp, juicy, and soft in one box'
     }
 ];
 
@@ -211,5 +239,8 @@ export const INITIAL_INVENTORY = [
     { variety_id: 12, is_active: true, pack_sizes: [{ weight: 5, stock: 20, price: 599 * 5 }, { weight: 10, stock: 10, price: 599 * 10 }] },
     // Walnuts sell in smaller packs than fruit
     { variety_id: 14, is_active: true, pack_sizes: [{ weight: 1, stock: 30, price: 799 }, { weight: 2, stock: 20, price: 799 * 2 }, { weight: 5, stock: 10, price: 799 * 5 }] },
-    { variety_id: 16, is_active: true, pack_sizes: [{ weight: 2, stock: 25, price: 449 * 2 }, { weight: 5, stock: 15, price: 449 * 5 }] }
+    { variety_id: 16, is_active: true, pack_sizes: [{ weight: 2, stock: 25, price: 449 * 2 }, { weight: 5, stock: 15, price: 449 * 5 }] },
+    // Orchard Boxes ship as 5kg only
+    { variety_id: 17, is_active: true, pack_sizes: [{ weight: 5, stock: 20, price: 360 * 5 }] },
+    { variety_id: 18, is_active: true, pack_sizes: [{ weight: 5, stock: 15, price: 430 * 5 }] }
 ];

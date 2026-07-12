@@ -53,7 +53,11 @@ export const getProductImage = (productName, { variety } = {}) => {
 
         'Himalayan Walnut (Akhrot)': 'Walnuts.webp',
         'Walnuts': 'Walnuts.webp',
-        'Akhrot': 'Walnuts.webp'
+        'Akhrot': 'Walnuts.webp',
+
+        'Orchard Boxes': 'Orchard Box.png',
+        'Apple Discovery Box': 'Orchard Box.png',
+        'Himalayan Harvest Box': 'Orchard Box.png'
     };
 
     // Case-insensitive lookup
