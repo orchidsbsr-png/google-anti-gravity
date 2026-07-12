@@ -21,10 +21,13 @@
         align-items: center;
         justify-content: space-between;
         padding: 0 14px 0 16px;
-        background: rgba(253, 252, 247, 0.82);
-        backdrop-filter: blur(18px) saturate(1.3);
-        -webkit-backdrop-filter: blur(18px) saturate(1.3);
-        border-bottom: 1px solid rgba(28, 35, 19, 0.1);
+        /* Extreme glassmorphism: nearly transparent, heavy blur — the
+           page shows through, frosted. */
+        background: rgba(253, 252, 247, 0.18);
+        backdrop-filter: blur(28px) saturate(1.7);
+        -webkit-backdrop-filter: blur(28px) saturate(1.7);
+        border-bottom: 1px solid rgba(253, 252, 247, 0.22);
+        box-shadow: 0 1px 0 rgba(28, 35, 19, 0.05);
     }
 
     .mtb-logo {
