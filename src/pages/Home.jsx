@@ -232,6 +232,7 @@ const Home = () => {
                             <Link to="/coming-soon" style={footerLink}>Coming Soon</Link>
                             <Link to="/adopt-a-tree" style={footerLink}>Adopt a Tree</Link>
                             <Link to="/recipes" style={footerLink}>The Kitchen</Link>
+                            <Link to="/information-centre" style={footerLink}>Information Centre</Link>
                             <Link to="/health-benefits" style={footerLink}>Health Benefits</Link>
                         </div>
                         <div>
