@@ -69,7 +69,8 @@ export const PRODUCTS = [
         description: 'Known locally as Chullu — a small, intensely flavoured wild apricot that grows in the high Himalayan valleys. Prized for eating fresh, drying, and traditional oils.',
         taste_profile: 'Bright, tangy-sweet with an intense apricot aroma',
         texture_profile: 'Soft, juicy flesh around a small stone',
-        image_path: '/images/products/Chullu.png'
+        image_path: '/images/products/Chullu.jpg',
+        video_path: '/videos/chullu.mp4'
     }
 ];
 

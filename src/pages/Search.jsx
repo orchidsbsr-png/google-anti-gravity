@@ -150,7 +150,7 @@ const Search = () => {
                     <Link to={`/product/${product.id}`} key={product.id} className={`pantone-card ${inSeason ? '' : 'off-season'}`}>
                         <div className="card-visual">
                             <LazyVideo
-                                src={`/videos/${product.name.toLowerCase().replace(/ /g, '-')}.mp4`}
+                                src={product.video_path || `/videos/${product.name.toLowerCase().replace(/ /g, '-')}.mp4`}
                                 poster={product.image_path}
                                 className="product-video"
                             />

@@ -45,7 +45,15 @@ export const getProductImage = (productName, { variety } = {}) => {
         'Orange Persimmons': 'Orange Persimmons.png',
 
         'Plums': 'Plums.png',
-        'Red Plums': 'Plums.png'
+        'Red Plums': 'Plums.png',
+
+        'Wild Himalayan Apricot (Chullu)': 'Chullu.jpg',
+        'Wild Himalayan Apricot': 'Chullu.jpg',
+        'Chullu': 'Chullu.jpg',
+
+        'Himalayan Walnut (Akhrot)': 'Walnuts.png',
+        'Walnuts': 'Walnuts.png',
+        'Akhrot': 'Walnuts.png'
     };
 
     // Case-insensitive lookup
