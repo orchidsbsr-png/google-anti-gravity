@@ -17,7 +17,10 @@ const AuthCallback = () => {
         const succeed = () => {
             if (settled.current) return;
             settled.current = true;
-            navigate('/', { replace: true });
+            // Return to wherever login was started from (cart, checkout, …)
+            const dest = sessionStorage.getItem('post_login_redirect') || '/';
+            sessionStorage.removeItem('post_login_redirect');
+            navigate(dest, { replace: true });
         };
 
         // Errors passed back in the URL (user cancelled, provider rejected…)

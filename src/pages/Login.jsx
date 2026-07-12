@@ -15,6 +15,10 @@ const Login = () => {
     const handleOAuth = async (loginFn, providerName) => {
         try {
             setError('');
+            // OAuth leaves the site and comes back with a fresh page load,
+            // losing router state — stash the destination so AuthCallback
+            // can land the user back where they were (cart, checkout, …).
+            sessionStorage.setItem('post_login_redirect', from);
             await loginFn();
             navigate(from, { replace: true });
         } catch (err) {
