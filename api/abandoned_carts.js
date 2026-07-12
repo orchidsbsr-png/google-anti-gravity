@@ -105,7 +105,7 @@ export default async function handler(req, res) {
                     'content-type': 'application/json'
                 },
                 body: JSON.stringify({
-                    sender: { name: 'Naliban Farms', email: 'orchids.bsr@gmail.com' },
+                    sender: { name: 'Naliban Farms', email: 'orders@nalibanfarms.in' },
                     to: [{ email }],
                     subject: 'Your harvest is waiting in your basket 🍎',
                     htmlContent: buildEmailHtml(name, items, total)

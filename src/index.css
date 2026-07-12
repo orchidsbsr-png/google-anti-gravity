@@ -18,9 +18,9 @@
   --paper: #FDFCF7;
   --terracotta: #C44536;
   --terracotta-deep: #A93B2E;
-  --gold: #C9A227;
-  --gold-bright: #E3C568;  /* display headings on dark/photo surfaces */
-  --gold-deep: #B8921E;    /* display headings on cream surfaces */
+  --gold: #D4A017;
+  --gold-bright: #E0B028;  /* display headings on dark/photo surfaces */
+  --gold-deep: #B8860B;    /* display headings on cream surfaces */
   --ink: #1C2313;
   --ink-soft: #4A4F3E;
   --ink-faint: #83866F;
@@ -47,7 +47,7 @@
   --lux-soft-sage: #E9ECD3;
   --lux-off-white: #F7F4EC;
   --lux-terracotta: #C44536;
-  --lux-muted-gold: #C9A227;
+  --lux-muted-gold: #D4A017;
   --lux-text-dark: #1C2313;
   --lux-text-light: #F7F4EC;
 
@@ -292,9 +292,38 @@ input, textarea, select {
 /* Hero fills exactly the first screen — headline, CTAs and scroll cue
    all visible without scrolling. Desktop subtracts the header height. */
 .hero-viewport {
-  height: 100vh;
-  height: 100svh;
-  min-height: 620px;
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
+/* Responsive hero typography — sizes live here (not inline) so phones
+   can shrink them without anything escaping its box. */
+.hero-title {
+  font-size: clamp(2.5rem, 9.5vw, 7.5rem);
+}
+
+.hero-eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.42em;
+}
+
+@media (max-width: 768px) {
+  .hero-brand {
+    transform: scale(0.74);
+    transform-origin: center bottom;
+    margin-top: -16px;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    line-height: 2;
+    padding: 0 10px;
+  }
+
+  .hero-cue {
+    display: none;
+  }
 }
 
 /* (Desktop nav is a left sidebar, so the hero keeps full height there too) */

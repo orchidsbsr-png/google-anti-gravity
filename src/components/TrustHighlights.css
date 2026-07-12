@@ -1,0 +1,107 @@
+/* Trust Highlights — light editorial break between the dark Origin
+   and Showcase sections. */
+
+.trust-section {
+    background-color: var(--cream, #F7F4EC);
+    padding: clamp(80px, 9vw, 140px) 6vw;
+    text-align: center;
+}
+
+.trust-eyebrow {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.35em;
+    color: var(--gold, #D4A017);
+    margin-bottom: 18px;
+}
+
+.trust-heading {
+    font-family: var(--font-serif, 'Fraunces', Georgia, serif);
+    font-size: clamp(2.2rem, 4.4vw, 3.6rem);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--gold-deep, #B8860B);
+    max-width: 720px;
+    margin: 0 auto clamp(48px, 5vw, 72px);
+}
+
+.trust-heading em {
+    font-weight: 300;
+}
+
+.trust-grid {
+    max-width: 1160px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: clamp(16px, 2vw, 26px);
+}
+
+.trust-card {
+    background: var(--paper, #FDFCF7);
+    border: 1px solid var(--hairline, rgba(28, 35, 19, 0.14));
+    border-radius: var(--radius-md, 18px);
+    padding: clamp(26px, 2.6vw, 36px) clamp(22px, 2.2vw, 30px);
+    text-align: left;
+    transition: transform 0.35s var(--ease-out-expo, ease), box-shadow 0.35s ease;
+}
+
+.trust-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-soft, 0 18px 50px -18px rgba(28, 35, 19, 0.22));
+}
+
+.trust-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(212, 160, 23, 0.12);
+    font-size: 1.45rem;
+    margin-bottom: 18px;
+}
+
+.trust-title {
+    font-family: var(--font-serif, 'Fraunces', Georgia, serif);
+    font-size: 1.22rem;
+    font-weight: 500;
+    color: var(--ink, #1C2313);
+    margin: 0 0 10px;
+    line-height: 1.25;
+}
+
+.trust-body {
+    font-size: 0.92rem;
+    line-height: 1.65;
+    font-weight: 300;
+    color: var(--ink-soft, #4A4F3E);
+    margin: 0;
+}
+
+@media (max-width: 640px) {
+    .trust-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .trust-card {
+        padding: 20px 16px;
+    }
+
+    .trust-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 1.2rem;
+        margin-bottom: 12px;
+    }
+
+    .trust-title {
+        font-size: 1.02rem;
+    }
+
+    .trust-body {
+        font-size: 0.82rem;
+    }
+}

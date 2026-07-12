@@ -56,8 +56,10 @@ export default function Hero() {
             overflow: 'hidden',
             position: 'relative',
             display: 'flex',
+            flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
+            padding: 'clamp(70px, 9vh, 110px) 0 clamp(60px, 8vh, 90px)'
         }}>
             {/* Background Image */}
             <img
@@ -77,36 +79,39 @@ export default function Hero() {
                 zIndex: 0
             }} />
 
-            {/* Brand mark — phone only; the desktop top nav already shows the logo */}
-            <div className="hero-reveal hero-brand" style={{
-                position: 'absolute',
-                top: 'clamp(20px, 3.5vw, 40px)',
-                left: 'clamp(20px, 5vw, 64px)',
+            {/* Hero brand mark — the centerpiece of the landing page.
+                Sits in normal flow above the headline so it can never
+                overlap the text on any screen size. The inner div carries
+                the GSAP reveal (which animates transform). */}
+            <div className="hero-brand" style={{
+                display: 'flex',
+                justifyContent: 'center',
                 zIndex: 3,
-                color: '#F7F4EC'
+                color: '#F7F4EC',
+                pointerEvents: 'none',
+                marginBottom: 'clamp(18px, 3.5vh, 38px)'
             }}>
-                <Logo variant="full" size={54} />
+                <div className="hero-reveal">
+                    <Logo variant="full" size={104} stacked />
+                </div>
             </div>
 
             {/* Hero Text */}
-            <div ref={textRef} style={{ textAlign: 'center', color: '#F7F4EC', zIndex: 3, padding: '0 20px', maxWidth: '1100px', marginTop: '-5vh', willChange: 'transform, opacity' }}>
-                <p className="hero-reveal" style={{
-                    fontSize: '0.75rem',
+            <div ref={textRef} style={{ textAlign: 'center', color: '#F7F4EC', zIndex: 3, padding: '0 20px', maxWidth: '1100px', willChange: 'transform, opacity' }}>
+                <p className="hero-reveal hero-eyebrow" style={{
                     fontWeight: 600,
-                    letterSpacing: '0.42em',
                     textTransform: 'uppercase',
                     marginBottom: '28px',
                     opacity: 0.85
                 }}>
                     {t('hero.eyebrow')}
                 </p>
-                <h1 className="hero-reveal" style={{
+                <h1 className="hero-reveal hero-title" style={{
                     fontFamily: "'Fraunces', Georgia, serif",
-                    fontSize: 'clamp(3.2rem, 9.5vw, 7.5rem)',
                     fontWeight: 400,
                     lineHeight: '1.02',
                     letterSpacing: '-0.02em',
-                    color: 'var(--gold-bright, #E3C568)',
+                    color: 'var(--gold-bright, #E0B028)',
                     margin: 0
                 }}>
                     {t('hero.title1')}
@@ -118,12 +123,25 @@ export default function Hero() {
                     marginTop: '32px',
                     fontWeight: 300,
                     lineHeight: 1.7,
-                    maxWidth: '520px',
+                    maxWidth: '620px',
                     marginLeft: 'auto',
                     marginRight: 'auto',
-                    opacity: 0.9
+                    opacity: 0.92
                 }}>
                     {t('hero.sub')}
+                </p>
+                <p className="hero-reveal" style={{
+                    fontSize: 'clamp(0.82rem, 1.2vw, 0.92rem)',
+                    marginTop: '16px',
+                    fontWeight: 300,
+                    lineHeight: 1.7,
+                    letterSpacing: '0.04em',
+                    maxWidth: '540px',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    opacity: 0.7
+                }}>
+                    {t('hero.sub2')}
                 </p>
                 <div className="hero-reveal" style={{
                     marginTop: '44px',
@@ -133,32 +151,36 @@ export default function Hero() {
                     flexWrap: 'wrap'
                 }}>
                     <Link to="/search" className="btn-terracotta">{t('hero.shop')}</Link>
-                    <Link to="/adopt-a-tree" style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: '1rem 2.4rem',
-                        borderRadius: '999px',
-                        border: '1px solid rgba(247,244,236,0.5)',
-                        color: '#F7F4EC',
-                        textDecoration: 'none',
-                        fontSize: '0.8rem',
-                        fontWeight: 600,
-                        letterSpacing: '0.18em',
-                        textTransform: 'uppercase',
-                        backdropFilter: 'blur(6px)',
-                        transition: 'background 0.3s ease, border-color 0.3s ease'
-                    }}
+                    <button
+                        onClick={() => document.querySelector('.origin-section')?.scrollIntoView({ behavior: 'smooth' })}
+                        style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '1rem 2.4rem',
+                            borderRadius: '999px',
+                            border: '1px solid rgba(247,244,236,0.5)',
+                            background: 'transparent',
+                            color: '#F7F4EC',
+                            cursor: 'pointer',
+                            fontFamily: 'inherit',
+                            fontSize: '0.8rem',
+                            fontWeight: 600,
+                            letterSpacing: '0.18em',
+                            textTransform: 'uppercase',
+                            backdropFilter: 'blur(6px)',
+                            transition: 'background 0.3s ease, border-color 0.3s ease'
+                        }}
                         onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(247,244,236,0.14)'; e.currentTarget.style.borderColor = '#F7F4EC'; }}
                         onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(247,244,236,0.5)'; }}
                     >
-                        {t('hero.adopt')}
-                    </Link>
+                        {t('hero.story')}
+                    </button>
                 </div>
             </div>
 
-            {/* Scroll cue */}
-            <div className="hero-reveal" style={{
+            {/* Scroll cue — hidden on phones, where it crowded the CTAs */}
+            <div className="hero-reveal hero-cue" style={{
                 position: 'absolute',
                 bottom: '4.5vh',
                 left: '50%',

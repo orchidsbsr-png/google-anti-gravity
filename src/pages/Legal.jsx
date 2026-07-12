@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import './Legal.css';
 
 const Legal = () => {
+    const location = useLocation();
+
+    // Footer links arrive as /legal#shipping etc. — React Router doesn't
+    // scroll to hashes on its own.
+    useEffect(() => {
+        if (location.hash) {
+            document.querySelector(location.hash)?.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            window.scrollTo(0, 0);
+        }
+    }, [location]);
+
     return (
         <div className="legal-page">
             <div className="legal-container">

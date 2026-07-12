@@ -91,7 +91,7 @@
     font-weight: 600;
     letter-spacing: 0.3em;
     text-transform: uppercase;
-    color: var(--gold, #C9A227);
+    color: var(--gold, #D4A017);
     margin-bottom: 16px;
 }
 
@@ -148,7 +148,7 @@
     font-weight: 600;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: var(--gold, #C9A227);
+    color: var(--gold, #D4A017);
 }
 
 /* ---------- Grid ---------- */

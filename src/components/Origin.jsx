@@ -11,7 +11,7 @@ export default function Origin() {
     const sectionRef = useRef(null);
 
     const stats = [
-        { value: '40+', label: t('origin.stat1') },
+        { value: '50+', label: t('origin.stat1') },
         { value: '2,300m', label: t('origin.stat2') },
         { value: '0', label: t('origin.stat3') },
     ];
@@ -61,7 +61,7 @@ export default function Origin() {
             <div style={{ zIndex: 2 }}>
                 <p className="origin-reveal" style={{
                     fontSize: '0.72rem',
-                    color: '#C9A227',
+                    color: '#D4A017',
                     fontWeight: 600,
                     textTransform: 'uppercase',
                     letterSpacing: '0.35em',
@@ -72,7 +72,7 @@ export default function Origin() {
                 <h2 className="origin-reveal" style={{
                     fontFamily: "'Fraunces', Georgia, serif",
                     fontSize: 'clamp(2.8rem, 5.5vw, 4.6rem)',
-                    color: 'var(--gold-bright, #E3C568)',
+                    color: 'var(--gold-bright, #E0B028)',
                     marginBottom: '2rem',
                     lineHeight: '1.05',
                     fontWeight: 400

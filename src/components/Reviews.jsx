@@ -37,7 +37,7 @@ const reviews = [
 const Stars = ({ count }) => (
     <div className="review-stars" aria-label={`${count} star rating`}>
         {Array.from({ length: count }).map((_, i) => (
-            <svg key={i} width="12" height="12" viewBox="0 0 24 24" fill="#C9A227" stroke="none">
+            <svg key={i} width="12" height="12" viewBox="0 0 24 24" fill="#D4A017" stroke="none">
                 <path d="M12 2l2.9 6.6 7.1.6-5.4 4.8 1.6 7-6.2-3.7L5.8 21l1.6-7L2 9.2l7.1-.6L12 2z" />
             </svg>
         ))}

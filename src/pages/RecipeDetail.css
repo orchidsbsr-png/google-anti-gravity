@@ -130,7 +130,7 @@
 
 .secret-box {
     background: var(--cream-warm, #F2EDE0);
-    border-left: 2px solid var(--gold, #C9A227);
+    border-left: 2px solid var(--gold, #D4A017);
     border-radius: 0 14px 14px 0;
     padding: 1.1rem 1.3rem;
 }
@@ -141,7 +141,7 @@
     font-weight: 600;
     letter-spacing: 0.3em;
     text-transform: uppercase;
-    color: var(--gold, #C9A227);
+    color: var(--gold, #D4A017);
     margin-bottom: 0.5rem;
 }
 
@@ -192,7 +192,7 @@
     font-weight: 600;
     letter-spacing: 0.24em;
     text-transform: uppercase;
-    color: var(--gold, #C9A227);
+    color: var(--gold, #D4A017);
     margin: 1.2rem 0 0.6rem;
 }
 

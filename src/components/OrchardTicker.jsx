@@ -33,7 +33,8 @@ export default function OrchardTicker() {
         tempC !== null && `${tempC}°C in the orchard right now`,
         picking && `Now picking — ${picking}`,
         upcoming && `${upcoming.fruit} return in ${['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'][upcoming.start - 1]}`,
-        'Four generations · father to son · Jubbal-Kotkhai',
+        'Naliban Khatasu · Jubbal-Kotkhai · 2,300m',
+        'Direct from farming families · no middlemen',
         'Hand-picked after you order',
     ].filter(Boolean);
 

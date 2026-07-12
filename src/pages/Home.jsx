@@ -3,13 +3,14 @@ import React from 'react';
 import SmoothScroll from '../components/SmoothScroll';
 import Hero from '../components/Hero';
 import Origin from '../components/Origin';
+import TrustHighlights from '../components/TrustHighlights';
 import ProductShowcase from '../components/ProductShowcase';
 import Reviews from '../components/Reviews';
 import Process from '../components/Process';
 import OrchardTicker from '../components/OrchardTicker';
 import Logo from '../components/Logo';
 import { Link } from 'react-router-dom';
-import { whatsappLink } from '../config/brand';
+import { BRAND, whatsappLink } from '../config/brand';
 import { useLanguage } from '../context/LanguageContext';
 
 const footerLink = {
@@ -29,6 +30,7 @@ const Home = () => {
                 <Hero />
                 <OrchardTicker />
                 <Origin />
+                <TrustHighlights />
                 <ProductShowcase />
                 <Reviews />
                 <Process />
@@ -44,7 +46,7 @@ const Home = () => {
                         fontWeight: 600,
                         textTransform: 'uppercase',
                         letterSpacing: '0.35em',
-                        color: '#C9A227',
+                        color: '#D4A017',
                         marginBottom: '20px'
                     }}>
                         {t('club.eyebrow')}
@@ -54,7 +56,7 @@ const Home = () => {
                         fontSize: 'clamp(2.4rem, 4.8vw, 4rem)',
                         fontWeight: 400,
                         lineHeight: 1.08,
-                        color: 'var(--gold-deep, #A5821B)',
+                        color: 'var(--gold-deep, #B8860B)',
                         maxWidth: '760px',
                         margin: '0 auto 22px'
                     }}>
@@ -123,7 +125,7 @@ const Home = () => {
                                 fontSize: 'clamp(2.6rem, 5vw, 4.2rem)',
                                 fontWeight: 400,
                                 lineHeight: 1.05,
-                                color: 'var(--gold-deep, #A5821B)',
+                                color: 'var(--gold-deep, #B8860B)',
                                 marginBottom: '24px'
                             }}>
                                 {t('adopt.title1')}
@@ -188,7 +190,7 @@ const Home = () => {
                             fontFamily: "'Fraunces', Georgia, serif",
                             fontSize: 'clamp(2.4rem, 4.5vw, 3.8rem)',
                             fontWeight: 400,
-                            color: 'var(--gold-bright, #E3C568)',
+                            color: 'var(--gold-bright, #E0B028)',
                             marginBottom: '18px'
                         }}>
                             {t('footer.title1')} <em style={{ fontWeight: 300 }}>{t('footer.title2')}</em> {t('footer.title3')}
@@ -212,9 +214,9 @@ const Home = () => {
                                 <Logo variant="full" size={50} />
                             </div>
                             <p style={{ fontSize: '0.85rem', lineHeight: 1.8, opacity: 0.6, fontWeight: 300, maxWidth: '260px' }}>
-                                A four-generation family orchard in the Jubbal-Kotkhai
-                                valley, above Hatkoti — growing fruit the slow way,
-                                father to son.
+                                Naturally grown Himalayan fruit from Naliban Khatasu,
+                                Jubbal-Kotkhai — our orchards and trusted farming
+                                families, direct to your doorstep.
                             </p>
                         </div>
                         <div>
@@ -223,10 +225,11 @@ const Home = () => {
                                 fontWeight: 600,
                                 letterSpacing: '0.28em',
                                 textTransform: 'uppercase',
-                                color: '#C9A227',
+                                color: '#D4A017',
                                 marginBottom: '16px'
                             }}>{t('footer.explore')}</p>
                             <Link to="/search" style={footerLink}>Shop the Harvest</Link>
+                            <Link to="/coming-soon" style={footerLink}>Coming Soon</Link>
                             <Link to="/adopt-a-tree" style={footerLink}>Adopt a Tree</Link>
                             <Link to="/recipes" style={footerLink}>The Kitchen</Link>
                             <Link to="/health-benefits" style={footerLink}>Health Benefits</Link>
@@ -237,7 +240,7 @@ const Home = () => {
                                 fontWeight: 600,
                                 letterSpacing: '0.28em',
                                 textTransform: 'uppercase',
-                                color: '#C9A227',
+                                color: '#D4A017',
                                 marginBottom: '16px'
                             }}>{t('footer.account')}</p>
                             <Link to="/orders" style={footerLink}>My Orders</Link>
@@ -250,11 +253,51 @@ const Home = () => {
                                 fontWeight: 600,
                                 letterSpacing: '0.28em',
                                 textTransform: 'uppercase',
-                                color: '#C9A227',
+                                color: '#D4A017',
                                 marginBottom: '16px'
                             }}>{t('footer.legal')}</p>
-                            <Link to="/legal" style={footerLink}>Terms of Service</Link>
-                            <Link to="/legal" style={footerLink}>Privacy Policy</Link>
+                            <Link to="/legal#terms" style={footerLink}>Terms of Service</Link>
+                            <Link to="/legal#privacy" style={footerLink}>Privacy Policy</Link>
+                            <Link to="/legal#shipping" style={footerLink}>Shipping Policy</Link>
+                            <Link to="/legal#refunds" style={footerLink}>Refund Policy</Link>
+                        </div>
+                        <div>
+                            <p style={{
+                                fontSize: '0.7rem',
+                                fontWeight: 600,
+                                letterSpacing: '0.28em',
+                                textTransform: 'uppercase',
+                                color: '#D4A017',
+                                marginBottom: '16px'
+                            }}>Contact</p>
+                            <a href={`mailto:${BRAND.supportEmail}`} style={footerLink}>{BRAND.supportEmail}</a>
+                            <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" style={footerLink}>WhatsApp Us</a>
+                            <a href={BRAND.instagram} target="_blank" rel="noopener noreferrer" style={footerLink}>Instagram</a>
+
+                            {/* Social icons */}
+                            <div style={{ display: 'flex', gap: '14px', marginTop: '18px' }}>
+                                <a href={BRAND.instagram} target="_blank" rel="noopener noreferrer" aria-label="Naliban Farms on Instagram"
+                                    style={{ color: 'rgba(247,244,236,0.75)', display: 'inline-flex' }}>
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                                    </svg>
+                                </a>
+                                <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" aria-label="Chat with Naliban Farms on WhatsApp"
+                                    style={{ color: 'rgba(247,244,236,0.75)', display: 'inline-flex' }}>
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
+                                    </svg>
+                                </a>
+                                <a href={`mailto:${BRAND.supportEmail}`} aria-label="Email Naliban Farms"
+                                    style={{ color: 'rgba(247,244,236,0.75)', display: 'inline-flex' }}>
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                        <rect x="2" y="4" width="20" height="16" rx="2" />
+                                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                                    </svg>
+                                </a>
+                            </div>
                         </div>
                     </div>
 
@@ -270,7 +313,7 @@ const Home = () => {
                         fontSize: '0.78rem',
                         color: 'rgba(247, 244, 236, 0.45)'
                     }}>
-                        <span>&copy; 2026 Naliban Farms &middot; Shimla.</span>
+                        <span>&copy; 2026 Naliban Farms &middot; Made in Himachal Pradesh 🇮🇳</span>
                         <span>Grown at 2,300m &middot; Shipped across India</span>
                     </div>
                 </footer>

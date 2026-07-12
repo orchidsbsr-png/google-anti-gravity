@@ -43,10 +43,8 @@ export async function sendOrderConfirmationEmail(order, customerEmail) {
         },
         body: JSON.stringify({
             sender: {
-                // Name is the brand; the address stays on the verified Brevo
-                // sender until nalibanfarms.in is authenticated in Brevo.
                 name: "Naliban Farms",
-                email: "orchids.bsr@gmail.com"
+                email: "orders@nalibanfarms.in"
             },
             to: [{ email: customerEmail, name: customerName }],
             subject: `Your fruit is being picked — Order #${orderRef}`,
@@ -56,7 +54,7 @@ export async function sendOrderConfirmationEmail(order, customerEmail) {
 
                         <!-- Header -->
                         <div style="background-color: #2D3319; border-radius: 18px 18px 0 0; padding: 40px 36px; text-align: center;">
-                            <p style="margin: 0 0 14px; font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: #C9A227;">
+                            <p style="margin: 0 0 14px; font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: #D4A017;">
                                 Order Confirmed &middot; #${orderRef}
                             </p>
                             <h1 style="margin: 0; font-family: Georgia, 'Times New Roman', serif; font-weight: normal; font-size: 30px; line-height: 1.2; color: #F7F4EC;">
@@ -87,8 +85,8 @@ export async function sendOrderConfirmationEmail(order, customerEmail) {
                             </table>
 
                             ${order.is_gift && order.gift_note ? `
-                            <div style="margin-top: 24px; background-color: #F2EDE0; border-left: 3px solid #C9A227; border-radius: 0 10px 10px 0; padding: 14px 18px;">
-                                <p style="margin: 0 0 4px; font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #C9A227;">Gift Note</p>
+                            <div style="margin-top: 24px; background-color: #F2EDE0; border-left: 3px solid #D4A017; border-radius: 0 10px 10px 0; padding: 14px 18px;">
+                                <p style="margin: 0 0 4px; font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #D4A017;">Gift Note</p>
                                 <p style="margin: 0; font-family: Georgia, serif; font-style: italic; font-size: 14px; color: #4A4F3E;">&ldquo;${order.gift_note}&rdquo;</p>
                             </div>` : ''}
 
@@ -116,7 +114,7 @@ export async function sendOrderConfirmationEmail(order, customerEmail) {
 
                         <p style="margin: 22px 0 0; text-align: center; font-family: Arial, sans-serif; font-size: 11px; color: #83866F;">
                             Naliban Farms &middot; ${BRAND.originShort}<br>
-                            Four generations, father to son, above the Hatkoti valley.
+                            Naturally grown at 2,300m &middot; harvested only after you order.
                         </p>
                     </div>
                 </div>

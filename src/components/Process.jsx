@@ -7,7 +7,7 @@ import './Process.css';
 gsap.registerPlugin(ScrollTrigger);
 
 const steps = [
-    { title: 'Harvest', desc: 'Hand-picked at peak ripeness.' },
+    { title: 'Harvest', desc: 'Hand-picked only after your order, at peak ripeness.' },
     { title: 'Clean', desc: 'Washed with clean water.' },
     { title: 'Packaging', desc: 'Eco-friendly materials.' },
     { title: 'Ship', desc: 'Fast, temperature-controlled delivery.' },
