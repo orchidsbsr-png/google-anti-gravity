@@ -88,15 +88,17 @@
     }
 
     /* Right-side drawer — slides in from the right, covers only part
-       of the screen; the page stays visible (dimmed) behind it. */
+       of the screen; the page stays visible (dimmed) behind it.
+       Everything fits without scrolling, and the panel itself is
+       static — it cannot be dragged or panned. */
     .mtb-sheet {
         position: fixed;
         top: 58px;
         right: 0;
         bottom: 0;
         width: min(78vw, 320px);
-        overflow-y: auto;
-        overscroll-behavior: contain;
+        overflow: hidden;
+        touch-action: none;
         background: var(--paper, #FDFCF7);
         border-radius: 18px 0 0 0;
         border-left: 1px solid var(--hairline, rgba(28, 35, 19, 0.1));

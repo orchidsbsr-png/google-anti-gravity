@@ -138,13 +138,10 @@ const BottomNav = () => {
         }
     };
 
+    // Only what's on sale right now — coming-soon categories live in the footer
     const shopLinks = [
         { to: '/search', label: 'All Fruits' },
-        { to: '/search?query=Walnut', label: 'Walnut (Akhrot)' },
-        { to: '/shop/dehydrated', label: 'Dehydrated Fruits · soon' },
-        { to: '/shop/jams', label: 'Fruit Jams · soon' },
-        { to: '/shop/chutneys', label: 'Fruit Chutneys · soon' },
-        { to: '/coming-soon', label: 'Everything Coming Soon' },
+        { to: '/search?query=Walnut', label: 'Walnuts (Akhrot)' },
     ];
 
     const exploreLinks = [
