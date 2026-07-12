@@ -2,7 +2,7 @@
 export const BRAND = {
     name: 'Naliban Farms',
     domain: 'https://nalibanfarms.in',
-    whatsappNumber: '4917661996833',
+    whatsappNumber: '919805071716',
     supportEmail: 'help@nalibanfarms.in',
     instagram: 'https://www.instagram.com/naliban.farms',
     originShort: 'Naliban Khatasu · Jubbal-Kotkhai · Himachal Pradesh',
