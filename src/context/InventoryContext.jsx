@@ -88,6 +88,9 @@ export const InventoryProvider = ({ children }) => {
     };
 
     const updateShopStatus = async (isOpen) => {
+        const previous = settings;
+        // Optimistic: flip the UI immediately, revert if the write fails
+        setSettings(s => ({ ...s, shop_open: isOpen }));
         try {
             const { error } = await supabase
                 .from('settings')
@@ -97,6 +100,46 @@ export const InventoryProvider = ({ children }) => {
             return true;
         } catch (err) {
             console.error('Error updating shop status:', err.message);
+            setSettings(previous);
+            alert(`Could not update shop status: ${err.message}`);
+            return false;
+        }
+    };
+
+    // Storefront "Selling fast" kicks in when a variety's total stock is at
+    // or below this many units (admin-configurable, defaults to 10).
+    const sellingFastThreshold = Number(settings?.selling_fast_threshold) > 0
+        ? Number(settings.selling_fast_threshold)
+        : 10;
+
+    const updateSellingFastThreshold = async (n) => {
+        const value = Math.max(1, parseInt(n) || 10);
+        try {
+            const { error } = await supabase
+                .from('settings')
+                .upsert({ id: 1, selling_fast_threshold: value, updated_at: new Date().toISOString() });
+            if (error) throw error;
+            await fetchSettings();
+            return true;
+        } catch (err) {
+            console.error('Error updating selling_fast_threshold:', err.message);
+            alert(`Could not save the threshold: ${err.message}`);
+            return false;
+        }
+    };
+
+    // Drives the homepage ticker's "Now picking — …" line
+    const updateNowPicking = async (text) => {
+        try {
+            const { error } = await supabase
+                .from('settings')
+                .upsert({ id: 1, now_picking: text, updated_at: new Date().toISOString() });
+            if (error) throw error;
+            await fetchSettings();
+            return true;
+        } catch (err) {
+            console.error('Error updating now_picking:', err.message);
+            alert(`Could not save: ${err.message}`);
             return false;
         }
     };
@@ -109,7 +152,10 @@ export const InventoryProvider = ({ children }) => {
             getStock,
             isInStock,
             updateInventory,
-            updateShopStatus
+            updateShopStatus,
+            updateNowPicking,
+            sellingFastThreshold,
+            updateSellingFastThreshold
         }}>
             {children}
         </InventoryContext.Provider>
