@@ -67,7 +67,7 @@ const isSameDay = (a, b) => new Date(a).toDateString() === new Date(b).toDateStr
 // ---- component -------------------------------------------------------
 
 const Admin = () => {
-    const { inventory, settings, updateInventory, updateShopStatus, updateNowPicking, sellingFastThreshold, updateSellingFastThreshold } = useInventory();
+    const { inventory, settings, updateInventory, updateShopStatus, updateNowPicking, sellingFastThreshold, updateSellingFastThreshold, codEnabled, updateCodEnabled } = useInventory();
     const { products, varieties } = useProduct();
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -789,6 +789,24 @@ const Admin = () => {
                                         </button>
                                     </div>
                                     <p className="adm-note">Shown live in the homepage ticker. Separate fruits with a “·”.</p>
+                                </div>
+
+                                <div className="adm-card">
+                                    <div className="adm-card-head"><span>Checkout</span></div>
+                                    <div className="adm-cod-row">
+                                        <span>
+                                            <b>Cash on Delivery</b>
+                                            <small>{codEnabled
+                                                ? 'ON — customers can choose COD at checkout'
+                                                : 'OFF — checkout is online payment only'}</small>
+                                        </span>
+                                        <button
+                                            className={`adm-switch ${codEnabled ? '' : 'off'}`}
+                                            title={codEnabled ? 'Switch COD off' : 'Switch COD on'}
+                                            aria-pressed={codEnabled}
+                                            onClick={() => updateCodEnabled(!codEnabled)}
+                                        />
+                                    </div>
                                 </div>
 
                                 <div className="adm-card">

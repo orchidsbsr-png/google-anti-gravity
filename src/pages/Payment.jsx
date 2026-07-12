@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAddress } from '../context/AddressContext';
 import { useAuth } from '../context/AuthContext';
+import { useInventory } from '../context/InventoryContext';
 import { useLanguage } from '../context/LanguageContext';
 import { supabase } from '../supabase';
 import AddressForm from '../components/AddressForm';
@@ -63,7 +64,13 @@ const Payment = () => {
     const [showAddressForm, setShowAddressForm] = useState(false);
     const [selectNewest, setSelectNewest] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
+    const { codEnabled } = useInventory();
     const [paymentMethod, setPaymentMethod] = useState('online');
+
+    // If COD gets switched off while someone had it selected, fall back
+    useEffect(() => {
+        if (!codEnabled && paymentMethod === 'cod') setPaymentMethod('online');
+    }, [codEnabled, paymentMethod]);
 
     // Dynamic Shipping State
     const [shippingCost, setShippingCost] = useState(0);
@@ -441,16 +448,18 @@ const Payment = () => {
                                 <span className="pay-badge">Secured by Razorpay</span>
                             </label>
 
-                            <label className={`payment-option ${paymentMethod === 'cod' ? 'selected' : ''}`}>
-                                <input
-                                    type="radio"
-                                    name="payment"
-                                    value="cod"
-                                    checked={paymentMethod === 'cod'}
-                                    onChange={() => setPaymentMethod('cod')}
-                                />
-                                <span>{t('checkout.cod')}</span>
-                            </label>
+                            {codEnabled && (
+                                <label className={`payment-option ${paymentMethod === 'cod' ? 'selected' : ''}`}>
+                                    <input
+                                        type="radio"
+                                        name="payment"
+                                        value="cod"
+                                        checked={paymentMethod === 'cod'}
+                                        onChange={() => setPaymentMethod('cod')}
+                                    />
+                                    <span>{t('checkout.cod')}</span>
+                                </label>
+                            )}
                         </div>
                     </section>
                 </div>

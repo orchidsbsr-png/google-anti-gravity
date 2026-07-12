@@ -110,6 +110,25 @@ export const InventoryProvider = ({ children }) => {
         }
     };
 
+    // COD was a dev-testing convenience — OFF unless the admin switch
+    // (settings.cod_enabled) is explicitly on.
+    const codEnabled = settings?.cod_enabled === true;
+
+    const updateCodEnabled = async (enabled) => {
+        try {
+            const { error } = await supabase
+                .from('settings')
+                .upsert({ id: 1, cod_enabled: Boolean(enabled), updated_at: new Date().toISOString() });
+            if (error) throw error;
+            await fetchSettings();
+            return true;
+        } catch (err) {
+            console.error('Error updating cod_enabled:', err.message);
+            alert(`Could not save the COD setting: ${err.message}`);
+            return false;
+        }
+    };
+
     // Storefront "Selling fast" kicks in when a variety's total stock is at
     // or below this many units (admin-configurable, defaults to 10).
     const sellingFastThreshold = Number(settings?.selling_fast_threshold) > 0
@@ -159,7 +178,9 @@ export const InventoryProvider = ({ children }) => {
             updateShopStatus,
             updateNowPicking,
             sellingFastThreshold,
-            updateSellingFastThreshold
+            updateSellingFastThreshold,
+            codEnabled,
+            updateCodEnabled
         }}>
             {children}
         </InventoryContext.Provider>

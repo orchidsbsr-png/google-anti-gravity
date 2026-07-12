@@ -724,6 +724,27 @@
     color: var(--ink-faint, #83866F);
 }
 
+.adm-cod-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 14px 18px 16px;
+}
+
+.adm-cod-row b {
+    display: block;
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--ink, #1C2313);
+    margin-bottom: 3px;
+}
+
+.adm-cod-row small {
+    font-size: 0.7rem;
+    color: var(--ink-faint, #83866F);
+}
+
 .adm-alert {
     width: 100%;
     display: flex;
