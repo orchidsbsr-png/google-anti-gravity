@@ -58,7 +58,7 @@ export default function Origin() {
             alignItems: 'center',
             overflow: 'hidden'
         }}>
-            <div className="fade-out-up" style={{ zIndex: 2 }}>
+            <div style={{ zIndex: 2 }}>
                 <p className="origin-reveal" style={{
                     fontSize: '0.72rem',
                     color: '#D4A017',

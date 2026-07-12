@@ -37,15 +37,13 @@ const highlights = [
 export default function TrustHighlights() {
     return (
         <section className="trust-section">
-            <div className="fade-out-up">
-                <p className="trust-eyebrow">The Naliban Promise</p>
-                <h2 className="trust-heading">
-                    Why fruit from here <em>tastes different.</em>
-                </h2>
-            </div>
+            <p className="trust-eyebrow">The Naliban Promise</p>
+            <h2 className="trust-heading">
+                Why fruit from here <em>tastes different.</em>
+            </h2>
             <div className="trust-grid">
                 {highlights.map((h) => (
-                    <article className="trust-card fade-out-up" key={h.title}>
+                    <article className="trust-card" key={h.title}>
                         <span className="trust-icon" aria-hidden="true">{h.icon}</span>
                         <h3 className="trust-title">{h.title}</h3>
                         <p className="trust-body">{h.body}</p>

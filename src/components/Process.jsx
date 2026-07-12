@@ -103,8 +103,8 @@ export default function Process() {
                 pointerEvents: 'none'
             }} />
 
-            <p className="process-eyebrow fade-out-up">Orchard to Doorstep</p>
-            <h2 className="process-heading fade-out-up">The <em style={{ fontWeight: 300 }}>Journey</em></h2>
+            <p className="process-eyebrow">Orchard to Doorstep</p>
+            <h2 className="process-heading">The <em style={{ fontWeight: 300 }}>Journey</em></h2>
 
             <div ref={containerRef} style={{ position: 'relative', width: '100%', maxWidth: '800px', paddingBottom: '200px' }}>
                 {/* SVG Path Container */}
