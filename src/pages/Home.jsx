@@ -1,5 +1,7 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 import SmoothScroll from '../components/SmoothScroll';
 import Hero from '../components/Hero';
 import Origin from '../components/Origin';
@@ -22,11 +24,38 @@ const footerLink = {
     transition: 'color 0.25s ease'
 };
 
+gsap.registerPlugin(ScrollTrigger);
+
 const Home = () => {
     const { t } = useLanguage();
+    const mainRef = useRef(null);
+
+    // Same feel as the hero: content softly fades, lifts, and blurs away
+    // as it scrolls out of the top of the screen.
+    useEffect(() => {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const ctx = gsap.context(() => {
+            gsap.utils.toArray('.fade-out-up').forEach((el) => {
+                gsap.to(el, {
+                    opacity: 0,
+                    y: -50,
+                    filter: 'blur(6px)',
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: el,
+                        start: 'bottom 38%',
+                        end: 'bottom 6%',
+                        scrub: true,
+                    }
+                });
+            });
+        }, mainRef);
+        return () => ctx.revert();
+    }, []);
+
     return (
         <SmoothScroll>
-            <main style={{ backgroundColor: '#F7F4EC' }}>
+            <main ref={mainRef} style={{ backgroundColor: '#F7F4EC' }}>
                 <Hero />
                 <OrchardTicker />
                 <Origin />
@@ -47,6 +76,7 @@ const Home = () => {
                     backgroundColor: '#F7F4EC',
                     textAlign: 'center'
                 }}>
+                    <div className="fade-out-up">
                     <p style={{
                         fontSize: '0.72rem',
                         fontWeight: 600,
@@ -97,6 +127,7 @@ const Home = () => {
                     }}>
                         {t('club.note')}
                     </p>
+                    </div>
                 </section>
 
                 {/* Harvest Club (cream) melts into the living gift (sage) */}
@@ -111,7 +142,7 @@ const Home = () => {
                     position: 'relative',
                     overflow: 'hidden'
                 }}>
-                    <div style={{
+                    <div className="fade-out-up" style={{
                         maxWidth: '1200px',
                         margin: '0 auto',
                         display: 'grid',

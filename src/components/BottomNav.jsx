@@ -155,7 +155,7 @@ const BottomNav = () => {
         <>
             <header className="mtb" role="banner">
                 <Link to="/" className="mtb-logo" aria-label="Naliban Farms — home">
-                    <LogoMark size={62} />
+                    <LogoMark size={50} />
                 </Link>
 
                 <div className="mtb-actions">
@@ -184,6 +184,11 @@ const BottomNav = () => {
             {menuOpen && (
                 <div className="mtb-sheet-backdrop" onClick={() => setMenuOpen(false)}>
                     <nav className="mtb-sheet" aria-label="Menu" onClick={(e) => e.stopPropagation()}>
+                        <div className="mtb-sheet-top">
+                            <button className="mtb-btn" aria-label="Close menu" onClick={() => setMenuOpen(false)}>
+                                {Icons.close}
+                            </button>
+                        </div>
                         <button className="mtb-sheet-item mtb-sheet-link" onClick={goToStory}>
                             Our Story
                         </button>

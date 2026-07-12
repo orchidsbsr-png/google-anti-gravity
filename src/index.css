@@ -57,7 +57,7 @@
 
   /* Mobile fixed top bar height — the bar, its drawer, and the page
      offset all read this one value */
-  --mobile-nav-h: 116px;
+  --mobile-nav-h: 81px;
 
   /* Rhythm */
   --radius-sm: 10px;
@@ -337,10 +337,26 @@ input, textarea, select {
 }
 
 @media (max-width: 768px) {
+  /* Phone hero: no logo mark — the wordmark alone sits flush under the
+     fixed nav, and the headline centres in the remaining space. */
+  .hero-viewport {
+    padding-top: 2px !important;
+    justify-content: flex-start !important;
+    min-height: calc(100svh - var(--mobile-nav-h, 81px));
+  }
+
   .hero-brand {
-    transform: scale(0.74);
-    transform-origin: center bottom;
-    margin-top: -16px;
+    transform: scale(0.82);
+    transform-origin: top center;
+    margin: 0 0 4px;
+  }
+
+  .hero-brand svg {
+    display: none;
+  }
+
+  .hero-text {
+    margin-block: auto !important;
   }
 
   .hero-eyebrow {

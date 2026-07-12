@@ -97,7 +97,7 @@ export default function Hero() {
             </div>
 
             {/* Hero Text */}
-            <div ref={textRef} style={{ textAlign: 'center', color: '#F7F4EC', zIndex: 3, padding: '0 20px', maxWidth: '1100px', willChange: 'transform, opacity' }}>
+            <div ref={textRef} className="hero-text" style={{ textAlign: 'center', color: '#F7F4EC', zIndex: 3, padding: '0 20px', maxWidth: '1100px', willChange: 'transform, opacity' }}>
                 <p className="hero-reveal hero-eyebrow" style={{
                     fontWeight: 600,
                     textTransform: 'uppercase',

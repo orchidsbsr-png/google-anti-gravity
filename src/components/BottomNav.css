@@ -46,8 +46,8 @@
         position: relative;
         display: grid;
         place-items: center;
-        width: 54px;
-        height: 54px;
+        width: 48px;
+        height: 48px;
         border-radius: 50%;
         border: none;
         background: none;
@@ -57,8 +57,8 @@
     }
 
     .mtb-btn svg {
-        width: 27px;
-        height: 27px;
+        width: 24px;
+        height: 24px;
     }
 
     .mtb-btn:active,
@@ -84,11 +84,12 @@
 
     /* ---- Burger sheet ---- */
 
+    /* Backdrop covers the whole screen — the drawer starts at the very top */
     .mtb-sheet-backdrop {
         display: block;
         position: fixed;
-        inset: var(--mobile-nav-h, 116px) 0 0 0;
-        z-index: 950;
+        inset: 0;
+        z-index: 970;
         background: rgba(27, 33, 18, 0.45);
         backdrop-filter: blur(3px);
         -webkit-backdrop-filter: blur(3px);
@@ -101,18 +102,26 @@
        static — it cannot be dragged or panned. */
     .mtb-sheet {
         position: fixed;
-        top: var(--mobile-nav-h, 116px);
+        top: 0;
         right: 0;
-        bottom: 0;
+        bottom: auto;
+        max-height: calc(100vh - 20px);
+        max-height: calc(100svh - 20px);
         width: min(78vw, 320px);
         overflow: hidden;
         touch-action: none;
         background: var(--paper, #FDFCF7);
-        border-radius: 18px 0 0 0;
+        border-radius: 0 0 0 20px;
         border-left: 1px solid var(--hairline, rgba(28, 35, 19, 0.1));
-        padding: 12px 22px 34px;
+        padding: 6px 22px 30px;
         box-shadow: -28px 0 70px -28px rgba(20, 24, 10, 0.5);
         animation: mtbSlide 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .mtb-sheet-top {
+        display: flex;
+        justify-content: flex-end;
+        padding: 8px 0 0;
     }
 
     .mtb-sheet-item {
