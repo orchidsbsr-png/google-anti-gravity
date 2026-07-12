@@ -66,7 +66,7 @@ export default function Reviews() {
             {/* Seamless transition from the showcase above */}
             <div className="reviews-fade-top" />
 
-            <div className="reviews-head">
+            <div className="reviews-head fade-out-up">
                 <p className="reviews-eyebrow">Kind Words</p>
                 <h2 className="reviews-title">
                     Loved across <em>India</em>

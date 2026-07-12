@@ -36,15 +36,18 @@ const Home = () => {
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
         const ctx = gsap.context(() => {
             gsap.utils.toArray('.fade-out-up').forEach((el) => {
+                // Same geometry as the hero: dimming starts the moment the
+                // element nears the top edge, finishing as it leaves.
                 gsap.to(el, {
                     opacity: 0,
-                    y: -50,
+                    y: -60,
+                    scale: 0.96,
                     filter: 'blur(6px)',
                     ease: 'none',
                     scrollTrigger: {
                         trigger: el,
-                        start: 'bottom 38%',
-                        end: 'bottom 6%',
+                        start: 'top 12%',
+                        end: 'top -35%',
                         scrub: true,
                     }
                 });
