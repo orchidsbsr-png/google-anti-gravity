@@ -92,7 +92,7 @@ export default function Hero() {
                 marginBottom: 'clamp(18px, 3.5vh, 38px)'
             }}>
                 <div className="hero-reveal">
-                    <Logo variant="full" size={104} stacked />
+                    <Logo variant="full" size={104} stacked colored />
                 </div>
             </div>
 
