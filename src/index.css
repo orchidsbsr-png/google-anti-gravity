@@ -312,6 +312,14 @@ input, textarea, select {
   display: flex;
 }
 
+/* Gradient seams between homepage sections — no hard colour cuts */
+.section-fade {
+  display: block;
+  width: 100%;
+  height: clamp(90px, 12vw, 170px);
+  pointer-events: none;
+}
+
 /* Phones have a fixed top bar — push all page content below it.
    The admin brings its own fixed bar, so it opts out. */
 @media (max-width: 1023px) {

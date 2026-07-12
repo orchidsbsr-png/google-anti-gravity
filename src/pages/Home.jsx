@@ -30,7 +30,13 @@ const Home = () => {
                 <Hero />
                 <OrchardTicker />
                 <Origin />
+                {/* Origin (deep green) melts into the Promise (cream) */}
+                <div className="section-fade" aria-hidden="true"
+                    style={{ background: 'linear-gradient(to bottom, #2D3319, #F7F4EC)' }} />
                 <TrustHighlights />
+                {/* Promise (cream) melts into the orchard showcase (near-black green) */}
+                <div className="section-fade" aria-hidden="true"
+                    style={{ background: 'linear-gradient(to bottom, #F7F4EC, #1B2112)' }} />
                 <ProductShowcase />
                 <Reviews />
                 <Process />
@@ -92,6 +98,10 @@ const Home = () => {
                         {t('club.note')}
                     </p>
                 </section>
+
+                {/* Harvest Club (cream) melts into the living gift (sage) */}
+                <div className="section-fade" aria-hidden="true"
+                    style={{ background: 'linear-gradient(to bottom, #F7F4EC, #E9ECD3)' }} />
 
                 {/* Adopt a Tree CTA */}
                 <section style={{
