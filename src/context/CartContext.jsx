@@ -55,19 +55,12 @@ export const CartProvider = ({ children }) => {
         const cartItemId = `${variety.id}-${quantityKg}`;
         const existingItem = cartItems.find(item => item.id === cartItemId);
 
-        // Calculate price from inventory pack_sizes if available, otherwise fallback
+        // Single source of truth: the live price-per-kg (admin-editable in
+        // inventory, falling back to the catalog default) × pack weight.
+        // Stored pack prices are ignored — they drift when rates change.
         const invItem = inventory?.find(i => i.variety_id === variety.id);
-        let pricePerBox;
-        if (invItem && invItem.pack_sizes) {
-            const pack = invItem.pack_sizes.find(p => p.weight === quantityKg);
-            if (pack && pack.price) {
-                pricePerBox = pack.price;
-            } else {
-                pricePerBox = variety.price_per_kg * quantityKg;
-            }
-        } else {
-            pricePerBox = variety.price_per_kg * quantityKg;
-        }
+        const perKg = Number(invItem?.price_per_kg) > 0 ? Number(invItem.price_per_kg) : variety.price_per_kg;
+        const pricePerBox = Math.round(perKg * quantityKg);
 
         const newItem = {
             id: cartItemId,

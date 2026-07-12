@@ -211,18 +211,12 @@ const ProductDetail = () => {
                             <span className="price-label">Price:</span>
                             <span className="price-value">₹{
                                 (() => {
-                                    let pricePerBox;
-                                    if (invItemForDisplay && invItemForDisplay.pack_sizes) {
-                                        const pack = invItemForDisplay.pack_sizes.find(p => p.weight === selectedSize);
-                                        if (pack && pack.price) {
-                                            pricePerBox = pack.price;
-                                        } else {
-                                            pricePerBox = selectedVariety.price_per_kg * selectedSize;
-                                        }
-                                    } else {
-                                        pricePerBox = selectedVariety.price_per_kg * selectedSize;
-                                    }
-                                    return (pricePerBox * quantity).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+                                    // Always kg-rate × weight — same maths as the cart
+                                    const perKg = Number(invItemForDisplay?.price_per_kg) > 0
+                                        ? Number(invItemForDisplay.price_per_kg)
+                                        : selectedVariety.price_per_kg;
+                                    const pricePerBox = Math.round(perKg * selectedSize);
+                                    return (pricePerBox * quantity).toLocaleString('en-IN');
                                 })()
                             }</span>
                             <span className="price-unit">({quantity} box{quantity > 1 ? 'es' : ''} × {selectedSize}kg)</span>
@@ -233,9 +227,9 @@ const ProductDetail = () => {
                                 stockAvailable > 0 ? (
                                     <>
                                         <span className="in-stock">In Stock ({stockAvailable} units)</span>
-                                        {stockAvailable < 10 && (
+                                        {stockAvailable <= sellingFastThreshold && !invItemForDisplay?.is_preorder && (
                                             <div className="selling-fast-badge">
-                                                🔥 Selling Fast! Only {stockAvailable} left!
+                                                Selling fast — only {stockAvailable} left
                                             </div>
                                         )}
                                     </>

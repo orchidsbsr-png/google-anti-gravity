@@ -179,6 +179,8 @@ const Admin = () => {
         const isBestseller = edited.is_bestseller !== undefined ? edited.is_bestseller : (item.is_bestseller ?? false);
         const pricePerKg = edited.price_per_kg !== undefined ? parseFloat(edited.price_per_kg) || 0 : (item.price_per_kg || 0);
 
+        // Pack prices are DERIVED, always: current ₹/kg × weight. Editing the
+        // rate can never leave stale box prices behind (the old Nashpati bug).
         let finalPackSizes;
         if (edited.pack_sizes && Array.isArray(edited.pack_sizes)) {
             const isCompleteArray = edited.pack_sizes.length === 0 || (edited.pack_sizes[0] && edited.pack_sizes[0].weight !== undefined);
@@ -186,22 +188,23 @@ const Admin = () => {
                 finalPackSizes = edited.pack_sizes.filter(p => p).map(pack => ({
                     weight: Number(pack.weight),
                     stock: Number(pack.stock ?? 0),
-                    price: Number(pack.price ?? pricePerKg * pack.weight)
+                    price: Math.round(pricePerKg * Number(pack.weight))
                 }));
             } else {
                 finalPackSizes = (item.pack_sizes || []).map((pack, index) => {
-                    if (edited.pack_sizes[index]) {
-                        return {
-                            weight: Number(edited.pack_sizes[index].weight ?? pack.weight),
-                            stock: Number(edited.pack_sizes[index].stock ?? pack.stock),
-                            price: Number(edited.pack_sizes[index].price ?? pack.price)
-                        };
-                    }
-                    return pack;
+                    const stock = edited.pack_sizes[index]?.stock ?? pack.stock;
+                    return {
+                        weight: Number(pack.weight),
+                        stock: Number(stock),
+                        price: Math.round(pricePerKg * Number(pack.weight))
+                    };
                 });
             }
         } else {
-            finalPackSizes = item.pack_sizes || [];
+            finalPackSizes = (item.pack_sizes || []).map(pack => ({
+                ...pack,
+                price: Math.round(pricePerKg * Number(pack.weight))
+            }));
         }
 
         const success = await updateInventory(varietyId, isActive, isBestseller, pricePerKg, finalPackSizes);
