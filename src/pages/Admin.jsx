@@ -3,6 +3,7 @@ import { useInventory } from '../context/InventoryContext';
 import { useProduct } from '../context/ProductContext';
 import { supabase } from '../supabase';
 import AdminLogin from '../components/AdminLogin';
+import { LogoMark } from '../components/Logo';
 import '../components/AdminLogin.css';
 import './Admin.css';
 
@@ -545,14 +546,7 @@ const Admin = () => {
             {/* ===== Rail ===== */}
             <nav className="adm-rail" aria-label="Admin sections">
                 <div className="adm-brand">
-                    <svg width="30" height="30" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-                        <circle cx="32" cy="32" r="30" stroke="currentColor" strokeWidth="1.4" opacity=".5" />
-                        <g fill="currentColor">
-                            <circle cx="32" cy="19" r="8" /><circle cx="24" cy="26" r="7" /><circle cx="40" cy="26" r="7" /><circle cx="32" cy="28" r="8.6" />
-                            <path d="M30.4 34 L30.4 43.5 C30.4 46.8 29.3 49.6 27.4 51.6 C30.4 50.9 33.6 50.9 36.6 51.6 C34.7 49.6 33.6 46.8 33.6 43.5 L33.6 34 Z" />
-                        </g>
-                        <path d="M16.5 52.5 Q32 49 47.5 52.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" fill="none" />
-                    </svg>
+                    <LogoMark size={30} />
                     <span className="adm-brand-word">Naliban<small>Back Office</small></span>
                 </div>
 

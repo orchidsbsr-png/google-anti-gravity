@@ -10,19 +10,21 @@ import { Link } from 'react-router-dom';
  * variant: "mark" (seal only) | "full" (seal + wordmark)
  * to:      optional route — wraps the logo in a Link when set
  * colored: favicon colours — green tree, red apple (ring/hillside
- *          stay in currentColor so the seal still reads on photos)
+ *          stay in currentColor so the seal still reads on photos).
+ *          On by default so the brand looks the same everywhere.
+ * dark:    set on dark surfaces — the gold wordmark switches to its
+ *          brighter step for contrast
  */
 const TREE_GREEN = '#3E4A26';
 const APPLE_RED = '#C44536';
 
-export const LogoMark = ({ size = 44, colored = false }) => (
+export const LogoMark = ({ size = 44, colored = true }) => (
     <svg
         width={size}
         height={size}
         viewBox="0 0 64 64"
         fill="none"
         aria-hidden="true"
-        style={colored ? { filter: 'drop-shadow(0 3px 14px rgba(0, 0, 0, 0.35))' } : undefined}
     >
         {/* Seal ring */}
         <circle cx="32" cy="32" r="30" stroke="currentColor" strokeWidth="1.2" opacity="0.55" fill="none" />
@@ -47,7 +49,10 @@ export const LogoMark = ({ size = 44, colored = false }) => (
     </svg>
 );
 
-const Logo = ({ variant = 'full', size = 44, to = null, className = '', stacked = false, colored = false }) => {
+const Logo = ({ variant = 'full', size = 44, to = null, className = '', stacked = false, colored = true, dark = false }) => {
+    const wordColor = colored
+        ? (dark ? 'var(--gold-bright, #E0B028)' : 'var(--gold-deep, #B8860B)')
+        : 'inherit';
     const content = (
         <span
             className={`brand-logo ${className}`}
@@ -71,7 +76,7 @@ const Logo = ({ variant = 'full', size = 44, to = null, className = '', stacked 
                             fontSize: size * 0.44,
                             letterSpacing: '-0.01em',
                             whiteSpace: 'nowrap',
-                            color: colored ? 'var(--gold-bright, #E0B028)' : 'inherit',
+                            color: wordColor,
                         }}
                     >
                         Naliban Farms
@@ -87,7 +92,7 @@ const Logo = ({ variant = 'full', size = 44, to = null, className = '', stacked 
                             opacity: colored ? 0.85 : 0.66,
                             marginTop: '6px',
                             whiteSpace: 'nowrap',
-                            color: colored ? 'var(--gold-bright, #E0B028)' : 'inherit',
+                            color: wordColor,
                         }}
                     >
                         Orchards of Shimla

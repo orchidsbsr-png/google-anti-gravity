@@ -91,8 +91,8 @@ export default function Hero() {
                 pointerEvents: 'none',
                 marginBottom: 'clamp(18px, 3.5vh, 38px)'
             }}>
-                <div className="hero-reveal">
-                    <Logo variant="full" size={104} stacked colored />
+                <div className="hero-reveal" style={{ filter: 'drop-shadow(0 3px 14px rgba(0, 0, 0, 0.35))' }}>
+                    <Logo variant="full" size={104} stacked dark />
                 </div>
             </div>
 

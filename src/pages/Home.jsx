@@ -211,7 +211,7 @@ const Home = () => {
                     }}>
                         <div>
                             <div style={{ marginBottom: '16px' }}>
-                                <Logo variant="full" size={50} />
+                                <Logo variant="full" size={50} dark />
                             </div>
                             <p style={{ fontSize: '0.85rem', lineHeight: 1.8, opacity: 0.6, fontWeight: 300, maxWidth: '260px' }}>
                                 Naturally grown Himalayan fruit from Naliban Khatasu,
