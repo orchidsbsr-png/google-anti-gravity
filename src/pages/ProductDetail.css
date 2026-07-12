@@ -45,6 +45,29 @@
     margin-bottom: 0;
 }
 
+.wish-btn {
+    display: inline-grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid var(--hairline, rgba(28, 35, 19, 0.16));
+    background: var(--paper, #FDFCF7);
+    color: var(--ink-faint, #83866F);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+
+.wish-btn:active {
+    transform: scale(0.9);
+}
+
+.wish-btn.on {
+    color: var(--terracotta, #C44536);
+    border-color: rgba(196, 69, 54, 0.4);
+}
+
 .bestseller-badge {
     background: var(--gold, #D4A017);
     color: #2D3319;

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useProduct } from '../context/ProductContext';
 import { useCart } from '../context/CartContext';
 import { useInventory } from '../context/InventoryContext';
+import { useWishlist } from '../context/WishlistContext';
 import { useAuth } from '../context/AuthContext';
 import ProductImage from '../components/ProductImage';
 import VarietySelector from '../components/VarietySelector';
@@ -15,6 +16,7 @@ const ProductDetail = () => {
     const { getProductById, getVarietiesByProductId, loading } = useProduct();
     const { addToCart } = useCart();
     const { isInStock, getStock, settings, inventory, sellingFastThreshold } = useInventory();
+    const { isWished, toggleWish } = useWishlist();
     const { user } = useAuth(); // Get user
 
     const [product, setProduct] = useState(null);
@@ -90,6 +92,18 @@ const ProductDetail = () => {
             <div className="product-detail-content glass-strong">
                 <div className="title-row">
                     <h1>{selectedVariety ? selectedVariety.name : product.name}</h1>
+                    <button
+                        className={`wish-btn ${isWished(product.id) ? 'on' : ''}`}
+                        onClick={() => toggleWish(product.id)}
+                        aria-label={isWished(product.id) ? 'Remove from wishlist' : 'Save to wishlist'}
+                        aria-pressed={isWished(product.id)}
+                    >
+                        <svg width="20" height="20" viewBox="0 0 24 24"
+                            fill={isWished(product.id) ? 'currentColor' : 'none'}
+                            stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M20.4 4.6a5.5 5.5 0 0 0-7.8 0L12 5.2l-.6-.6a5.5 5.5 0 0 0-7.8 7.8l.6.6L12 20.8l7.8-7.8.6-.6a5.5 5.5 0 0 0 0-7.8z" />
+                        </svg>
+                    </button>
                     {selectedVariety && (() => {
                         const item = inventory.find(i => i.variety_id === selectedVariety.id);
                         if (!item || item.is_active === false) return null;

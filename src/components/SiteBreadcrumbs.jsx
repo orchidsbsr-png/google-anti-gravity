@@ -35,6 +35,8 @@ export default function SiteBreadcrumbs() {
         trail = [home, { label: 'Shop', to: '/search' }, { label: CATEGORY_LABELS[m.params.category] || 'Category' }];
     } else if (path === '/cart') {
         trail = [home, { label: 'Your Basket' }];
+    } else if (path === '/wishlist') {
+        trail = [home, { label: 'Wishlist' }];
     } else if (path === '/recipes') {
         trail = [home, { label: 'The Kitchen' }];
     } else if ((m = matchPath('/recipes/:id', path))) {

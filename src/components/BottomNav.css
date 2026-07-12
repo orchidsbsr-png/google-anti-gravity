@@ -1,231 +1,191 @@
-/* Floating Capsule Bottom Nav — Orchard Editorial.
-   Collapsed it sits as a FAB in the bottom-right corner (clear of
-   centered hero CTAs / scroll hints); expanded it grows leftward
-   out of the corner into the full capsule. */
-.bottom-nav {
-    position: fixed;
-    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-    right: 16px;
-    height: 66px;
-    z-index: 1000;
+/* Mobile fixed top bar + burger sheet. Desktop (>=1024px) uses the
+   left rail instead, so all of this hides there. */
 
-    background: rgba(253, 252, 247, 0.7);
-    backdrop-filter: blur(20px) saturate(1.4);
-    -webkit-backdrop-filter: blur(20px) saturate(1.4);
-    border-radius: 33px;
-    box-shadow: 0 18px 45px -12px rgba(28, 35, 19, 0.35);
-    border: 1px solid rgba(28, 35, 19, 0.08);
-
-    /* Squeeze Animation */
-    transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-        padding 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-        background-color 0.3s ease;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.mtb {
+    display: none;
 }
 
-/* Dark Mode Adaptation */
-[data-theme='dark'] .bottom-nav {
-    background: rgba(27, 33, 18, 0.72);
-    backdrop-filter: blur(20px) saturate(1.4);
-    -webkit-backdrop-filter: blur(20px) saturate(1.4);
-    border: 1px solid rgba(233, 236, 211, 0.12);
-    box-shadow: 0 18px 45px -10px rgba(0, 0, 0, 0.55);
+.mtb-sheet-backdrop {
+    display: none;
 }
 
-/* --- STATE: Collapsed --- */
-.bottom-nav.collapsed {
-    width: 66px;
-    padding: 0;
-}
+@media (max-width: 1023px) {
+    .mtb {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 960;
+        height: 58px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 14px 0 16px;
+        background: rgba(253, 252, 247, 0.82);
+        backdrop-filter: blur(18px) saturate(1.3);
+        -webkit-backdrop-filter: blur(18px) saturate(1.3);
+        border-bottom: 1px solid rgba(28, 35, 19, 0.1);
+    }
 
-/* --- STATE: Expanded --- */
-.bottom-nav.expanded {
-    width: calc(100vw - 32px);
-    max-width: 520px;
-    padding: 0;
-}
+    .mtb-logo {
+        display: inline-flex;
+        align-items: center;
+        color: var(--ink, #1C2313);
+    }
 
-/* Hamburger Toggle Button */
-.nav-toggle.hamburger {
-    position: absolute;
-    width: 66px;
-    height: 66px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #2D3319;
-    z-index: 2;
-    transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
+    .mtb-actions {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
 
-[data-theme='dark'] .nav-toggle.hamburger {
-    color: #E9ECD3;
-}
+    .mtb-btn {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        border: none;
+        background: none;
+        color: var(--ink-soft, #4A4F3E);
+        cursor: pointer;
+        transition: background 0.2s ease, color 0.2s ease;
+    }
 
-/* Toggle Visibility based on state */
-.bottom-nav.collapsed .nav-toggle.hamburger {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
-    pointer-events: auto;
-}
+    .mtb-btn:active,
+    .mtb-btn.active {
+        background: var(--sage, #E9ECD3);
+        color: var(--ink, #1C2313);
+    }
 
-.bottom-nav.expanded .nav-toggle.hamburger {
-    opacity: 0;
-    transform: scale(0.5) rotate(-90deg);
-    pointer-events: none;
-}
+    .mtb-badge {
+        position: absolute;
+        top: 4px;
+        right: 3px;
+        min-width: 16px;
+        height: 16px;
+        padding: 0 4px;
+        border-radius: 999px;
+        background: var(--terracotta, #C44536);
+        color: #fff;
+        font: 700 0.6rem/16px var(--font-sans, 'Inter', sans-serif);
+        text-align: center;
+        font-variant-numeric: tabular-nums;
+    }
 
-/* Items Container */
-.nav-items-container {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    width: 100%;
-    min-width: 0;
-    padding: 0 10px;
-    opacity: 0;
-    transform: scale(0.9);
-    pointer-events: none;
-    transition: opacity 0.2s ease 0s, transform 0.3s ease 0s;
-}
+    /* ---- Burger sheet ---- */
 
-.bottom-nav.expanded .nav-items-container {
-    opacity: 1;
-    transform: scale(1);
-    pointer-events: auto;
-    transition: opacity 0.4s ease 0.15s, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s;
-}
+    .mtb-sheet-backdrop {
+        display: block;
+        position: fixed;
+        inset: 58px 0 0 0;
+        z-index: 950;
+        background: rgba(27, 33, 18, 0.45);
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+        animation: mtbFade 0.25s ease both;
+    }
 
-/* Menu items pop in one after another when the dock expands */
-.bottom-nav.expanded .nav-items-container .nav-item {
-    animation: navItemDrop 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
+    .mtb-sheet {
+        max-height: calc(100vh - 58px);
+        max-height: calc(100svh - 58px);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        background: var(--paper, #FDFCF7);
+        border-radius: 0 0 22px 22px;
+        padding: 10px 22px 26px;
+        box-shadow: 0 30px 60px -20px rgba(20, 24, 10, 0.45);
+        animation: mtbSlide 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
 
-.bottom-nav.expanded .nav-items-container .nav-item:nth-child(1) { animation-delay: 0.10s; }
-.bottom-nav.expanded .nav-items-container .nav-item:nth-child(2) { animation-delay: 0.15s; }
-.bottom-nav.expanded .nav-items-container .nav-item:nth-child(3) { animation-delay: 0.20s; }
-.bottom-nav.expanded .nav-items-container .nav-item:nth-child(4) { animation-delay: 0.25s; }
-.bottom-nav.expanded .nav-items-container .nav-item:nth-child(5) { animation-delay: 0.30s; }
-.bottom-nav.expanded .nav-items-container .nav-item:nth-child(6) { animation-delay: 0.35s; }
-.bottom-nav.expanded .nav-items-container .nav-item:nth-child(7) { animation-delay: 0.40s; }
-.bottom-nav.expanded .nav-items-container .nav-item:nth-child(8) { animation-delay: 0.45s; }
-
-@keyframes navItemDrop {
-    from {
+    .mtb-sheet-item {
+        display: block;
+        width: 100%;
+        text-align: left;
+        background: none;
+        border: none;
+        text-decoration: none;
+        cursor: pointer;
         opacity: 0;
-        transform: translateY(10px) scale(0.94);
+        animation: mtbItem 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
+
+    /* Items drop in one after another */
+    .mtb-sheet-item:nth-child(1) { animation-delay: 0.05s; }
+    .mtb-sheet-item:nth-child(2) { animation-delay: 0.09s; }
+    .mtb-sheet-item:nth-child(3) { animation-delay: 0.13s; }
+    .mtb-sheet-item:nth-child(4) { animation-delay: 0.17s; }
+    .mtb-sheet-item:nth-child(5) { animation-delay: 0.21s; }
+    .mtb-sheet-item:nth-child(6) { animation-delay: 0.25s; }
+    .mtb-sheet-item:nth-child(7) { animation-delay: 0.29s; }
+    .mtb-sheet-item:nth-child(8) { animation-delay: 0.33s; }
+    .mtb-sheet-item:nth-child(9) { animation-delay: 0.37s; }
+    .mtb-sheet-item:nth-child(10) { animation-delay: 0.41s; }
+    .mtb-sheet-item:nth-child(11) { animation-delay: 0.45s; }
+    .mtb-sheet-item:nth-child(12) { animation-delay: 0.49s; }
+    .mtb-sheet-item:nth-child(13) { animation-delay: 0.53s; }
+    .mtb-sheet-item:nth-child(14) { animation-delay: 0.57s; }
+    .mtb-sheet-item:nth-child(15) { animation-delay: 0.61s; }
+    .mtb-sheet-item:nth-child(16) { animation-delay: 0.65s; }
+
+    .mtb-sheet-link {
+        font-family: var(--font-serif, 'Fraunces', Georgia, serif);
+        font-size: 1.15rem;
+        color: var(--ink, #1C2313);
+        padding: 16px 2px 14px;
+        border-bottom: 1px solid var(--hairline, rgba(28, 35, 19, 0.1));
     }
-}
 
-@media (prefers-reduced-motion: reduce) {
-    .bottom-nav.expanded .nav-items-container .nav-item {
-        animation: none;
-        opacity: 1;
+    /* Section headings — deliberately NOT clickable */
+    .mtb-sheet-head {
+        margin: 0;
+        padding: 20px 2px 8px;
+        font: 700 0.64rem/1 var(--font-sans, 'Inter', sans-serif);
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--gold-deep, #B8860B);
+        pointer-events: none;
     }
-}
 
-/* Individual Item Styles */
-.nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    color: #83866F;
-    font-size: 0.62rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-    width: auto;
-    height: auto;
-    background: none;
-    border: none;
-    cursor: pointer;
-    flex: 1;
-    position: relative;
-    padding: 8px 0;
-    font-family: 'Inter', sans-serif;
-}
+    .mtb-sheet-sub {
+        font-family: var(--font-sans, 'Inter', sans-serif);
+        font-size: 0.92rem;
+        font-weight: 500;
+        color: var(--ink-soft, #4A4F3E);
+        padding: 11px 2px 11px 14px;
+        border-left: 2px solid var(--sage-deep, #D8DDBC);
+        margin-left: 4px;
+        transition: color 0.2s ease, border-color 0.2s ease;
+    }
 
-[data-theme='dark'] .nav-item {
-    color: #8E9179;
-}
+    .mtb-sheet-sub:active {
+        color: var(--ink, #1C2313);
+        border-left-color: var(--gold, #D4A017);
+    }
 
-.nav-item.active {
-    color: #2D3319;
-    transform: translateY(-2px);
-}
+    @keyframes mtbFade {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
 
-[data-theme='dark'] .nav-item.active {
-    color: #E9ECD3;
-}
+    @keyframes mtbSlide {
+        from { transform: translateY(-14px); opacity: 0.6; }
+        to { transform: translateY(0); opacity: 1; }
+    }
 
-.nav-item.active::after {
-    content: '';
-    position: absolute;
-    bottom: 2px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: #C44536;
-}
+    @keyframes mtbItem {
+        from { opacity: 0; transform: translateY(-8px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 
-.nav-item .icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 4px;
-    transition: transform 0.2s ease;
-}
-
-.nav-item:active .icon {
-    transform: scale(0.9);
-}
-
-.icon-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.bottom-nav .badge {
-    position: absolute;
-    top: -7px;
-    right: -9px;
-    background: #C44536;
-    color: white;
-    font-size: 0.62rem;
-    min-width: 17px;
-    height: 17px;
-    border-radius: 9px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    box-shadow: 0 2px 6px rgba(196, 69, 54, 0.45);
-    padding: 0 4px;
-    border: 2px solid rgba(253, 252, 247, 0.9);
-}
-
-.close-btn {
-    color: #C44536 !important;
-}
-
-.lang-icon {
-    font-size: 0.95rem;
-    font-weight: 700;
-    line-height: 21px;
+    @media (prefers-reduced-motion: reduce) {
+        .mtb-sheet-backdrop,
+        .mtb-sheet,
+        .mtb-sheet-item {
+            animation: none;
+            opacity: 1;
+            transform: none;
+        }
+    }
 }

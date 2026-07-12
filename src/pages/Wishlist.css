@@ -1,0 +1,126 @@
+.wl-page {
+    background: var(--cream, #F7F4EC);
+    min-height: 80vh;
+    padding: clamp(28px, 4vw, 60px) 6vw clamp(80px, 9vw, 130px);
+}
+
+.wl-eyebrow {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.35em;
+    color: var(--gold, #D4A017);
+    margin-bottom: 12px;
+}
+
+.wl-title {
+    font-family: var(--font-serif, 'Fraunces', Georgia, serif);
+    font-size: clamp(2rem, 4.4vw, 3.4rem);
+    font-weight: 400;
+    color: var(--gold-deep, #B8860B);
+    margin: 0 0 clamp(26px, 3.5vw, 44px);
+}
+
+.wl-title em {
+    font-weight: 300;
+}
+
+.wl-empty {
+    max-width: 420px;
+    display: grid;
+    gap: 22px;
+    justify-items: start;
+}
+
+.wl-empty p {
+    font-size: 1rem;
+    line-height: 1.7;
+    font-weight: 300;
+    color: var(--ink-soft, #4A4F3E);
+    margin: 0;
+}
+
+.wl-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: clamp(14px, 2vw, 24px);
+    max-width: 1160px;
+}
+
+.wl-card {
+    background: var(--paper, #FDFCF7);
+    border: 1px solid var(--hairline, rgba(28, 35, 19, 0.12));
+    border-radius: var(--radius-md, 18px);
+    overflow: hidden;
+    transition: transform 0.3s var(--ease-out-expo, ease), box-shadow 0.3s ease;
+}
+
+.wl-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-soft, 0 18px 50px -18px rgba(28, 35, 19, 0.22));
+}
+
+.wl-visual {
+    display: block;
+    aspect-ratio: 4 / 3;
+    background: var(--sage, #E9ECD3);
+}
+
+.wl-visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.wl-body {
+    padding: 16px 18px 18px;
+}
+
+.wl-name {
+    font-family: var(--font-serif, 'Fraunces', Georgia, serif);
+    font-size: 1.12rem;
+    font-weight: 500;
+    color: var(--ink, #1C2313);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.wl-note {
+    font-size: 0.82rem;
+    font-weight: 300;
+    line-height: 1.5;
+    color: var(--ink-faint, #83866F);
+    margin: 0 0 14px;
+}
+
+.wl-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.wl-view {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--terracotta, #C44536);
+    text-decoration: none;
+}
+
+.wl-remove {
+    background: none;
+    border: none;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--ink-faint, #83866F);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+}
+
+.wl-remove:hover {
+    color: var(--error, #B3402F);
+}

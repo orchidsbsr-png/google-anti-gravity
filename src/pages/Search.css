@@ -434,3 +434,32 @@
     background: rgba(196, 69, 54, 0.92);
     color: #F7F4EC;
 }
+
+/* ---- Card wishlist heart ---- */
+
+.card-wish {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(253, 252, 247, 0.85);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: var(--ink-soft, #4A4F3E);
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.15s ease;
+}
+
+.card-wish:active {
+    transform: scale(0.88);
+}
+
+.card-wish.on {
+    color: var(--terracotta, #C44536);
+}

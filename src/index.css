@@ -312,6 +312,18 @@ input, textarea, select {
   display: flex;
 }
 
+/* Phones have a fixed top bar — push all page content below it.
+   The admin brings its own fixed bar, so it opts out. */
+@media (max-width: 1023px) {
+  .App {
+    padding-top: 58px;
+  }
+
+  .App:has(.adm) {
+    padding-top: 0;
+  }
+}
+
 @media (max-width: 768px) {
   .hero-brand {
     transform: scale(0.74);

@@ -5,6 +5,7 @@ import { AddressProvider } from './context/AddressContext'
 import { ProductProvider } from './context/ProductContext'
 import { InventoryProvider } from './context/InventoryContext'
 import { AuthProvider } from './context/AuthContext'
+import { WishlistProvider } from './context/WishlistContext'
 import { ThemeProvider } from './context/ThemeContext'
 import { LanguageProvider } from './context/LanguageContext'
 import BottomNav from './components/BottomNav'
@@ -57,6 +58,7 @@ const ComingSoon = lazyWithReload(() => import('./pages/ComingSoon'))
 const InformationCentre = lazyWithReload(() => import('./pages/InformationCentre'))
 const ArticleDetail = lazyWithReload(() => import('./pages/ArticleDetail'))
 const ShopCategory = lazyWithReload(() => import('./pages/ShopCategory'))
+const Wishlist = lazyWithReload(() => import('./pages/Wishlist'))
 
 const PageLoader = () => (
     <div style={{
@@ -85,6 +87,7 @@ function App() {
         <ThemeProvider>
             <LanguageProvider>
             <AuthProvider>
+                <WishlistProvider>
                 <ProductProvider>
                     <InventoryProvider>
                         <CartProvider>
@@ -111,6 +114,7 @@ function App() {
                                             <Route path="/information-centre" element={<InformationCentre />} />
                                             <Route path="/information-centre/:slug" element={<ArticleDetail />} />
                                             <Route path="/shop/:category" element={<ShopCategory />} />
+                                            <Route path="/wishlist" element={<Wishlist />} />
 
                                             {/* Protected Routes */}
                                             <Route path="/cart" element={
@@ -155,6 +159,7 @@ function App() {
                         </CartProvider>
                     </InventoryProvider>
                 </ProductProvider>
+                </WishlistProvider>
             </AuthProvider>
             </LanguageProvider>
         </ThemeProvider>

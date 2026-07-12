@@ -1,7 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { useLanguage } from '../context/LanguageContext';
+import { useWishlist } from '../context/WishlistContext';
+import { BRAND, whatsappLink } from '../config/brand';
+import { LogoMark } from './Logo';
 import './BottomNav.css';
 
 const iconProps = {
@@ -50,6 +52,18 @@ export const Icons = {
             <path d="M4.5 20.5c1.5-3.5 4.2-5 7.5-5s6 1.5 7.5 5" />
         </svg>
     ),
+    heart: (
+        <svg {...iconProps}>
+            <path d="M20.4 4.6a5.5 5.5 0 0 0-7.8 0L12 5.2l-.6-.6a5.5 5.5 0 0 0-7.8 7.8l.6.6L12 20.8l7.8-7.8.6-.6a5.5 5.5 0 0 0 0-7.8z" />
+        </svg>
+    ),
+    burger: (
+        <svg {...iconProps}>
+            <line x1="4" y1="7" x2="20" y2="7" />
+            <line x1="4" y1="12" x2="20" y2="12" />
+            <line x1="4" y1="17" x2="13" y2="17" />
+        </svg>
+    ),
     sun: (
         <svg {...iconProps}>
             <circle cx="12" cy="12" r="4" />
@@ -87,80 +101,121 @@ export const Icons = {
     ),
 };
 
+// Mobile-only fixed top bar (the desktop rail handles >=1024px).
+// Logo left; wishlist / cart / profile / burger right. The burger opens
+// a full menu where "Shop" is a heading with its subcategories listed —
+// not a clickable link itself.
 const BottomNav = () => {
     const { getCartItemCount } = useCart();
-    const { t } = useLanguage();
+    const { count: wishCount } = useWishlist();
+    const navigate = useNavigate();
+    const location = useLocation();
     const cartCount = getCartItemCount();
 
-    const [isOpen, setIsOpen] = useState(false);
-    const navRef = useRef(null);
-    const location = useLocation();
+    const [menuOpen, setMenuOpen] = useState(false);
 
-    // Close menu when clicking outside of it
+    // Close the menu on navigation and lock page scroll while it's open
+    useEffect(() => { setMenuOpen(false); }, [location]);
     useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (navRef.current && !navRef.current.contains(event.target)) {
-                setIsOpen(false);
-            }
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
+        document.body.style.overflow = menuOpen ? 'hidden' : '';
+        return () => { document.body.style.overflow = ''; };
+    }, [menuOpen]);
 
-    // Close menu when navigating to a new page
-    useEffect(() => {
-        setIsOpen(false);
-    }, [location]);
-
-    const handleMenuToggle = () => setIsOpen(!isOpen);
-    const handleLinkClick = () => setIsOpen(false);
-
-    // Distraction-free checkout: hide global nav while paying
-    if (location.pathname === '/payment') {
+    // Distraction-free checkout, and the admin has its own fixed bar
+    if (location.pathname === '/payment' || location.pathname === '/admin') {
         return null;
     }
 
+    const goToStory = () => {
+        setMenuOpen(false);
+        if (location.pathname === '/') {
+            document.querySelector('.origin-section')?.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            navigate('/');
+            setTimeout(() => {
+                document.querySelector('.origin-section')?.scrollIntoView({ behavior: 'smooth' });
+            }, 450);
+        }
+    };
+
+    const shopLinks = [
+        { to: '/search', label: 'All Fruits' },
+        { to: '/search?query=Walnut', label: 'Walnut (Akhrot)' },
+        { to: '/shop/dehydrated', label: 'Dehydrated Fruits · soon' },
+        { to: '/shop/jams', label: 'Fruit Jams · soon' },
+        { to: '/shop/chutneys', label: 'Fruit Chutneys · soon' },
+        { to: '/coming-soon', label: 'Everything Coming Soon' },
+    ];
+
+    const exploreLinks = [
+        { to: '/recipes', label: 'The Kitchen' },
+        { to: '/information-centre', label: 'Information Centre' },
+        { to: '/adopt-a-tree', label: 'Adopt a Tree' },
+        { to: '/orders', label: 'My Orders' },
+    ];
+
     return (
-        <nav ref={navRef} className={`bottom-nav ${isOpen ? 'expanded' : 'collapsed'}`}>
-            {/* The Hamburger Button that triggers the expansion */}
-            <button className="nav-toggle hamburger" onClick={handleMenuToggle} aria-label="Open menu">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-                    <line x1="4" y1="8" x2="20" y2="8"></line>
-                    <line x1="4" y1="16" x2="14" y2="16"></line>
-                </svg>
-            </button>
+        <>
+            <header className="mtb" role="banner">
+                <Link to="/" className="mtb-logo" aria-label="Naliban Farms — home">
+                    <LogoMark size={38} />
+                </Link>
 
-            {/* The original full navigation pill list */}
-            <div className="nav-items-container">
-                <button className="nav-item close-btn" onClick={handleMenuToggle} aria-label="Close menu">
-                    <span className="icon">{Icons.close}</span>
-                    <span className="label">{t('nav.close')}</span>
-                </button>
+                <div className="mtb-actions">
+                    <NavLink to="/wishlist" className={({ isActive }) => `mtb-btn ${isActive ? 'active' : ''}`} aria-label={`Wishlist, ${wishCount} items`}>
+                        {Icons.heart}
+                        {wishCount > 0 && <span className="mtb-badge">{wishCount}</span>}
+                    </NavLink>
+                    <NavLink to="/cart" className={({ isActive }) => `mtb-btn ${isActive ? 'active' : ''}`} aria-label={`Cart, ${cartCount} items`}>
+                        {Icons.cart}
+                        {cartCount > 0 && <span className="mtb-badge">{cartCount}</span>}
+                    </NavLink>
+                    <NavLink to="/profile" className={({ isActive }) => `mtb-btn ${isActive ? 'active' : ''}`} aria-label="Profile">
+                        {Icons.profile}
+                    </NavLink>
+                    <button
+                        className="mtb-btn"
+                        aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+                        aria-expanded={menuOpen}
+                        onClick={() => setMenuOpen(o => !o)}
+                    >
+                        {menuOpen ? Icons.close : Icons.burger}
+                    </button>
+                </div>
+            </header>
 
-                <NavLink to="/" onClick={handleLinkClick} className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
-                    <span className="icon">{Icons.home}</span>
-                    <span className="label">{t('nav.home')}</span>
-                </NavLink>
+            {menuOpen && (
+                <div className="mtb-sheet-backdrop" onClick={() => setMenuOpen(false)}>
+                    <nav className="mtb-sheet" aria-label="Menu" onClick={(e) => e.stopPropagation()}>
+                        <button className="mtb-sheet-item mtb-sheet-link" onClick={goToStory}>
+                            Our Story
+                        </button>
 
-                <NavLink to="/search" onClick={handleLinkClick} className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
-                    <span className="icon">{Icons.search}</span>
-                    <span className="label">{t('nav.shop')}</span>
-                </NavLink>
+                        <p className="mtb-sheet-item mtb-sheet-head">Shop</p>
+                        {shopLinks.map(l => (
+                            <Link key={l.label} to={l.to} className="mtb-sheet-item mtb-sheet-sub">
+                                {l.label}
+                            </Link>
+                        ))}
 
-                <NavLink to="/cart" onClick={handleLinkClick} className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
-                    <div className="icon-wrapper">
-                        <span className="icon">{Icons.cart}</span>
-                        {cartCount > 0 && <span className="badge">{cartCount}</span>}
-                    </div>
-                    <span className="label">{t('nav.cart')}</span>
-                </NavLink>
+                        <p className="mtb-sheet-item mtb-sheet-head">Explore</p>
+                        {exploreLinks.map(l => (
+                            <Link key={l.label} to={l.to} className="mtb-sheet-item mtb-sheet-sub">
+                                {l.label}
+                            </Link>
+                        ))}
 
-                <NavLink to="/profile" onClick={handleLinkClick} className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
-                    <span className="icon">{Icons.profile}</span>
-                    <span className="label">{t('nav.profile')}</span>
-                </NavLink>
-            </div>
-        </nav>
+                        <p className="mtb-sheet-item mtb-sheet-head">Contact</p>
+                        <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="mtb-sheet-item mtb-sheet-sub">
+                            WhatsApp Us
+                        </a>
+                        <a href={`mailto:${BRAND.supportEmail}`} className="mtb-sheet-item mtb-sheet-sub">
+                            {BRAND.supportEmail}
+                        </a>
+                    </nav>
+                </div>
+            )}
+        </>
     );
 };
 

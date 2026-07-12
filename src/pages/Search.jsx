@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useProduct } from '../context/ProductContext';
 import { useInventory } from '../context/InventoryContext';
+import { useWishlist } from '../context/WishlistContext';
 import { useLanguage } from '../context/LanguageContext';
 import { HARVEST_SEASONS, seasonLabel, returnsLabel } from '../data/seasons';
 import LazyVideo from '../components/LazyVideo';
@@ -10,6 +11,7 @@ import './Search.css';
 const Search = () => {
     const { products, loading, getVarietiesByProductId } = useProduct();
     const { inventory, sellingFastThreshold } = useInventory();
+    const { isWished, toggleWish } = useWishlist();
     const { t } = useLanguage();
     const [searchParams] = useSearchParams();
     const [searchTerm, setSearchTerm] = useState('');
@@ -155,6 +157,18 @@ const Search = () => {
                                 className="product-video"
                             />
                             <span className="card-index">{String(index + 1).padStart(2, '0')}</span>
+                            <button
+                                className={`card-wish ${isWished(product.id) ? 'on' : ''}`}
+                                aria-label={isWished(product.id) ? `Remove ${product.name} from wishlist` : `Save ${product.name} to wishlist`}
+                                aria-pressed={isWished(product.id)}
+                                onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleWish(product.id); }}
+                            >
+                                <svg width="17" height="17" viewBox="0 0 24 24"
+                                    fill={isWished(product.id) ? 'currentColor' : 'none'}
+                                    stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M20.4 4.6a5.5 5.5 0 0 0-7.8 0L12 5.2l-.6-.6a5.5 5.5 0 0 0-7.8 7.8l.6.6L12 20.8l7.8-7.8.6-.6a5.5 5.5 0 0 0 0-7.8z" />
+                                </svg>
+                            </button>
                             {(flags.bestseller || flags.sellingFast) && (
                                 <span className="card-flags">
                                     {flags.bestseller && <span className="flag-pill flag-gold">Bestseller</span>}
