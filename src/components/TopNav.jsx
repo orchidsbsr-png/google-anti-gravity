@@ -35,7 +35,7 @@ const TopNav = () => {
 
     const shopItems = [
         { to: '/search', label: 'All Fruits' },
-        { to: '/search?query=Walnuts', label: 'Nuts · Walnuts' },
+        { to: '/search?query=Walnut', label: 'Nuts · Walnut (Akhrot)' },
         { to: '/shop/dehydrated', label: 'Dehydrated Fruits · soon' },
         { to: '/shop/jams', label: 'Fruit Jams · soon' },
         { to: '/shop/chutneys', label: 'Chutneys · soon' },

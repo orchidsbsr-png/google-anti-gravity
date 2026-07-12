@@ -55,11 +55,11 @@ export const PRODUCTS = [
     },
     {
         id: 7,
-        name: 'Walnuts',
+        name: 'Himalayan Walnut (Akhrot)',
         category: 'nuts',
-        description: 'Himalayan walnuts from high-altitude orchards — available fresh in the green shell or cured in the classic brown shell.',
+        description: 'Akhrot from high-altitude Himalayan orchards — thin-shelled, full-kerneled walnuts, sun-cured the traditional way.',
         taste_profile: 'Rich, buttery, and mildly earthy',
-        texture_profile: 'Crunchy kernel with a tender bite when fresh',
+        texture_profile: 'Crunchy, dense kernel',
         image_path: '/images/products/Walnuts.png'
     },
     {
@@ -175,18 +175,9 @@ export const VARIETIES = [
     {
         id: 14,
         product_id: 7,
-        name: 'Green-shell Walnuts',
-        price_per_kg: 899,
-        description: 'Fresh-season walnuts in the green husk — moist, milky kernels with a delicate flavour you only get right after harvest.',
-        taste_profile: 'Fresh, milky, and subtly sweet',
-        texture_profile: 'Tender, moist kernel'
-    },
-    {
-        id: 15,
-        product_id: 7,
-        name: 'Brown-shell Walnuts',
-        price_per_kg: 749,
-        description: 'Classic cured walnuts in the brown shell — dried the traditional way for a deeper flavour and longer shelf life.',
+        name: 'Himalayan Walnut (Akhrot)',
+        price_per_kg: 799,
+        description: 'High-altitude akhrot, sun-cured in the shell for a deep, buttery flavour and a long shelf life.',
         taste_profile: 'Rich, buttery, and earthy',
         texture_profile: 'Crunchy, dense kernel'
     },
@@ -217,7 +208,6 @@ export const INITIAL_INVENTORY = [
     { variety_id: 11, is_active: true, pack_sizes: [{ weight: 5, stock: 40, price: 299 * 5 }, { weight: 10, stock: 20, price: 299 * 10 }] },
     { variety_id: 12, is_active: true, pack_sizes: [{ weight: 5, stock: 20, price: 599 * 5 }, { weight: 10, stock: 10, price: 599 * 10 }] },
     // Walnuts sell in smaller packs than fruit
-    { variety_id: 14, is_active: true, pack_sizes: [{ weight: 1, stock: 30, price: 899 }, { weight: 2, stock: 20, price: 899 * 2 }, { weight: 5, stock: 10, price: 899 * 5 }] },
-    { variety_id: 15, is_active: true, pack_sizes: [{ weight: 1, stock: 40, price: 749 }, { weight: 2, stock: 25, price: 749 * 2 }, { weight: 5, stock: 12, price: 749 * 5 }] },
+    { variety_id: 14, is_active: true, pack_sizes: [{ weight: 1, stock: 30, price: 799 }, { weight: 2, stock: 20, price: 799 * 2 }, { weight: 5, stock: 10, price: 799 * 5 }] },
     { variety_id: 16, is_active: true, pack_sizes: [{ weight: 2, stock: 25, price: 449 * 2 }, { weight: 5, stock: 15, price: 449 * 5 }] }
 ];
