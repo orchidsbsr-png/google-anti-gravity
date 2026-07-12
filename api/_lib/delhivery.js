@@ -90,14 +90,17 @@ export async function createDelhiveryShipment(orderId, providedOrder = null) {
     // 3. Prepare Delhivery Payload
     // NOTE: pickup_location.name must EXACTLY match a pickup address
     // registered in the Delhivery One account, or the manifest is refused.
-    const pickupName = process.env.PICKUP_NAME || "Fresh_Farm_Himachal";
+    // NALIBAN_JUBBAL = the Delhivery office drop-off point in Jubbal
+    // (Ward No 5, Nagar Panchayat, near SBI Bank, Main Bazaar, 171205),
+    // registered via /api/shipment action=create_warehouse.
+    const pickupName = process.env.PICKUP_NAME || "NALIBAN_JUBBAL";
     const payload = {
         "format": "json",
         "data": JSON.stringify({
             "pickup_location": {
                 "name": pickupName,
-                "add": process.env.PICKUP_ADDRESS || "Himachal Pradesh",
-                "pin": process.env.PICKUP_PINCODE || "171206"
+                "add": process.env.PICKUP_ADDRESS || "Ward No 5, Nagar Panchayat, near SBI Bank, Main Bazaar, Jubbal",
+                "pin": process.env.PICKUP_PINCODE || "171205"
             },
             "shipments": [{
                 "waybill": waybill,

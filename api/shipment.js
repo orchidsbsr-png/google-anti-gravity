@@ -64,6 +64,40 @@ async function createPickup({ pickup_date, pickup_time, pickup_location, expecte
     return json; // { pickup_id, incoming_center_name, ... }
 }
 
+// One-time setup: register a pickup point with Delhivery. Every
+// manifest's pickup_location.name must exactly match a warehouse
+// registered here (or in Delhivery One → Settings → Pickup addresses).
+async function createWarehouse({ name, phone, address, city, pin, state }) {
+    const body = {
+        name,
+        email: 'help@nalibanfarms.in',
+        phone: String(phone),
+        address,
+        city,
+        pin: String(pin),
+        country: 'India',
+        return_address: address,
+        return_pin: String(pin),
+        return_city: city,
+        return_state: state || 'Himachal Pradesh',
+        return_country: 'India'
+    };
+    const response = await fetch('https://track.delhivery.com/api/backend/clientwarehouse/create/', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Token ${TOKEN}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(body)
+    });
+    const json = await response.json().catch(() => ({}));
+    if (!response.ok || json.success === false) {
+        throw new Error(json.error?.message || json.error || JSON.stringify(json));
+    }
+    return json;
+}
+
 async function cancelShipment(waybill) {
     const response = await fetch('https://track.delhivery.com/api/p/edit', {
         method: 'POST',
@@ -100,7 +134,15 @@ export default async function handler(req, res) {
         }
 
         if (req.method === 'POST') {
-            const { action, waybill, pickup_date, pickup_time, pickup_location, expected_package_count } = req.body || {};
+            const { action, waybill, pickup_date, pickup_time, pickup_location, expected_package_count,
+                name, phone, address, city, pin, state } = req.body || {};
+
+            if (action === 'create_warehouse') {
+                if (!name || !phone || !address || !city || !pin) {
+                    return res.status(400).json({ error: 'name, phone, address, city and pin are required' });
+                }
+                return res.status(200).json(await createWarehouse({ name, phone, address, city, pin, state }));
+            }
 
             if (action === 'cancel') {
                 if (!waybill) return res.status(400).json({ error: 'Waybill is required' });
