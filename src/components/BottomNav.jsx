@@ -142,24 +142,9 @@ const BottomNav = () => {
                     <span className="label">{t('nav.home')}</span>
                 </NavLink>
 
-                <NavLink to="/recipes" onClick={handleLinkClick} className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
-                    <span className="icon">{Icons.kitchen}</span>
-                    <span className="label">{t('nav.kitchen')}</span>
-                </NavLink>
-
                 <NavLink to="/search" onClick={handleLinkClick} className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
                     <span className="icon">{Icons.search}</span>
                     <span className="label">{t('nav.shop')}</span>
-                </NavLink>
-
-                <NavLink to="/information-centre" onClick={handleLinkClick} className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
-                    <span className="icon">{Icons.info}</span>
-                    <span className="label">Info</span>
-                </NavLink>
-
-                <NavLink to="/adopt-a-tree" onClick={handleLinkClick} className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
-                    <span className="icon">{Icons.tree}</span>
-                    <span className="label">Adopt</span>
                 </NavLink>
 
                 <NavLink to="/cart" onClick={handleLinkClick} className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>

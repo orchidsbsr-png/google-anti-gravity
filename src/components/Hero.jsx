@@ -146,36 +146,9 @@ export default function Hero() {
                 <div className="hero-reveal" style={{
                     marginTop: '44px',
                     display: 'flex',
-                    gap: '16px',
-                    justifyContent: 'center',
-                    flexWrap: 'wrap'
+                    justifyContent: 'center'
                 }}>
                     <Link to="/search" className="btn-terracotta">{t('hero.shop')}</Link>
-                    <button
-                        onClick={() => document.querySelector('.origin-section')?.scrollIntoView({ behavior: 'smooth' })}
-                        style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            padding: '1rem 2.4rem',
-                            borderRadius: '999px',
-                            border: '1px solid rgba(247,244,236,0.5)',
-                            background: 'transparent',
-                            color: '#F7F4EC',
-                            cursor: 'pointer',
-                            fontFamily: 'inherit',
-                            fontSize: '0.8rem',
-                            fontWeight: 600,
-                            letterSpacing: '0.18em',
-                            textTransform: 'uppercase',
-                            backdropFilter: 'blur(6px)',
-                            transition: 'background 0.3s ease, border-color 0.3s ease'
-                        }}
-                        onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(247,244,236,0.14)'; e.currentTarget.style.borderColor = '#F7F4EC'; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(247,244,236,0.5)'; }}
-                    >
-                        {t('hero.story')}
-                    </button>
                 </div>
             </div>
 
