@@ -55,9 +55,10 @@ export const getProductImage = (productName, { variety } = {}) => {
         'Walnuts': 'Walnuts.webp',
         'Akhrot': 'Walnuts.webp',
 
-        'Orchard Boxes': 'Orchard Box.png',
-        'Apple Discovery Box': 'Orchard Box.png',
-        'Himalayan Harvest Box': 'Orchard Box.png'
+        'Orchard Boxes': 'Apple Discovery Box.jpg',
+        'Apple Discovery Box': 'Apple Discovery Box.jpg',
+        // Until the Harvest Box gets its own photo, both mixes share the apple-box shot
+        'Himalayan Harvest Box': 'Apple Discovery Box.jpg'
     };
 
     // Case-insensitive lookup

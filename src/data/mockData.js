@@ -70,7 +70,7 @@ export const PRODUCTS = [
         description: 'Curated mixed boxes from the orchard — several varieties, one box, picked together after you order. The easiest way to taste the whole harvest, and a ready-made gift.',
         taste_profile: 'A spectrum — sweet, tart, floral, and rich in one box',
         texture_profile: 'Crisp apples to soft stone fruit, packed layer by layer',
-        image_path: '/images/products/Orchard Box.png'
+        image_path: '/images/products/Apple Discovery Box.jpg'
     },
     {
         id: 8,
