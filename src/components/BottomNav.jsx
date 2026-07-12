@@ -67,6 +67,24 @@ export const Icons = {
             <line x1="18" y1="6" x2="6" y2="18" />
         </svg>
     ),
+    info: (
+        <svg {...iconProps}>
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+        </svg>
+    ),
+    tree: (
+        <svg {...iconProps}>
+            <path d="M12 3l5 6h-3l4 5h-4l3 4H7l3-4H6l4-5H7l5-6z" />
+            <path d="M12 18v3" />
+        </svg>
+    ),
+    mail: (
+        <svg {...iconProps}>
+            <rect x="2" y="4" width="20" height="16" rx="2" />
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+        </svg>
+    ),
 };
 
 const BottomNav = () => {
@@ -132,6 +150,16 @@ const BottomNav = () => {
                 <NavLink to="/search" onClick={handleLinkClick} className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
                     <span className="icon">{Icons.search}</span>
                     <span className="label">{t('nav.shop')}</span>
+                </NavLink>
+
+                <NavLink to="/information-centre" onClick={handleLinkClick} className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
+                    <span className="icon">{Icons.info}</span>
+                    <span className="label">Info</span>
+                </NavLink>
+
+                <NavLink to="/adopt-a-tree" onClick={handleLinkClick} className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
+                    <span className="icon">{Icons.tree}</span>
+                    <span className="label">Adopt</span>
                 </NavLink>
 
                 <NavLink to="/cart" onClick={handleLinkClick} className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>

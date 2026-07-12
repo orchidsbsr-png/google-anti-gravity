@@ -102,6 +102,38 @@
     transition: opacity 0.4s ease 0.15s, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s;
 }
 
+/* Menu items pop in one after another when the dock expands */
+.bottom-nav.expanded .nav-items-container .nav-item {
+    animation: navItemDrop 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.bottom-nav.expanded .nav-items-container .nav-item:nth-child(1) { animation-delay: 0.10s; }
+.bottom-nav.expanded .nav-items-container .nav-item:nth-child(2) { animation-delay: 0.15s; }
+.bottom-nav.expanded .nav-items-container .nav-item:nth-child(3) { animation-delay: 0.20s; }
+.bottom-nav.expanded .nav-items-container .nav-item:nth-child(4) { animation-delay: 0.25s; }
+.bottom-nav.expanded .nav-items-container .nav-item:nth-child(5) { animation-delay: 0.30s; }
+.bottom-nav.expanded .nav-items-container .nav-item:nth-child(6) { animation-delay: 0.35s; }
+.bottom-nav.expanded .nav-items-container .nav-item:nth-child(7) { animation-delay: 0.40s; }
+.bottom-nav.expanded .nav-items-container .nav-item:nth-child(8) { animation-delay: 0.45s; }
+
+@keyframes navItemDrop {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.94);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bottom-nav.expanded .nav-items-container .nav-item {
+        animation: none;
+        opacity: 1;
+    }
+}
+
 /* Individual Item Styles */
 .nav-item {
     display: flex;

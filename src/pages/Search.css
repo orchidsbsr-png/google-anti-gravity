@@ -58,7 +58,7 @@
     font-weight: 600;
     letter-spacing: 0.28em;
     text-transform: uppercase;
-    color: var(--gold, #C9A227);
+    color: var(--gold, #D4A017);
     white-space: nowrap;
     margin-right: 6px;
 }
@@ -361,4 +361,76 @@
     .search-field {
         min-width: 0;
     }
+}
+
+/* ---- Shelf chips (All / Bestsellers / Selling Fast) ---- */
+
+.shelf-chips {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 18px 0 4px;
+}
+
+.shelf-chip {
+    border: 1px solid var(--hairline, rgba(28, 35, 19, 0.16));
+    background: var(--paper, #FDFCF7);
+    color: var(--ink-soft, #4A4F3E);
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-family: var(--font-sans, 'Inter', sans-serif);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.shelf-chip:hover {
+    border-color: var(--gold, #D4A017);
+    color: var(--ink, #1C2313);
+}
+
+.shelf-chip.active {
+    background: var(--forest-700, #2D3319);
+    border-color: var(--forest-700, #2D3319);
+    color: var(--cream, #F7F4EC);
+}
+
+/* ---- Card badges ---- */
+
+.card-flags {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    z-index: 2;
+}
+
+.flag-pill {
+    display: inline-block;
+    border-radius: 999px;
+    padding: 5px 11px;
+    font-family: var(--font-sans, 'Inter', sans-serif);
+    font-size: 0.56rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+.flag-gold {
+    background: rgba(212, 160, 23, 0.92);
+    color: #2D3319;
+}
+
+.flag-fire {
+    background: rgba(196, 69, 54, 0.92);
+    color: #F7F4EC;
 }

@@ -46,15 +46,22 @@
 }
 
 .bestseller-badge {
-    background: var(--gold, #C9A227);
-    color: #fff;
+    background: var(--gold, #D4A017);
+    color: #2D3319;
     padding: 0.4rem 0.9rem;
     border-radius: 999px;
     font-size: 0.68rem;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     box-shadow: 0 8px 20px -8px rgba(201, 162, 39, 0.6);
+    white-space: nowrap;
+}
+
+.bestseller-badge.selling-fast {
+    background: var(--terracotta, #C44536);
+    color: #F7F4EC;
+    box-shadow: 0 8px 20px -8px rgba(196, 69, 54, 0.55);
 }
 
 .description {
@@ -67,7 +74,7 @@
 
 .origin-note {
     background: var(--cream-warm, #F2EDE0);
-    border-left: 2px solid var(--gold, #C9A227);
+    border-left: 2px solid var(--gold, #D4A017);
     border-radius: 0 14px 14px 0;
     padding: 1.1rem 1.3rem;
     margin-bottom: 2rem;
@@ -79,7 +86,7 @@
     font-weight: 600;
     letter-spacing: 0.3em;
     text-transform: uppercase;
-    color: var(--gold, #C9A227);
+    color: var(--gold, #D4A017);
     margin-bottom: 0.5rem;
 }
 

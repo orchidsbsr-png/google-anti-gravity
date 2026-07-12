@@ -52,6 +52,24 @@ export const PRODUCTS = [
         taste_profile: 'Sweet and slightly tart with a rich, fruity flavor',
         texture_profile: 'Firm and crisp, bursting with juice',
         image_path: '/images/products/Cherries.png'
+    },
+    {
+        id: 7,
+        name: 'Walnuts',
+        category: 'nuts',
+        description: 'Himalayan walnuts from high-altitude orchards — available fresh in the green shell or cured in the classic brown shell.',
+        taste_profile: 'Rich, buttery, and mildly earthy',
+        texture_profile: 'Crunchy kernel with a tender bite when fresh',
+        image_path: '/images/products/Walnuts.png'
+    },
+    {
+        id: 8,
+        name: 'Wild Himalayan Apricot (Chullu)',
+        category: 'apricots',
+        description: 'Known locally as Chullu — a small, intensely flavoured wild apricot that grows in the high Himalayan valleys. Prized for eating fresh, drying, and traditional oils.',
+        taste_profile: 'Bright, tangy-sweet with an intense apricot aroma',
+        texture_profile: 'Soft, juicy flesh around a small stone',
+        image_path: '/images/products/Chullu.png'
     }
 ];
 
@@ -152,7 +170,36 @@ export const VARIETIES = [
     // Single Varieties
     { id: 10, product_id: 3, name: 'Fuzzy Kiwis', price_per_kg: 479 },
     { id: 11, product_id: 4, name: 'Plums', price_per_kg: 299 },
-    { id: 12, product_id: 6, name: 'Cherries', price_per_kg: 599 }
+    { id: 12, product_id: 6, name: 'Cherries', price_per_kg: 599 },
+    // Walnuts
+    {
+        id: 14,
+        product_id: 7,
+        name: 'Green-shell Walnuts',
+        price_per_kg: 899,
+        description: 'Fresh-season walnuts in the green husk — moist, milky kernels with a delicate flavour you only get right after harvest.',
+        taste_profile: 'Fresh, milky, and subtly sweet',
+        texture_profile: 'Tender, moist kernel'
+    },
+    {
+        id: 15,
+        product_id: 7,
+        name: 'Brown-shell Walnuts',
+        price_per_kg: 749,
+        description: 'Classic cured walnuts in the brown shell — dried the traditional way for a deeper flavour and longer shelf life.',
+        taste_profile: 'Rich, buttery, and earthy',
+        texture_profile: 'Crunchy, dense kernel'
+    },
+    // Wild Himalayan Apricot
+    {
+        id: 16,
+        product_id: 8,
+        name: 'Wild Himalayan Apricot (Chullu)',
+        price_per_kg: 449,
+        description: 'The wild mountain apricot of Himachal, hand-collected in season. Small fruit, huge flavour.',
+        taste_profile: 'Tangy-sweet and intensely aromatic',
+        texture_profile: 'Soft and juicy'
+    }
 ];
 
 export const INITIAL_INVENTORY = [
@@ -168,5 +215,9 @@ export const INITIAL_INVENTORY = [
     { variety_id: 13, is_active: true, pack_sizes: [{ weight: 0.5, stock: 40, price: 320 }, { weight: 1, stock: 30, price: 599 }, { weight: 5, stock: 15, price: 599 * 5 }] }, // Fuyu
     { variety_id: 10, is_active: true, pack_sizes: [{ weight: 5, stock: 25, price: 479 * 5 }, { weight: 10, stock: 12, price: 479 * 10 }] },
     { variety_id: 11, is_active: true, pack_sizes: [{ weight: 5, stock: 40, price: 299 * 5 }, { weight: 10, stock: 20, price: 299 * 10 }] },
-    { variety_id: 12, is_active: true, pack_sizes: [{ weight: 5, stock: 20, price: 599 * 5 }, { weight: 10, stock: 10, price: 599 * 10 }] }
+    { variety_id: 12, is_active: true, pack_sizes: [{ weight: 5, stock: 20, price: 599 * 5 }, { weight: 10, stock: 10, price: 599 * 10 }] },
+    // Walnuts sell in smaller packs than fruit
+    { variety_id: 14, is_active: true, pack_sizes: [{ weight: 1, stock: 30, price: 899 }, { weight: 2, stock: 20, price: 899 * 2 }, { weight: 5, stock: 10, price: 899 * 5 }] },
+    { variety_id: 15, is_active: true, pack_sizes: [{ weight: 1, stock: 40, price: 749 }, { weight: 2, stock: 25, price: 749 * 2 }, { weight: 5, stock: 12, price: 749 * 5 }] },
+    { variety_id: 16, is_active: true, pack_sizes: [{ weight: 2, stock: 25, price: 449 * 2 }, { weight: 5, stock: 15, price: 449 * 5 }] }
 ];

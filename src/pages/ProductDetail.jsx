@@ -14,7 +14,7 @@ const ProductDetail = () => {
     const navigate = useNavigate();
     const { getProductById, getVarietiesByProductId, loading } = useProduct();
     const { addToCart } = useCart();
-    const { isInStock, getStock, settings, inventory } = useInventory();
+    const { isInStock, getStock, settings, inventory, sellingFastThreshold } = useInventory();
     const { user } = useAuth(); // Get user
 
     const [product, setProduct] = useState(null);
@@ -90,9 +90,18 @@ const ProductDetail = () => {
             <div className="product-detail-content glass-strong">
                 <div className="title-row">
                     <h1>{selectedVariety ? selectedVariety.name : product.name}</h1>
-                    {selectedVariety && getStock(selectedVariety.id, 5) > 0 && inventory.find(i => i.variety_id === selectedVariety.id)?.is_bestseller && (
-                        <span className="bestseller-badge">🏆 Best Seller</span>
-                    )}
+                    {selectedVariety && (() => {
+                        const item = inventory.find(i => i.variety_id === selectedVariety.id);
+                        if (!item || item.is_active === false) return null;
+                        const total = (item.pack_sizes || []).reduce((s, p) => s + (Number(p.stock) || 0), 0);
+                        if (total <= 0) return null;
+                        return (
+                            <>
+                                {item.is_bestseller && <span className="bestseller-badge">Bestseller</span>}
+                                {total <= sellingFastThreshold && <span className="bestseller-badge selling-fast">Selling Fast</span>}
+                            </>
+                        );
+                    })()}
                 </div>
                 <p className="description">
                     {selectedVariety?.description || product.description}

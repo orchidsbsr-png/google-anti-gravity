@@ -9,10 +9,11 @@ import './Search.css';
 
 const Search = () => {
     const { products, loading, getVarietiesByProductId } = useProduct();
-    const { inventory } = useInventory();
+    const { inventory, sellingFastThreshold } = useInventory();
     const { t } = useLanguage();
     const [searchParams] = useSearchParams();
     const [searchTerm, setSearchTerm] = useState('');
+    const [shelf, setShelf] = useState('all'); // all | bestsellers | selling-fast
 
     // A product is "in season" if any of its varieties has live stock
     const hasStock = (productId) => {
@@ -25,6 +26,21 @@ const Search = () => {
         });
     };
 
+    // Bestseller is set by hand in the admin; Selling Fast is automatic —
+    // any active variety whose total stock has dropped to the threshold.
+    const getFlags = (productId) => {
+        const flags = { bestseller: false, sellingFast: false };
+        if (!inventory.length) return flags;
+        (getVarietiesByProductId(productId) || []).forEach(v => {
+            const item = inventory.find(i => i.variety_id === v.id);
+            if (!item || item.is_active === false) return;
+            const total = (item.pack_sizes || []).reduce((s, p) => s + (Number(p.stock) || 0), 0);
+            if (item.is_bestseller && total > 0) flags.bestseller = true;
+            if (total > 0 && total <= sellingFastThreshold) flags.sellingFast = true;
+        });
+        return flags;
+    };
+
     useEffect(() => {
         const query = searchParams.get('query');
         if (query) {
@@ -32,9 +48,15 @@ const Search = () => {
         }
     }, [searchParams]);
 
-    const filteredProducts = products.filter(product =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredProducts = products.filter(product => {
+        if (!product.name.toLowerCase().includes(searchTerm.toLowerCase())) return false;
+        if (shelf === 'all') return true;
+        const flags = getFlags(product.id);
+        return shelf === 'bestsellers' ? flags.bestseller : flags.sellingFast;
+    });
+
+    const bestsellerCount = products.filter(p => getFlags(p.id).bestseller).length;
+    const sellingFastCount = products.filter(p => getFlags(p.id).sellingFast).length;
 
     // Mock TCX codes for the aesthetic
     const getTCXCode = (id) => {
@@ -88,6 +110,18 @@ const Search = () => {
                     ))}
                 </div>
 
+                <div className="shelf-chips" role="tablist" aria-label="Shelves">
+                    <button role="tab" aria-selected={shelf === 'all'} className={`shelf-chip ${shelf === 'all' ? 'active' : ''}`} onClick={() => setShelf('all')}>
+                        All
+                    </button>
+                    <button role="tab" aria-selected={shelf === 'bestsellers'} className={`shelf-chip ${shelf === 'bestsellers' ? 'active' : ''}`} onClick={() => setShelf('bestsellers')}>
+                        Bestsellers{bestsellerCount > 0 ? ` · ${bestsellerCount}` : ''}
+                    </button>
+                    <button role="tab" aria-selected={shelf === 'selling-fast'} className={`shelf-chip ${shelf === 'selling-fast' ? 'active' : ''}`} onClick={() => setShelf('selling-fast')}>
+                        Selling Fast{sellingFastCount > 0 ? ` · ${sellingFastCount}` : ''}
+                    </button>
+                </div>
+
                 <div className="collection-toolbar">
                     <span className="collection-count">
                         {filteredProducts.length} {t('shop.inSeason')}
@@ -111,6 +145,7 @@ const Search = () => {
             <div className="gallery-grid">
                 {filteredProducts.map((product, index) => {
                     const inSeason = hasStock(product.id);
+                    const flags = getFlags(product.id);
                     return (
                     <Link to={`/product/${product.id}`} key={product.id} className={`pantone-card ${inSeason ? '' : 'off-season'}`}>
                         <div className="card-visual">
@@ -120,6 +155,12 @@ const Search = () => {
                                 className="product-video"
                             />
                             <span className="card-index">{String(index + 1).padStart(2, '0')}</span>
+                            {(flags.bestseller || flags.sellingFast) && (
+                                <span className="card-flags">
+                                    {flags.bestseller && <span className="flag-pill flag-gold">Bestseller</span>}
+                                    {flags.sellingFast && <span className="flag-pill flag-fire">Selling Fast</span>}
+                                </span>
+                            )}
                             {!inSeason && (
                                 <span className="season-stamp">{returnsLabel(product.name)}</span>
                             )}

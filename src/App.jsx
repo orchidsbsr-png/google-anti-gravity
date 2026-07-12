@@ -9,30 +9,50 @@ import { ThemeProvider } from './context/ThemeContext'
 import { LanguageProvider } from './context/LanguageContext'
 import BottomNav from './components/BottomNav'
 import TopNav from './components/TopNav'
+import SiteBreadcrumbs from './components/SiteBreadcrumbs'
 import CartToast from './components/CartToast'
 import ProtectedRoute from './components/ProtectedRoute'
 import Home from './pages/Home'
 import AuthCallback from './pages/AuthCallback'
 import './App.css'
 
+// A stale tab open across a deploy asks for a lazy chunk's old hashed
+// filename, which 404s and falls through the SPA rewrite to index.html —
+// the browser then fails to parse HTML as JS. Reload once to pick up the
+// new build instead of surfacing that as a crash (worst possible timing
+// right after checkout).
+const lazyWithReload = (importer) => lazy(() => importer().catch((error) => {
+    const key = 'chunk-reload-attempted';
+    if (!sessionStorage.getItem(key)) {
+        sessionStorage.setItem(key, '1');
+        window.location.reload();
+        return new Promise(() => {}); // reloading; never resolve
+    }
+    throw error;
+}));
+
 // Route-level code splitting — Home stays eager for instant first paint,
 // everything else loads on demand.
-const Search = lazy(() => import('./pages/Search'))
-const ProductDetail = lazy(() => import('./pages/ProductDetail'))
-const Cart = lazy(() => import('./pages/Cart'))
-const Payment = lazy(() => import('./pages/Payment'))
-const OrderConfirmation = lazy(() => import('./pages/OrderConfirmation'))
-const Profile = lazy(() => import('./pages/Profile'))
-const HealthBenefits = lazy(() => import('./pages/HealthBenefits'))
-const Recipes = lazy(() => import('./pages/Recipes'))
-const RecipeDetail = lazy(() => import('./pages/RecipeDetail'))
-const Admin = lazy(() => import('./pages/Admin'))
-const Login = lazy(() => import('./pages/Login'))
-const MyOrders = lazy(() => import('./pages/MyOrders'))
-const OrderSummary = lazy(() => import('./pages/OrderSummary'))
-const Legal = lazy(() => import('./pages/Legal'))
-const FarmFresh = lazy(() => import('./pages/FarmFresh'))
-const AdoptATree = lazy(() => import('./pages/AdoptATree'))
+const Search = lazyWithReload(() => import('./pages/Search'))
+const ProductDetail = lazyWithReload(() => import('./pages/ProductDetail'))
+const Cart = lazyWithReload(() => import('./pages/Cart'))
+const Payment = lazyWithReload(() => import('./pages/Payment'))
+const OrderConfirmation = lazyWithReload(() => import('./pages/OrderConfirmation'))
+const Profile = lazyWithReload(() => import('./pages/Profile'))
+const HealthBenefits = lazyWithReload(() => import('./pages/HealthBenefits'))
+const Recipes = lazyWithReload(() => import('./pages/Recipes'))
+const RecipeDetail = lazyWithReload(() => import('./pages/RecipeDetail'))
+const Admin = lazyWithReload(() => import('./pages/Admin'))
+const Login = lazyWithReload(() => import('./pages/Login'))
+const MyOrders = lazyWithReload(() => import('./pages/MyOrders'))
+const OrderSummary = lazyWithReload(() => import('./pages/OrderSummary'))
+const Legal = lazyWithReload(() => import('./pages/Legal'))
+const FarmFresh = lazyWithReload(() => import('./pages/FarmFresh'))
+const AdoptATree = lazyWithReload(() => import('./pages/AdoptATree'))
+const ComingSoon = lazyWithReload(() => import('./pages/ComingSoon'))
+const InformationCentre = lazyWithReload(() => import('./pages/InformationCentre'))
+const ArticleDetail = lazyWithReload(() => import('./pages/ArticleDetail'))
+const ShopCategory = lazyWithReload(() => import('./pages/ShopCategory'))
 
 const PageLoader = () => (
     <div style={{
@@ -68,6 +88,7 @@ function App() {
                                 <Router>
                                     <div className="App">
                                         <TopNav />
+                                        <SiteBreadcrumbs />
                                         <RouteFade>
                                         <Suspense fallback={<PageLoader />}>
                                         <Routes>
@@ -82,6 +103,10 @@ function App() {
                                             <Route path="/recipes/:id" element={<RecipeDetail />} />
                                             <Route path="/farm-fresh" element={<FarmFresh />} />
                                             <Route path="/adopt-a-tree" element={<AdoptATree />} />
+                                            <Route path="/coming-soon" element={<ComingSoon />} />
+                                            <Route path="/information-centre" element={<InformationCentre />} />
+                                            <Route path="/information-centre/:slug" element={<ArticleDetail />} />
+                                            <Route path="/shop/:category" element={<ShopCategory />} />
 
                                             {/* Protected Routes */}
                                             <Route path="/cart" element={
