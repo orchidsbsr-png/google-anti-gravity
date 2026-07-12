@@ -72,33 +72,6 @@
     font-weight: 300;
 }
 
-.origin-note {
-    background: var(--cream-warm, #F2EDE0);
-    border-left: 2px solid var(--gold, #D4A017);
-    border-radius: 0 14px 14px 0;
-    padding: 1.1rem 1.3rem;
-    margin-bottom: 2rem;
-}
-
-.origin-note-label {
-    display: block;
-    font-size: 0.62rem;
-    font-weight: 600;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--gold, #D4A017);
-    margin-bottom: 0.5rem;
-}
-
-.origin-note p {
-    font-family: var(--font-serif, 'Fraunces', serif);
-    font-style: italic;
-    font-size: 0.98rem;
-    line-height: 1.7;
-    color: var(--ink-soft, #4A4F3E);
-    margin: 0;
-}
-
 .profiles {
     display: flex;
     gap: 2.5rem;

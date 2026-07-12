@@ -6,7 +6,7 @@ import { useInventory } from '../context/InventoryContext';
 import { useAuth } from '../context/AuthContext';
 import ProductImage from '../components/ProductImage';
 import VarietySelector from '../components/VarietySelector';
-import { BRAND, whatsappLink } from '../config/brand';
+import { whatsappLink } from '../config/brand';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
@@ -107,10 +107,6 @@ const ProductDetail = () => {
                     {selectedVariety?.description || product.description}
                 </p>
 
-                <div className="origin-note">
-                    <span className="origin-note-label">Single Origin</span>
-                    <p>{BRAND.story}</p>
-                </div>
 
                 <div className="profiles">
                     <div className="profile-item">
