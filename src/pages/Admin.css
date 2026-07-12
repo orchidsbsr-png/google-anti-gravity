@@ -766,6 +766,21 @@
 
 /* ---------- Inventory ---------- */
 
+.adm-season {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font: 700 0.62rem/1 var(--font-sans, 'Inter', sans-serif);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint, #83866F);
+    white-space: nowrap;
+}
+
+.adm-season.on {
+    color: var(--success, #4A6B2A);
+}
+
 .adm-inv-row {
     border-bottom: 1px solid var(--hairline, rgba(28, 35, 19, 0.12));
     padding: 12px 18px;

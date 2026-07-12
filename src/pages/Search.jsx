@@ -176,7 +176,10 @@ const Search = () => {
                                 </span>
                             )}
                             {!inSeason && (
-                                <span className="season-stamp">{returnsLabel(product.name)}</span>
+                                <span className="season-veil" aria-hidden="true">
+                                    <span className="season-veil-tag">Out of season</span>
+                                    <span className="season-veil-when">{returnsLabel(product.name)}</span>
+                                </span>
                             )}
                         </div>
                         <div className="card-data">

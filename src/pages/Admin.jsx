@@ -384,6 +384,29 @@ const Admin = () => {
         setSavingPicking(false);
     };
 
+    // Season switch: one toggle flips every variety of a fruit in or out
+    // of the shop at once (e.g. cherry season ends → cherries disappear).
+    const handleToggleProductSeason = async (group) => {
+        const anyActive = group.vars.some(v => {
+            const inv = inventory.find(i => i.variety_id === v.id);
+            return inv ? inv.is_active !== false : true;
+        });
+        const target = !anyActive;
+        for (const v of group.vars) {
+            const item = inventory.find(i => i.variety_id === v.id) || {
+                is_active: true, is_bestseller: false,
+                price_per_kg: v.price_per_kg, pack_sizes: []
+            };
+            await updateInventory(
+                v.id,
+                target,
+                item.is_bestseller ?? false,
+                item.price_per_kg || v.price_per_kg,
+                item.pack_sizes || []
+            );
+        }
+    };
+
     // ---- filtered lists ----
     const filteredOrders = orders.filter(order => {
         if (orderStatusFilter === 'to_pack' && !TO_PACK.includes(order.status)) return false;
@@ -836,10 +859,26 @@ const Admin = () => {
                             </div>
                         </div>
 
-                        {productGroups.map(group => (
+                        {productGroups.map(group => {
+                            const groupActive = group.vars.some(v => {
+                                const inv = inventory.find(i => i.variety_id === v.id);
+                                return inv ? inv.is_active !== false : true;
+                            });
+                            return (
                             <div className="adm-card" key={group.product.id}>
                                 <div className="adm-card-head">
                                     <span>{group.product.name} · {group.vars.length} variet{group.vars.length !== 1 ? 'ies' : 'y'}</span>
+                                    <span className={`adm-season ${groupActive ? 'on' : ''}`}>
+                                        {groupActive ? 'In season' : 'Out of season'}
+                                        <button
+                                            className={`adm-switch ${groupActive ? '' : 'off'}`}
+                                            title={groupActive
+                                                ? `End the season — hide all ${group.product.name} from the shop`
+                                                : `Start the season — show all ${group.product.name} in the shop`}
+                                            aria-pressed={groupActive}
+                                            onClick={() => handleToggleProductSeason(group)}
+                                        />
+                                    </span>
                                 </div>
                                 {group.vars.map(variety => {
                                     const invItem = inventory.find(i => i.variety_id === variety.id) || {
@@ -983,7 +1022,8 @@ const Admin = () => {
                                     );
                                 })}
                             </div>
-                        ))}
+                            );
+                        })}
                         {productGroups.length === 0 && (
                             <p className="adm-empty" style={{ padding: '22px' }}>No products match “{searchTerm}”.</p>
                         )}
