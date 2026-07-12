@@ -22,9 +22,13 @@ import './App.css'
 // new build instead of surfacing that as a crash (worst possible timing
 // right after checkout).
 const lazyWithReload = (importer) => lazy(() => importer().catch((error) => {
-    const key = 'chunk-reload-attempted';
-    if (!sessionStorage.getItem(key)) {
-        sessionStorage.setItem(key, '1');
+    // Allow another auto-recovery after 30s so a tab that lives across
+    // several deploys keeps healing itself, while a genuinely broken
+    // build can still only trigger one reload per half-minute (no loop).
+    const key = 'chunk-reload-at';
+    const last = Number(sessionStorage.getItem(key) || 0);
+    if (Date.now() - last > 30000) {
+        sessionStorage.setItem(key, String(Date.now()));
         window.location.reload();
         return new Promise(() => {}); // reloading; never resolve
     }
