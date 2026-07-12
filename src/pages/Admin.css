@@ -964,6 +964,78 @@
     border: 1px solid var(--hairline, rgba(28, 35, 19, 0.1));
 }
 
+/* ---------- Customer sheet table ---------- */
+
+.adm-tbl-wrap {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+}
+
+.adm-table {
+    width: 100%;
+    min-width: 880px;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+}
+
+.adm-table th {
+    text-align: left;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint, #83866F);
+    background: var(--paper, #FDFCF7);
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--hairline, rgba(28, 35, 19, 0.12));
+    white-space: nowrap;
+}
+
+.adm-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--hairline, rgba(28, 35, 19, 0.12));
+    color: var(--ink-soft, #4A4F3E);
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.adm-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.adm-table tbody tr:hover td {
+    background: rgba(233, 236, 211, 0.28);
+}
+
+.adm-td-strong {
+    color: var(--ink, #1C2313);
+    font-weight: 600;
+}
+
+.adm-awb-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.adm-mini-btn {
+    display: inline-grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    border: 1px solid var(--hairline, rgba(28, 35, 19, 0.14));
+    background: var(--paper, #FDFCF7);
+    color: var(--ink-soft, #4A4F3E);
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.adm-mini-btn:hover {
+    background: var(--sage, #E9ECD3);
+}
+
 /* ---------- Responsive ---------- */
 
 @media (max-width: 1050px) {
@@ -982,11 +1054,13 @@
 }
 
 @media (max-width: 760px) {
-    /* Phones scroll the page normally; the rail becomes a sticky top bar */
+    /* Phones scroll the page normally; the rail is FIXED at the top so
+       the menu is always visible, and the content scrolls under it. */
     .adm {
         grid-template-columns: 1fr;
         height: auto;
         overflow: visible;
+        padding-top: 58px; /* clears the fixed rail */
     }
 
     .adm-main {
@@ -995,15 +1069,23 @@
     }
 
     .adm-rail {
-        position: sticky;
+        position: fixed;
         top: 0;
-        z-index: 30;
-        height: auto;
+        left: 0;
+        right: 0;
+        z-index: 40;
+        height: 58px;
         overflow-y: visible;
         flex-direction: row;
         align-items: center;
         padding: 8px 12px;
         gap: 8px;
+        box-shadow: 0 8px 24px -12px rgba(20, 24, 10, 0.45);
+    }
+
+    /* The topbar sticks just below the fixed rail */
+    .adm-topbar {
+        top: 58px;
     }
 
     .adm-brand {

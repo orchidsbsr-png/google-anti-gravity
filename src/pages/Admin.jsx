@@ -34,6 +34,8 @@ const I = {
     leaf: <svg {...ic} width="14" height="14"><path d="M12 22V10" /><path d="M12 10C12 5.5 8.5 3 4.5 3c0 4.5 3.5 7 7.5 7z" /><path d="M12 13c0-3.8 3-6 6.5-6c0 3.8-3 6-6.5 6z" /></svg>,
     label: <svg {...ic} width="14" height="14"><path d="M20.6 13.4 12 22 2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8z" /><circle cx="7.5" cy="7.5" r="1.5" /></svg>,
     sheet: <svg {...ic} width="14" height="14"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6" /><path d="M8 13h8M8 17h8" /></svg>,
+    table: <svg {...ic} width="17" height="17"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M3 10h18M9 10v10M15 10v10" /></svg>,
+    copy: <svg {...ic} width="13" height="13"><rect x="9" y="9" width="12" height="12" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg>,
 };
 
 const STATUS_META = {
@@ -80,6 +82,7 @@ const Admin = () => {
     const [nowPickingDraft, setNowPickingDraft] = useState('');
     const [savingPicking, setSavingPicking] = useState(false);
     const [thresholdDraft, setThresholdDraft] = useState(10);
+    const [copiedAwb, setCopiedAwb] = useState(null);
 
     useEffect(() => {
         setThresholdDraft(sellingFastThreshold);
@@ -242,12 +245,26 @@ const Admin = () => {
         const confirm2 = window.prompt("Type 'DELETE' to confirm clearing all orders:");
         if (confirm2 !== 'DELETE') return;
         try {
-            const { error } = await supabase.from('orders').delete().not('id', 'is', null);
+            // .select() returns the deleted rows — without it a permission
+            // block deletes nothing yet reports no error.
+            const { data, error } = await supabase
+                .from('orders')
+                .delete()
+                .not('id', 'is', null)
+                .select('id');
             if (error) throw error;
-            alert('All orders have been cleared.');
+            if (!data || data.length === 0) {
+                alert(
+                    'Nothing was deleted — the database refused silently.\n\n' +
+                    'Your orders table is missing the DELETE permission. Run this once in Supabase → SQL Editor:\n\n' +
+                    'CREATE POLICY "delete orders" ON orders FOR DELETE USING (true);'
+                );
+                return;
+            }
+            alert(`Deleted ${data.length} order${data.length !== 1 ? 's' : ''}.`);
         } catch (error) {
             console.error('Error clearing orders:', error);
-            alert('Failed to clear orders.');
+            alert(`Failed to clear orders: ${error.message}`);
         }
     };
 
@@ -392,6 +409,53 @@ const Admin = () => {
         .map(p => ({ product: p, vars: filteredVarieties.filter(v => v.product_id === p.id) }))
         .filter(g => g.vars.length > 0);
 
+    // Customer sheet: every order as one row — searchable by anything
+    const sheetOrders = orders.filter(o => {
+        const s = searchTerm.toLowerCase();
+        if (!s) return true;
+        const d = o.customer_details || {};
+        return (
+            o.id.toLowerCase().includes(s) ||
+            (d.name || '').toLowerCase().includes(s) ||
+            (d.phone || '').toLowerCase().includes(s) ||
+            (d.email || '').toLowerCase().includes(s) ||
+            (o.awb_number || '').toLowerCase().includes(s) ||
+            o.status.toLowerCase().includes(s)
+        );
+    });
+
+    const copyAwb = (awb) => {
+        navigator.clipboard?.writeText(awb);
+        setCopiedAwb(awb);
+        setTimeout(() => setCopiedAwb(null), 1500);
+    };
+
+    const exportSheetCsv = () => {
+        const esc = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
+        const rows = sheetOrders.map(o => {
+            const d = o.customer_details || {};
+            const addr = typeof d.address === 'object' && d.address !== null ? d.address : {};
+            return [
+                `#${o.id.slice(0, 8).toUpperCase()}`,
+                new Date(o.created_at).toLocaleDateString('en-IN'),
+                d.name || '', d.phone || '', d.email || '',
+                addr.city || '', addr.pincode || '',
+                o.total_price || 0,
+                o.payment_method === 'cod' ? 'COD' : 'Online',
+                o.status,
+                o.awb_number || ''
+            ].map(esc).join(',');
+        });
+        const csv = ['Order,Date,Name,Phone,Email,City,Pincode,Total,Payment,Status,AWB', ...rows].join('\r\n');
+        // BOM so Excel opens it as UTF-8
+        const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `naliban-orders-${new Date().toISOString().slice(0, 10)}.csv`;
+        a.click();
+        URL.revokeObjectURL(a.href);
+    };
+
     const orderFilters = [
         { key: 'All', label: 'All', count: orders.length },
         { key: 'to_pack', label: 'To pack', count: toPackOrders.length },
@@ -408,7 +472,7 @@ const Admin = () => {
         return <AdminLogin onLogin={() => setIsAuthenticated(true)} />;
     }
 
-    const viewTitles = { overview: 'Overview', orders: 'Orders', inventory: 'Inventory' };
+    const viewTitles = { overview: 'Overview', orders: 'Orders', inventory: 'Inventory', sheet: 'Customer Sheet' };
 
     // ---- shared render helpers ----
     const statusPill = (status) => {
@@ -562,6 +626,9 @@ const Admin = () => {
                         {I.inventory}<span className="adm-rail-label">Inventory</span>
                         {lowStock.length > 0 && <span className="adm-badge crit">{lowStock.length}</span>}
                     </button>
+                    <button className={`adm-rail-link ${view === 'sheet' ? 'active' : ''}`} onClick={() => goTo('sheet')}>
+                        {I.table}<span className="adm-rail-label">Sheet</span>
+                    </button>
                 </div>
 
                 <div className="adm-rail-foot">
@@ -577,7 +644,11 @@ const Admin = () => {
                         {I.search}
                         <input
                             type="text"
-                            placeholder={view === 'inventory' ? 'Search products…' : 'Search orders…'}
+                            placeholder={
+                                view === 'inventory' ? 'Search products…'
+                                    : view === 'sheet' ? 'Search name, phone, email, AWB…'
+                                        : 'Search orders…'
+                            }
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
@@ -916,6 +987,86 @@ const Admin = () => {
                         {productGroups.length === 0 && (
                             <p className="adm-empty" style={{ padding: '22px' }}>No products match “{searchTerm}”.</p>
                         )}
+                    </section>
+                )}
+
+                {/* ===== Customer Sheet ===== */}
+                {view === 'sheet' && (
+                    <section className="adm-view">
+                        <div className="adm-vhead">
+                            <h1>Customer Sheet</h1>
+                            <span>{sheetOrders.length} of {orders.length} orders</span>
+                            <div className="adm-vhead-actions">
+                                <button className="adm-btn adm-btn-primary" onClick={exportSheetCsv}>
+                                    {I.sheet} Export CSV for Excel
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="adm-card">
+                            <div className="adm-tbl-wrap">
+                                <table className="adm-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Order</th><th>Date</th><th>Name</th><th>Phone</th>
+                                            <th>Email</th><th>City</th><th>Total</th><th>Status</th><th>AWB</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {sheetOrders.map(o => {
+                                            const d = o.customer_details || {};
+                                            const addr = typeof d.address === 'object' && d.address !== null ? d.address : {};
+                                            return (
+                                                <tr key={o.id}>
+                                                    <td className="adm-oref">#{o.id.slice(0, 8).toUpperCase()}</td>
+                                                    <td>{new Date(o.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: '2-digit' })}</td>
+                                                    <td className="adm-td-strong">{d.name || '—'}</td>
+                                                    <td className="adm-num">{d.phone || '—'}</td>
+                                                    <td>{d.email || '—'}</td>
+                                                    <td>{addr.city || '—'}</td>
+                                                    <td className="adm-num adm-td-strong">{inr(o.total_price)}</td>
+                                                    <td>{statusPill(o.status)}</td>
+                                                    <td>
+                                                        {o.awb_number ? (
+                                                            <span className="adm-awb-cell">
+                                                                <span className="adm-num">{o.awb_number}</span>
+                                                                <button
+                                                                    className="adm-mini-btn"
+                                                                    title={copiedAwb === o.awb_number ? 'Copied!' : 'Copy AWB'}
+                                                                    onClick={() => copyAwb(o.awb_number)}
+                                                                >
+                                                                    {copiedAwb === o.awb_number ? I.check : I.copy}
+                                                                </button>
+                                                                <a
+                                                                    className="adm-mini-btn"
+                                                                    title="Track on Delhivery"
+                                                                    href={`https://www.delhivery.com/track/package/${encodeURIComponent(o.awb_number)}`}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                >
+                                                                    {I.external}
+                                                                </a>
+                                                            </span>
+                                                        ) : (
+                                                            <span style={{ color: 'var(--ink-faint, #83866F)' }}>—</span>
+                                                        )}
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                        {sheetOrders.length === 0 && (
+                                            <tr>
+                                                <td colSpan={9}>
+                                                    <p className="adm-empty" style={{ padding: '14px 0' }}>
+                                                        No orders match{searchTerm ? ` “${searchTerm}”` : ''}.
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </section>
                 )}
             </div>
