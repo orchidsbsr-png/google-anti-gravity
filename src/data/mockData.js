@@ -60,7 +60,7 @@ export const PRODUCTS = [
         description: 'Akhrot from high-altitude Himalayan orchards — thin-shelled, full-kerneled walnuts, sun-cured the traditional way.',
         taste_profile: 'Rich, buttery, and mildly earthy',
         texture_profile: 'Crunchy, dense kernel',
-        image_path: '/images/products/Walnuts.png',
+        image_path: '/images/products/Walnuts.webp',
         video_path: '/videos/walnuts.mp4'
     },
     {

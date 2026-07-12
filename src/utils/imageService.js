@@ -51,9 +51,9 @@ export const getProductImage = (productName, { variety } = {}) => {
         'Wild Himalayan Apricot': 'Chullu.jpg',
         'Chullu': 'Chullu.jpg',
 
-        'Himalayan Walnut (Akhrot)': 'Walnuts.png',
-        'Walnuts': 'Walnuts.png',
-        'Akhrot': 'Walnuts.png'
+        'Himalayan Walnut (Akhrot)': 'Walnuts.webp',
+        'Walnuts': 'Walnuts.webp',
+        'Akhrot': 'Walnuts.webp'
     };
 
     // Case-insensitive lookup
