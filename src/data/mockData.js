@@ -90,7 +90,7 @@ export const VARIETIES = [
         id: 1,
         product_id: 1,
         name: 'Red Delicious',
-        price_per_kg: 399,
+        price_per_kg: 249,
         description: 'The classic red apple. Known for its iconic heart shape and bright red skin.',
         taste_profile: 'Mildly sweet with very little acidity',
         texture_profile: 'Soft and mealy flesh, thick skin'
@@ -99,7 +99,7 @@ export const VARIETIES = [
         id: 2,
         product_id: 1,
         name: 'Granny Smith',
-        price_per_kg: 429,
+        price_per_kg: 399,
         description: 'A bright green apple that is famous for its tartness. Excellent for baking.',
         taste_profile: 'Sharp, acidic, and tart',
         texture_profile: 'Firm, crisp, and juicy'
@@ -108,7 +108,7 @@ export const VARIETIES = [
         id: 3,
         product_id: 1,
         name: 'Gala',
-        price_per_kg: 399,
+        price_per_kg: 349,
         description: 'A popular snacking apple with a yellow-orange skin and red striping.',
         taste_profile: 'Sweet, aromatic, and vanilla-like',
         texture_profile: 'Fine-grained, crisp, and juicy'
@@ -117,7 +117,7 @@ export const VARIETIES = [
         id: 4,
         product_id: 1,
         name: 'Golden Delicious',
-        price_per_kg: 329,
+        price_per_kg: 299,
         description: 'A versatile yellow apple that is great for both eating fresh and cooking.',
         taste_profile: 'Sweet and mellow, honey-like',
         texture_profile: 'Crisp flesh that resists browning'
@@ -127,7 +127,7 @@ export const VARIETIES = [
         id: 5,
         product_id: 5,
         name: 'Nashpati Pear',
-        price_per_kg: 149,
+        price_per_kg: 249,
         description: 'The Indian Pear, known for its crunch and refreshing quality.',
         taste_profile: 'Mildly sweet and refreshing',
         texture_profile: 'Very crunchy and gritty'
@@ -145,7 +145,7 @@ export const VARIETIES = [
         id: 7,
         product_id: 5,
         name: 'Concorde Pear',
-        price_per_kg: 379,
+        price_per_kg: 349,
         description: 'A long, narrow pear that is excellent for cooking and salads.',
         taste_profile: 'Sweet and aromatic with a hint of vanilla',
         texture_profile: 'Firm and dense, holds shape well'
@@ -154,7 +154,7 @@ export const VARIETIES = [
         id: 8,
         product_id: 5,
         name: 'Red Max',
-        price_per_kg: 449,
+        price_per_kg: 379,
         description: 'A delicious red pear variety.',
         taste_profile: 'Sweet and juicy',
         texture_profile: 'Crisp'
@@ -164,7 +164,7 @@ export const VARIETIES = [
         id: 9,
         product_id: 2,
         name: 'Hachiya',
-        price_per_kg: 649,
+        price_per_kg: 349,
         description: 'Acorn-shaped and tastes best when overripe like tomatoes. Jelly-like, creamy, and tangy-sweet at peak maturity. Fantastic for baking muffins, cookies, breads, and puddings.',
         taste_profile: 'Rich, pulpy, and sweet (astringent when unripe)',
         texture_profile: 'Jelly-like and creamy'
@@ -173,15 +173,15 @@ export const VARIETIES = [
         id: 13,
         product_id: 2,
         name: 'Fuyu',
-        price_per_kg: 599,
+        price_per_kg: 399,
         description: 'Squat and stubby, kind of like a flattened apple. Boasts a spicy-sweet flavor with unique tropical and cinnamon hints. Excellent eaten raw and firm, or baked for a savory side.',
         taste_profile: 'Spicy-sweet with tropical and cinnamon hints',
         texture_profile: 'Hard and crisp, like an apple'
     },
     // Single Varieties
-    { id: 10, product_id: 3, name: 'Fuzzy Kiwis', price_per_kg: 479 },
-    { id: 11, product_id: 4, name: 'Plums', price_per_kg: 299 },
-    { id: 12, product_id: 6, name: 'Cherries', price_per_kg: 599 },
+    { id: 10, product_id: 3, name: 'Fuzzy Kiwis', price_per_kg: 449 },
+    { id: 11, product_id: 4, name: 'Plums', price_per_kg: 329 },
+    { id: 12, product_id: 6, name: 'Cherries', price_per_kg: 899 },
     // Walnuts
     {
         id: 14,
@@ -197,7 +197,7 @@ export const VARIETIES = [
         id: 16,
         product_id: 8,
         name: 'Wild Himalayan Apricot (Chullu)',
-        price_per_kg: 449,
+        price_per_kg: 349,
         description: 'The wild mountain apricot of Himachal, hand-collected in season. Small fruit, huge flavour.',
         taste_profile: 'Tangy-sweet and intensely aromatic',
         texture_profile: 'Soft and juicy'
@@ -224,22 +224,22 @@ export const VARIETIES = [
 ];
 
 export const INITIAL_INVENTORY = [
-    { variety_id: 1, is_active: true, pack_sizes: [{ weight: 5, stock: 50, price: 399 * 5 }, { weight: 10, stock: 30, price: 399 * 10 }] },
-    { variety_id: 2, is_active: true, pack_sizes: [{ weight: 5, stock: 40, price: 429 * 5 }, { weight: 10, stock: 25, price: 429 * 10 }] },
-    { variety_id: 3, is_active: true, pack_sizes: [{ weight: 5, stock: 35, price: 399 * 5 }, { weight: 10, stock: 20, price: 399 * 10 }] },
-    { variety_id: 4, is_active: true, pack_sizes: [{ weight: 5, stock: 45, price: 329 * 5 }, { weight: 10, stock: 28, price: 329 * 10 }] },
-    { variety_id: 5, is_active: true, pack_sizes: [{ weight: 5, stock: 30, price: 149 * 5 }, { weight: 10, stock: 15, price: 149 * 10 }] },
+    { variety_id: 1, is_active: true, pack_sizes: [{ weight: 5, stock: 50, price: 249 * 5 }, { weight: 10, stock: 30, price: 249 * 10 }] },
+    { variety_id: 2, is_active: true, pack_sizes: [{ weight: 5, stock: 40, price: 399 * 5 }, { weight: 10, stock: 25, price: 399 * 10 }] },
+    { variety_id: 3, is_active: true, pack_sizes: [{ weight: 5, stock: 35, price: 349 * 5 }, { weight: 10, stock: 20, price: 349 * 10 }] },
+    { variety_id: 4, is_active: true, pack_sizes: [{ weight: 5, stock: 45, price: 299 * 5 }, { weight: 10, stock: 28, price: 299 * 10 }] },
+    { variety_id: 5, is_active: true, pack_sizes: [{ weight: 5, stock: 30, price: 249 * 5 }, { weight: 10, stock: 15, price: 249 * 10 }] },
     { variety_id: 6, is_active: true, pack_sizes: [{ weight: 5, stock: 25, price: 399 * 5 }, { weight: 10, stock: 12, price: 399 * 10 }] },
-    { variety_id: 7, is_active: true, pack_sizes: [{ weight: 5, stock: 20, price: 379 * 5 }, { weight: 10, stock: 10, price: 379 * 10 }] },
-    { variety_id: 8, is_active: true, pack_sizes: [{ weight: 5, stock: 15, price: 449 * 5 }, { weight: 10, stock: 8, price: 449 * 10 }] },
-    { variety_id: 9, is_active: true, pack_sizes: [{ weight: 0.5, stock: 40, price: 350 }, { weight: 1, stock: 30, price: 649 }, { weight: 5, stock: 15, price: 649 * 5 }] }, // Hachiya
-    { variety_id: 13, is_active: true, pack_sizes: [{ weight: 0.5, stock: 40, price: 320 }, { weight: 1, stock: 30, price: 599 }, { weight: 5, stock: 15, price: 599 * 5 }] }, // Fuyu
-    { variety_id: 10, is_active: true, pack_sizes: [{ weight: 5, stock: 25, price: 479 * 5 }, { weight: 10, stock: 12, price: 479 * 10 }] },
-    { variety_id: 11, is_active: true, pack_sizes: [{ weight: 5, stock: 40, price: 299 * 5 }, { weight: 10, stock: 20, price: 299 * 10 }] },
-    { variety_id: 12, is_active: true, pack_sizes: [{ weight: 5, stock: 20, price: 599 * 5 }, { weight: 10, stock: 10, price: 599 * 10 }] },
+    { variety_id: 7, is_active: true, pack_sizes: [{ weight: 5, stock: 20, price: 349 * 5 }, { weight: 10, stock: 10, price: 349 * 10 }] },
+    { variety_id: 8, is_active: true, pack_sizes: [{ weight: 5, stock: 15, price: 379 * 5 }, { weight: 10, stock: 8, price: 379 * 10 }] },
+    { variety_id: 9, is_active: true, pack_sizes: [{ weight: 0.5, stock: 40, price: 175 }, { weight: 1, stock: 30, price: 349 }, { weight: 5, stock: 15, price: 349 * 5 }] }, // Hachiya
+    { variety_id: 13, is_active: true, pack_sizes: [{ weight: 0.5, stock: 40, price: 200 }, { weight: 1, stock: 30, price: 399 }, { weight: 5, stock: 15, price: 399 * 5 }] }, // Fuyu
+    { variety_id: 10, is_active: true, pack_sizes: [{ weight: 5, stock: 25, price: 449 * 5 }, { weight: 10, stock: 12, price: 449 * 10 }] },
+    { variety_id: 11, is_active: true, pack_sizes: [{ weight: 5, stock: 40, price: 329 * 5 }, { weight: 10, stock: 20, price: 329 * 10 }] },
+    { variety_id: 12, is_active: true, pack_sizes: [{ weight: 5, stock: 20, price: 899 * 5 }, { weight: 10, stock: 10, price: 899 * 10 }] },
     // Walnuts sell in smaller packs than fruit
     { variety_id: 14, is_active: true, pack_sizes: [{ weight: 1, stock: 30, price: 799 }, { weight: 2, stock: 20, price: 799 * 2 }, { weight: 5, stock: 10, price: 799 * 5 }] },
-    { variety_id: 16, is_active: true, pack_sizes: [{ weight: 2, stock: 25, price: 449 * 2 }, { weight: 5, stock: 15, price: 449 * 5 }] },
+    { variety_id: 16, is_active: true, pack_sizes: [{ weight: 2, stock: 25, price: 349 * 2 }, { weight: 5, stock: 15, price: 349 * 5 }] },
     // Orchard Boxes ship as 5kg only
     { variety_id: 17, is_active: true, pack_sizes: [{ weight: 5, stock: 20, price: 360 * 5 }] },
     { variety_id: 18, is_active: true, pack_sizes: [{ weight: 5, stock: 15, price: 430 * 5 }] }
