@@ -55,6 +55,10 @@
   --font-serif: 'Fraunces', Georgia, serif;
   --font-sans: 'Inter', -apple-system, sans-serif;
 
+  /* Mobile fixed top bar height — the bar, its drawer, and the page
+     offset all read this one value */
+  --mobile-nav-h: 116px;
+
   /* Rhythm */
   --radius-sm: 10px;
   --radius-md: 18px;
@@ -324,7 +328,7 @@ input, textarea, select {
    The admin brings its own fixed bar, so it opts out. */
 @media (max-width: 1023px) {
   .App {
-    padding-top: 58px;
+    padding-top: var(--mobile-nav-h, 116px);
   }
 
   .App:has(.adm) {

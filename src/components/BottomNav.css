@@ -16,11 +16,11 @@
         left: 0;
         right: 0;
         z-index: 960;
-        height: 58px;
+        height: var(--mobile-nav-h, 116px);
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 0 14px 0 16px;
+        padding: 0 16px 0 20px;
         /* Extreme glassmorphism: nearly transparent, heavy blur — the
            page shows through, frosted. */
         background: rgba(253, 252, 247, 0.18);
@@ -39,21 +39,26 @@
     .mtb-actions {
         display: flex;
         align-items: center;
-        gap: 4px;
+        gap: 8px;
     }
 
     .mtb-btn {
         position: relative;
         display: grid;
         place-items: center;
-        width: 42px;
-        height: 42px;
+        width: 54px;
+        height: 54px;
         border-radius: 50%;
         border: none;
         background: none;
         color: var(--ink-soft, #4A4F3E);
         cursor: pointer;
         transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .mtb-btn svg {
+        width: 27px;
+        height: 27px;
     }
 
     .mtb-btn:active,
@@ -64,8 +69,8 @@
 
     .mtb-badge {
         position: absolute;
-        top: 4px;
-        right: 3px;
+        top: 6px;
+        right: 6px;
         min-width: 16px;
         height: 16px;
         padding: 0 4px;
@@ -82,7 +87,7 @@
     .mtb-sheet-backdrop {
         display: block;
         position: fixed;
-        inset: 58px 0 0 0;
+        inset: var(--mobile-nav-h, 116px) 0 0 0;
         z-index: 950;
         background: rgba(27, 33, 18, 0.45);
         backdrop-filter: blur(3px);
@@ -96,7 +101,7 @@
        static — it cannot be dragged or panned. */
     .mtb-sheet {
         position: fixed;
-        top: 58px;
+        top: var(--mobile-nav-h, 116px);
         right: 0;
         bottom: 0;
         width: min(78vw, 320px);

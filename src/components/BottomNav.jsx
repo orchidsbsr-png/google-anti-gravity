@@ -155,7 +155,7 @@ const BottomNav = () => {
         <>
             <header className="mtb" role="banner">
                 <Link to="/" className="mtb-logo" aria-label="Naliban Farms — home">
-                    <LogoMark size={38} />
+                    <LogoMark size={62} />
                 </Link>
 
                 <div className="mtb-actions">
