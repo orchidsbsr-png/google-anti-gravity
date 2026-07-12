@@ -90,6 +90,32 @@ const ProductDetail = () => {
             </div>
 
             <div className="product-detail-content glass-strong">
+                {(() => {
+                    const preorderOn = varieties.some(v => {
+                        const item = inventory.find(i => i.variety_id === v.id);
+                        return item?.is_preorder && item.is_active !== false;
+                    });
+                    if (!preorderOn) return null;
+                    return (
+                        <div className="preorder-note">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                <path d="M12 22V10" />
+                                <path d="M12 10C12 5.5 8.5 3 4.5 3c0 4.5 3.5 7 7.5 7z" />
+                                <path d="M12 13c0-3.8 3-6 6.5-6c0 3.8-3 6-6.5 6z" />
+                            </svg>
+                            <div>
+                                <b>Preorder — still ripening on the trees.</b>
+                                <p>
+                                    This harvest hasn't been picked yet. Reserve your box now,
+                                    and the moment your fruit comes off the tree we'll message
+                                    you that it's being packed for you.
+                                </p>
+                            </div>
+                        </div>
+                    );
+                })()}
+
                 <div className="title-row">
                     <h1>{selectedVariety ? selectedVariety.name : product.name}</h1>
                     <button

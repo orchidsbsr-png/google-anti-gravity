@@ -64,18 +64,22 @@ export const InventoryProvider = ({ children }) => {
         return getStock(varietyId, sizeKg) > 0;
     };
 
-    const updateInventory = async (varietyId, isActive, isBestseller, pricePerKg, packSizes) => {
+    const updateInventory = async (varietyId, isActive, isBestseller, pricePerKg, packSizes, isPreorder = null) => {
         try {
-            const { error } = await supabase
-                .from('inventory')
-                .upsert({
-                    variety_id: parseInt(varietyId),
-                    is_active: Boolean(isActive ?? true),
-                    is_bestseller: Boolean(isBestseller ?? false),
-                    price_per_kg: Number(pricePerKg) || 0,
-                    pack_sizes: packSizes, // [{weight, stock, price}]
-                    updated_at: new Date().toISOString()
-                });
+            const row = {
+                variety_id: parseInt(varietyId),
+                is_active: Boolean(isActive ?? true),
+                is_bestseller: Boolean(isBestseller ?? false),
+                price_per_kg: Number(pricePerKg) || 0,
+                pack_sizes: packSizes, // [{weight, stock, price}]
+                updated_at: new Date().toISOString()
+            };
+            // Only sent when explicitly toggled, so databases without the
+            // is_preorder column keep working until it's added.
+            if (isPreorder !== null && isPreorder !== undefined) {
+                row.is_preorder = Boolean(isPreorder);
+            }
+            const { error } = await supabase.from('inventory').upsert(row);
 
             if (error) throw error;
             await fetchInventory();

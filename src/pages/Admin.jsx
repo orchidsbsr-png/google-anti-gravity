@@ -384,6 +384,27 @@ const Admin = () => {
         setSavingPicking(false);
     };
 
+    // Preorder switch: fruit is still on the trees, but customers can
+    // reserve boxes now. Flips is_preorder for every variety at once.
+    const handleToggleProductPreorder = async (group) => {
+        const anyPre = group.vars.some(v => inventory.find(i => i.variety_id === v.id)?.is_preorder);
+        const target = !anyPre;
+        for (const v of group.vars) {
+            const item = inventory.find(i => i.variety_id === v.id) || {
+                is_active: true, is_bestseller: false,
+                price_per_kg: v.price_per_kg, pack_sizes: []
+            };
+            await updateInventory(
+                v.id,
+                item.is_active ?? true,
+                item.is_bestseller ?? false,
+                item.price_per_kg || v.price_per_kg,
+                item.pack_sizes || [],
+                target
+            );
+        }
+    };
+
     // Season switch: one toggle flips every variety of a fruit in or out
     // of the shop at once (e.g. cherry season ends → cherries disappear).
     const handleToggleProductSeason = async (group) => {
@@ -864,11 +885,22 @@ const Admin = () => {
                                 const inv = inventory.find(i => i.variety_id === v.id);
                                 return inv ? inv.is_active !== false : true;
                             });
+                            const groupPreorder = group.vars.some(v =>
+                                inventory.find(i => i.variety_id === v.id)?.is_preorder);
                             return (
                             <div className="adm-card" key={group.product.id}>
                                 <div className="adm-card-head">
                                     <span>{group.product.name} · {group.vars.length} variet{group.vars.length !== 1 ? 'ies' : 'y'}</span>
                                     <span className={`adm-season ${groupActive ? 'on' : ''}`}>
+                                        <button
+                                            className={`adm-chip ${groupPreorder ? 'active' : ''}`}
+                                            title={groupPreorder
+                                                ? 'Preorder is ON — shop shows “ripening on the trees”; turn off when harvest starts'
+                                                : 'Turn ON preorder — customers can reserve boxes before harvest'}
+                                            onClick={() => handleToggleProductPreorder(group)}
+                                        >
+                                            {groupPreorder ? 'Preorder ON' : 'Preorder'}
+                                        </button>
                                         {groupActive ? 'In season' : 'Out of season'}
                                         <button
                                             className={`adm-switch ${groupActive ? '' : 'off'}`}

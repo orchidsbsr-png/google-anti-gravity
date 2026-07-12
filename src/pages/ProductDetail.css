@@ -45,6 +45,38 @@
     margin-bottom: 0;
 }
 
+.preorder-note {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: var(--sage, #E9ECD3);
+    border: 1px solid rgba(64, 73, 42, 0.25);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 1.4rem;
+    color: var(--forest-700, #2D3319);
+}
+
+.preorder-note svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.preorder-note b {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.preorder-note p {
+    margin: 0;
+    font-size: 0.84rem;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--ink-soft, #4A4F3E);
+}
+
 .wish-btn {
     display: inline-grid;
     place-items: center;

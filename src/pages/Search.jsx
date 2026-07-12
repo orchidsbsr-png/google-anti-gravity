@@ -30,15 +30,17 @@ const Search = () => {
 
     // Bestseller is set by hand in the admin; Selling Fast is automatic —
     // any active variety whose total stock has dropped to the threshold.
+    // Preorder means the fruit is still on the trees but reservable now.
     const getFlags = (productId) => {
-        const flags = { bestseller: false, sellingFast: false };
+        const flags = { bestseller: false, sellingFast: false, preorder: false };
         if (!inventory.length) return flags;
         (getVarietiesByProductId(productId) || []).forEach(v => {
             const item = inventory.find(i => i.variety_id === v.id);
             if (!item || item.is_active === false) return;
             const total = (item.pack_sizes || []).reduce((s, p) => s + (Number(p.stock) || 0), 0);
             if (item.is_bestseller && total > 0) flags.bestseller = true;
-            if (total > 0 && total <= sellingFastThreshold) flags.sellingFast = true;
+            if (!item.is_preorder && total > 0 && total <= sellingFastThreshold) flags.sellingFast = true;
+            if (item.is_preorder) flags.preorder = true;
         });
         return flags;
     };
@@ -175,7 +177,12 @@ const Search = () => {
                                     {flags.sellingFast && <span className="flag-pill flag-fire">Selling Fast</span>}
                                 </span>
                             )}
-                            {!inSeason && (
+                            {flags.preorder ? (
+                                <span className="season-veil preorder" aria-hidden="true">
+                                    <span className="season-veil-tag">Preorder</span>
+                                    <span className="season-veil-when">Ripening on the trees</span>
+                                </span>
+                            ) : !inSeason && (
                                 <span className="season-veil" aria-hidden="true">
                                     <span className="season-veil-tag">Out of season</span>
                                     <span className="season-veil-when">{returnsLabel(product.name)}</span>

@@ -480,3 +480,19 @@
 .card-wish.on {
     color: var(--terracotta, #C44536);
 }
+
+/* Preorder variant — full-colour media, green-tinted veil */
+.pantone-card:has(.season-veil.preorder) .product-video {
+    filter: none;
+}
+
+.season-veil.preorder {
+    background: linear-gradient(to top,
+        rgba(45, 51, 25, 0.85) 0%,
+        rgba(45, 51, 25, 0.3) 34%,
+        transparent 60%);
+}
+
+.season-veil.preorder .season-veil-tag {
+    color: #E0B028;
+}
