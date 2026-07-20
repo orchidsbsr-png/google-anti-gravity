@@ -72,6 +72,8 @@ export const AuthProvider = ({ children }) => {
             setUser(null);
             // Clear admin session if any
             sessionStorage.removeItem('admin_auth');
+            sessionStorage.removeItem('admin_token');
+            sessionStorage.removeItem('admin_token_exp');
             window.location.href = '/'; // Hard redirect to clear any state bugs
         } catch (error) {
             console.error("Error logging out", error);

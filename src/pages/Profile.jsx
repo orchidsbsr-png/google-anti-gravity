@@ -77,6 +77,13 @@ const Icons = {
 const Profile = () => {
     const { addresses, deleteAddress, updateAddress, addAddress } = useAddress();
     const { logout, user } = useAuth();
+
+    // The admin entry point is quiet by design — it only shows up for the
+    // owner's own account once VITE_ADMIN_EMAIL is set (Vercel → env vars).
+    // Until then it falls back to showing for everyone, same as before, so
+    // nothing breaks by not configuring it.
+    const adminEmail = import.meta.env.VITE_ADMIN_EMAIL;
+    const canSeeAdmin = !adminEmail || user?.email?.toLowerCase() === adminEmail.toLowerCase();
     const [isEditing, setIsEditing] = useState(false);
     const [editingAddress, setEditingAddress] = useState(null);
     const [profilePic, setProfilePic] = useState(localStorage.getItem('user_profile_pic') || user?.photoURL || null);
@@ -151,9 +158,11 @@ const Profile = () => {
                     <Link to="/orders" className="profile-action">
                         {Icons.orders} My Orders
                     </Link>
-                    <Link to="/admin" className="profile-action">
-                        {Icons.admin} Admin
-                    </Link>
+                    {canSeeAdmin && (
+                        <Link to="/admin" className="profile-action">
+                            {Icons.admin} Admin
+                        </Link>
+                    )}
                     <button onClick={logout} className="profile-action logout">
                         {Icons.logout} Logout
                     </button>

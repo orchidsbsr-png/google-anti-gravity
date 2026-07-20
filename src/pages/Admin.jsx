@@ -89,7 +89,15 @@ const Admin = () => {
     }, [sellingFastThreshold]);
 
     useEffect(() => {
-        if (sessionStorage.getItem('admin_auth') === 'true') setIsAuthenticated(true);
+        const exp = Number(sessionStorage.getItem('admin_token_exp') || 0);
+        const hasToken = sessionStorage.getItem('admin_token');
+        if (hasToken && exp > Date.now()) {
+            setIsAuthenticated(true);
+        } else {
+            sessionStorage.removeItem('admin_token');
+            sessionStorage.removeItem('admin_token_exp');
+            sessionStorage.removeItem('admin_auth');
+        }
     }, []);
 
     useEffect(() => {
@@ -148,6 +156,8 @@ const Admin = () => {
     const handleLogout = () => {
         setIsAuthenticated(false);
         sessionStorage.removeItem('admin_auth');
+        sessionStorage.removeItem('admin_token');
+        sessionStorage.removeItem('admin_token_exp');
     };
 
     const handleFieldChange = (varietyId, field, value, packIndex = null) => {
