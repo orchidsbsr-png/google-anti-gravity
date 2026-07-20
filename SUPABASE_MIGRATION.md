@@ -101,8 +101,11 @@ Bonus fixes made during migration:
 - **Old Firestore data**: existing orders in Firebase are not auto-copied.
   If you need them, export from Firebase console → I can write an import
   script into the `orders` table.
-- **Admin security**: the admin page is still protected by the client-side
-  password, same as before. The RLS policies mirror that. When you want it
-  properly locked down, we can add a Supabase role check.
+- **Admin security**: the admin PIN is now verified server-side
+  (`/api/admin_auth`, PIN in the `ADMIN_PIN` env var — no longer in the
+  browser bundle). To also stop direct database tampering with the public
+  key, run `SUPABASE_RLS_HARDENING.sql` in the SQL editor — it ties
+  inventory/settings/order writes to your Google login. Requirement: be
+  signed in with the owner Google account when using the admin panel.
 - The `functions/` folder (Firebase Cloud Functions) appears unused by the
   app (Vercel `api/` does the work) and can be deleted in a cleanup pass.
