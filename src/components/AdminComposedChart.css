@@ -1,0 +1,81 @@
+/* Composed revenue/orders chart — lives inside an .adm-card on the
+   admin Overview. Palette matches Admin.css (forest ink, gold accent). */
+
+.adm-chart-wrap {
+    position: relative;
+    padding-top: 6px;
+}
+
+.adm-chart-empty {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 24px;
+    font-size: 0.85rem;
+    color: #83866F;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.adm-chart-legend {
+    display: flex;
+    justify-content: center;
+    gap: 22px;
+    margin-top: 4px;
+    font-size: 0.75rem;
+    color: #6B6F5A;
+}
+
+.adm-chart-legend > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.adm-chart-tip {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: #FFFDF8;
+    border: 1px solid rgba(45, 51, 25, 0.14);
+    border-radius: 12px;
+    padding: 10px 14px;
+    box-shadow: 0 12px 30px -12px rgba(28, 35, 19, 0.35);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    color: #2D3319;
+}
+
+.adm-chart-tip-day {
+    font-weight: 600;
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #83866F;
+}
+
+.adm-chart-tip-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.adm-chart-tip-row b {
+    margin-left: auto;
+    padding-left: 16px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.adm-chart-tip-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+
+.adm-chart-tip-dot.revenue { background: #2D3319; }
+.adm-chart-tip-dot.orders { background: #D4A017; }

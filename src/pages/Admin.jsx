@@ -3,6 +3,7 @@ import { useInventory } from '../context/InventoryContext';
 import { useProduct } from '../context/ProductContext';
 import { supabase } from '../supabase';
 import AdminLogin from '../components/AdminLogin';
+import AdminComposedChart from '../components/AdminComposedChart';
 import { LogoMark } from '../components/Logo';
 import '../components/AdminLogin.css';
 import './Admin.css';
@@ -763,6 +764,13 @@ const Admin = () => {
                                         : 'everything stocked'}
                                 </span>
                             </div>
+                        </div>
+
+                        <div className="adm-card">
+                            <div className="adm-card-head">
+                                <span>Last 14 days — revenue &amp; orders</span>
+                            </div>
+                            <AdminComposedChart orders={liveOrders} days={14} />
                         </div>
 
                         <div className="adm-grid2">
