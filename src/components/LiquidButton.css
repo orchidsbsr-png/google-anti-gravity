@@ -1,0 +1,110 @@
+/* Liquid-glass CTA — see LiquidButton.jsx for the filter wiring.
+   Base metrics mirror .btn-primary / .btn-terracotta (index.css) so the
+   glass versions drop into the same layouts without shifting anything. */
+
+.liquid-btn-defs {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+.liquid-btn {
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border-radius: var(--radius-pill, 999px);
+    padding: 1rem 2.4rem;
+    font-family: var(--font-sans, 'Inter', sans-serif);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    overflow: hidden;
+    /* Frosted fallback for engines without SVG backdrop filters
+       (Safari/Firefox) — Chromium layers the refraction on top. */
+    backdrop-filter: blur(6px) saturate(1.25);
+    -webkit-backdrop-filter: blur(6px) saturate(1.25);
+    transition: transform 0.3s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)),
+                background 0.3s ease,
+                box-shadow 0.45s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+/* brand tints — translucent enough to show the refraction at the edges,
+   solid enough to keep the label at AA contrast */
+.liquid-btn--terracotta {
+    background: linear-gradient(135deg, rgba(196, 69, 54, 0.85), rgba(163, 52, 40, 0.78));
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    color: #fff;
+}
+
+.liquid-btn--terracotta:hover {
+    background: linear-gradient(135deg, rgba(163, 52, 40, 0.92), rgba(140, 42, 32, 0.86));
+    box-shadow: 0 18px 40px -15px rgba(196, 69, 54, 0.5);
+}
+
+.liquid-btn--forest {
+    background: linear-gradient(135deg, rgba(45, 51, 25, 0.85), rgba(27, 33, 18, 0.8));
+    border: 1px solid rgba(247, 244, 236, 0.3);
+    color: var(--cream, #F7F4EC);
+}
+
+.liquid-btn--forest:hover {
+    background: linear-gradient(135deg, rgba(27, 33, 18, 0.94), rgba(20, 24, 12, 0.9));
+    box-shadow: var(--shadow-soft, 0 18px 40px -18px rgba(28, 35, 19, 0.45));
+}
+
+/* the SVG-displacement refraction layer (Chromium) */
+.liquid-btn-refract {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+/* glass rim: the kokonut inset-shadow stack, softened to white light */
+.liquid-btn-rim {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    box-shadow:
+        inset 3px 3px 0.5px -3px rgba(255, 255, 255, 0.85),
+        inset -3px -3px 0.5px -3px rgba(255, 255, 255, 0.7),
+        inset 1px 1px 1px -0.5px rgba(255, 255, 255, 0.55),
+        inset -1px -1px 1px -0.5px rgba(255, 255, 255, 0.5),
+        inset 0 0 6px 6px rgba(255, 255, 255, 0.08),
+        inset 0 0 2px 2px rgba(255, 255, 255, 0.05),
+        0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.liquid-btn-label {
+    position: relative;
+    z-index: 1;
+}
+
+/* motion: gentle lift + press depth, matching the site's existing CTAs */
+@media (hover: hover) {
+    .liquid-btn:hover { transform: translateY(-2px) scale(1.04); }
+}
+
+.liquid-btn:active { transform: scale(0.97); }
+
+.liquid-btn:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.8);
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .liquid-btn { transition: none; }
+    .liquid-btn:hover, .liquid-btn:active { transform: none; }
+}

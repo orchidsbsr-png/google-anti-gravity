@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import { useLanguage } from '../context/LanguageContext';
 import Logo from './Logo';
+import LiquidButton from './LiquidButton';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -148,7 +148,7 @@ export default function Hero() {
                     display: 'flex',
                     justifyContent: 'center'
                 }}>
-                    <Link to="/search" className="btn-terracotta">{t('hero.shop')}</Link>
+                    <LiquidButton to="/search" tint="terracotta">{t('hero.shop')}</LiquidButton>
                 </div>
             </div>
 

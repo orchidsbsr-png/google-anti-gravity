@@ -9,6 +9,7 @@ import Reviews from '../components/Reviews';
 import Process from '../components/Process';
 import OrchardTicker from '../components/OrchardTicker';
 import Logo from '../components/Logo';
+import LiquidButton from '../components/LiquidButton';
 import { Link } from 'react-router-dom';
 import { BRAND, whatsappLink } from '../config/brand';
 import { useLanguage } from '../context/LanguageContext';
@@ -80,14 +81,14 @@ const Home = () => {
                     }}>
                         {t('club.body')}
                     </p>
-                    <a
+                    <LiquidButton
                         href={whatsappLink('Hello! I would like to join the Harvest Club — a box a month.')}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="btn-primary"
+                        tint="forest"
                     >
                         {t('club.cta')}
-                    </a>
+                    </LiquidButton>
                     <p style={{
                         marginTop: '18px',
                         fontSize: '0.72rem',
@@ -152,7 +153,7 @@ const Home = () => {
                             }}>
                                 {t('adopt.body')}
                             </p>
-                            <Link to="/adopt-a-tree" className="btn-primary">{t('adopt.cta')}</Link>
+                            <LiquidButton to="/adopt-a-tree" tint="forest">{t('adopt.cta')}</LiquidButton>
                         </div>
                         <div style={{ position: 'relative' }}>
                             <img
@@ -208,7 +209,7 @@ const Home = () => {
                         <p style={{ fontSize: '1rem', opacity: 0.7, fontWeight: 300, marginBottom: '38px' }}>
                             {t('footer.sub')}
                         </p>
-                        <Link to="/search" className="btn-terracotta">{t('footer.shopNow')}</Link>
+                        <LiquidButton to="/search" tint="terracotta">{t('footer.shopNow')}</LiquidButton>
                     </div>
 
                     <div style={{
