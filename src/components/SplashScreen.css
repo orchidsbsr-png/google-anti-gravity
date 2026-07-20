@@ -1,0 +1,71 @@
+/* App-open splash — deep orchard surface, centred typewriter wordmark.
+   See SplashScreen.jsx for the typing logic and session gating. */
+
+.splash-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    background: radial-gradient(120% 100% at 50% -10%, #2D3319 0%, #1B2112 55%, #14180C 100%);
+    opacity: 1;
+    transition: opacity 0.65s ease;
+}
+
+.splash-screen.fading {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.splash-inner {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.splash-text {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: clamp(2rem, 8vw, 3.4rem);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    color: #F7F4EC;
+    min-height: 1.2em;
+    white-space: nowrap;
+}
+
+.splash-cursor {
+    display: inline-block;
+    width: 3px;
+    height: clamp(2.1rem, 8.4vw, 3.6rem);
+    border-radius: 2px;
+    background: var(--gold-bright, #E0B028);
+    animation: splashBlink 1s step-end infinite;
+}
+
+@keyframes splashBlink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+}
+
+.splash-tagline {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(247, 244, 236, 0.45);
+    opacity: 0;
+    animation: splashTaglineIn 0.8s ease 1s forwards;
+}
+
+@keyframes splashTaglineIn {
+    to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .splash-cursor { animation: none; }
+    .splash-tagline { animation: none; opacity: 1; }
+}

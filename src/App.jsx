@@ -9,6 +9,7 @@ import { WishlistProvider } from './context/WishlistContext'
 import { ThemeProvider } from './context/ThemeContext'
 import { LanguageProvider } from './context/LanguageContext'
 import BottomNav from './components/BottomNav'
+import SplashScreen from './components/SplashScreen'
 import TopNav from './components/TopNav'
 import SiteBreadcrumbs from './components/SiteBreadcrumbs'
 import CartToast from './components/CartToast'
@@ -94,6 +95,7 @@ function App() {
                             <AddressProvider>
                                 <Router>
                                     <div className="App">
+                                        <SplashScreen />
                                         <TopNav />
                                         <SiteBreadcrumbs />
                                         <RouteFade>
