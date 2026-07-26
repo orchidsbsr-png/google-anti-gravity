@@ -42,7 +42,7 @@ export const PRODUCTS = [
         description: 'Sweet, juicy, and crunchy with a hint of floral aroma. Hand-picked from our family orchard.',
         taste_profile: 'Sweet with a hint of floral aroma',
         texture_profile: 'Juicy and crunchy',
-        image_path: '/images/products/French Butter Pear.png'
+        image_path: '/images/products/Red Bartlett.jpg'
     },
     {
         id: 6,
@@ -126,38 +126,38 @@ export const VARIETIES = [
     {
         id: 5,
         product_id: 5,
-        name: 'Nashpati Pear',
-        price_per_kg: 249,
-        description: 'The Indian Pear, known for its crunch and refreshing quality.',
-        taste_profile: 'Mildly sweet and refreshing',
-        texture_profile: 'Very crunchy and gritty'
+        name: 'Red Bartlett',
+        price_per_kg: 399,
+        description: 'The crimson cousin of the classic Bartlett. Picked firm and green-shouldered, it blushes deep red and turns buttery on your counter in a few days — the most perfumed pear we grow.',
+        taste_profile: 'Honey-sweet and intensely aromatic, the classic pear flavour',
+        texture_profile: 'Fine-grained and melting when ripe, juice to the elbows'
     },
     {
         id: 6,
         product_id: 5,
-        name: 'Bosc Pear',
-        price_per_kg: 399,
-        description: 'An elegant pear with a long neck and russet skin.',
-        taste_profile: 'Sweet with notes of wood and spice',
-        texture_profile: 'Dense, crisp, and smooth'
+        name: 'Packham',
+        price_per_kg: 349,
+        description: 'Green, slightly knobbly, and unglamorous until you cut it. Packham ripens to pale gold and is the easiest pear to eat out of hand — no fuss, no grit, just juice.',
+        taste_profile: 'Mildly sweet and clean, gentle acidity',
+        texture_profile: 'Smooth, melting flesh with very fine grain'
     },
     {
         id: 7,
         product_id: 5,
-        name: 'Concorde Pear',
-        price_per_kg: 349,
-        description: 'A long, narrow pear that is excellent for cooking and salads.',
-        taste_profile: 'Sweet and aromatic with a hint of vanilla',
-        texture_profile: 'Firm and dense, holds shape well'
+        name: 'Bergamot',
+        price_per_kg: 379,
+        description: 'An old European pear that found a home in these hills. Rounder and squatter than the others, green-gold and freckled with russet — it stays firm longest, so it is the one to poach or bake.',
+        taste_profile: 'Sweet with a faint musky perfume',
+        texture_profile: 'Firm and crisp, holds its shape when cooked'
     },
     {
         id: 8,
         product_id: 5,
-        name: 'Red Max',
-        price_per_kg: 379,
-        description: 'A delicious red pear variety.',
-        taste_profile: 'Sweet and juicy',
-        texture_profile: 'Crisp'
+        name: 'Tumba',
+        price_per_kg: 249,
+        description: 'The local hill pear, grown here long before the European varieties arrived. Pale green with a sun blush, picked hard off the tree — give it a week or two indoors and it mellows and sweetens right through.',
+        taste_profile: 'Mildly sweet and earthy once mellowed',
+        texture_profile: 'Dense and very crunchy, slightly gritty'
     },
     // Persimmons
     {
@@ -228,10 +228,10 @@ export const INITIAL_INVENTORY = [
     { variety_id: 2, is_active: true, pack_sizes: [{ weight: 5, stock: 40, price: 399 * 5 }, { weight: 10, stock: 25, price: 399 * 10 }] },
     { variety_id: 3, is_active: true, pack_sizes: [{ weight: 5, stock: 35, price: 349 * 5 }, { weight: 10, stock: 20, price: 349 * 10 }] },
     { variety_id: 4, is_active: true, pack_sizes: [{ weight: 5, stock: 45, price: 299 * 5 }, { weight: 10, stock: 28, price: 299 * 10 }] },
-    { variety_id: 5, is_active: true, pack_sizes: [{ weight: 5, stock: 30, price: 249 * 5 }, { weight: 10, stock: 15, price: 249 * 10 }] },
-    { variety_id: 6, is_active: true, pack_sizes: [{ weight: 5, stock: 25, price: 399 * 5 }, { weight: 10, stock: 12, price: 399 * 10 }] },
-    { variety_id: 7, is_active: true, pack_sizes: [{ weight: 5, stock: 20, price: 349 * 5 }, { weight: 10, stock: 10, price: 349 * 10 }] },
-    { variety_id: 8, is_active: true, pack_sizes: [{ weight: 5, stock: 15, price: 379 * 5 }, { weight: 10, stock: 8, price: 379 * 10 }] },
+    { variety_id: 5, is_active: true, pack_sizes: [{ weight: 5, stock: 30, price: 399 * 5 }, { weight: 10, stock: 15, price: 399 * 10 }] }, // Red Bartlett
+    { variety_id: 6, is_active: true, pack_sizes: [{ weight: 5, stock: 25, price: 349 * 5 }, { weight: 10, stock: 12, price: 349 * 10 }] }, // Packham
+    { variety_id: 7, is_active: true, pack_sizes: [{ weight: 5, stock: 20, price: 379 * 5 }, { weight: 10, stock: 10, price: 379 * 10 }] }, // Bergamot
+    { variety_id: 8, is_active: true, pack_sizes: [{ weight: 5, stock: 15, price: 249 * 5 }, { weight: 10, stock: 8, price: 249 * 10 }] }, // Tumba
     { variety_id: 9, is_active: true, pack_sizes: [{ weight: 0.5, stock: 40, price: 175 }, { weight: 1, stock: 30, price: 349 }, { weight: 5, stock: 15, price: 349 * 5 }] }, // Hachiya
     { variety_id: 13, is_active: true, pack_sizes: [{ weight: 0.5, stock: 40, price: 200 }, { weight: 1, stock: 30, price: 399 }, { weight: 5, stock: 15, price: 399 * 5 }] }, // Fuyu
     { variety_id: 10, is_active: true, pack_sizes: [{ weight: 5, stock: 25, price: 449 * 5 }, { weight: 10, stock: 12, price: 449 * 10 }] },

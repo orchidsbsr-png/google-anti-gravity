@@ -13,7 +13,7 @@ export const healthBenefits = [
         fruit: 'Pears',
         benefits: 'High in Vitamin C and K. Great for immune system and bone health.',
         icon: '🍐',
-        image: '/images/products/Nashpati.png',
+        image: '/images/products/Red Bartlett.jpg',
         nutrients: ['Vitamin C', 'Vitamin K', 'Copper'],
         line: 'Gentle on the stomach, generous to the bones.'
     },

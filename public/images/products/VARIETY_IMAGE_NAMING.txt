@@ -24,21 +24,16 @@ APPLE VARIETIES:
 
 PEAR VARIETIES:
 ===========================================
-1. Nashpati Pear
-   → Name your file: "Nashpati Pear.jpg"
-   → Alternative: "Nashpati_Pear.jpg" or "nashpati-pear.jpg"
+All four are already uploaded. To replace one, keep the exact
+filename — the app maps variety names to these files directly:
 
-2. Bosc Pear
-   → Name your file: "Bosc Pear.jpg"
-   → Alternative: "Bosc_Pear.jpg" or "bosc-pear.jpg"
+1. Red Bartlett  → "Red Bartlett.jpg"   (also the Pears product shot)
+2. Packham       → "Packham.jpg"
+3. Bergamot      → "Bergamot.jpg"
+4. Tumba         → "Tumba.jpg"
 
-3. Concorde Pear
-   → Name your file: "Concorde Pear.jpg"
-   → Alternative: "Concorde_Pear.jpg" or "concorde-pear.jpg"
-
-4. French Butter Pear
-   → Name your file: "French Butter Pear.jpg"
-   → Alternative: "French_Butter_Pear.jpg" or "french-butter-pear.jpg"
+If a file is missing, that variety falls back to the Pears
+product shot instead of showing a broken image.
 
 KIWI:
 ===========================================

@@ -147,10 +147,10 @@ INSERT INTO inventory (variety_id, is_active, is_bestseller, price_per_kg, pack_
 (2,  true, false, 429, '[{"weight":5,"stock":40,"price":2145},{"weight":10,"stock":25,"price":4290}]'),
 (3,  true, false, 449, '[{"weight":5,"stock":35,"price":2245},{"weight":10,"stock":20,"price":4490}]'),
 (4,  true, false, 419, '[{"weight":5,"stock":45,"price":2095},{"weight":10,"stock":28,"price":4190}]'),
-(5,  true, false, 449, '[{"weight":5,"stock":30,"price":2245},{"weight":10,"stock":15,"price":4490}]'),
-(6,  true, false, 479, '[{"weight":5,"stock":25,"price":2395},{"weight":10,"stock":12,"price":4790}]'),
-(7,  true, false, 499, '[{"weight":5,"stock":20,"price":2495},{"weight":10,"stock":10,"price":4990}]'),
-(8,  true, false, 529, '[{"weight":5,"stock":15,"price":2645},{"weight":10,"stock":8,"price":5290}]'),
+(5,  true, false, 399, '[{"weight":5,"stock":30,"price":1995},{"weight":10,"stock":15,"price":3990}]'), -- Red Bartlett
+(6,  true, false, 349, '[{"weight":5,"stock":25,"price":1745},{"weight":10,"stock":12,"price":3490}]'), -- Packham
+(7,  true, false, 379, '[{"weight":5,"stock":20,"price":1895},{"weight":10,"stock":10,"price":3790}]'), -- Bergamot
+(8,  true, false, 249, '[{"weight":5,"stock":15,"price":1245},{"weight":10,"stock":8,"price":2490}]'), -- Tumba
 (9,  true, false, 649, '[{"weight":5,"stock":30,"price":3245},{"weight":10,"stock":15,"price":6490}]'),
 (10, true, false, 479, '[{"weight":5,"stock":25,"price":2395},{"weight":10,"stock":12,"price":4790}]'),
 (11, true, false, 299, '[{"weight":5,"stock":40,"price":1495},{"weight":10,"stock":20,"price":2990}]'),
