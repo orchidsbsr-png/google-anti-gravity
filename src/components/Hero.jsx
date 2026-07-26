@@ -12,6 +12,7 @@ export default function Hero() {
     const { t } = useLanguage();
     const containerRef = useRef(null);
     const textRef = useRef(null);
+    const brandRef = useRef(null);
     const bgRef = useRef(null);
 
     useEffect(() => {
@@ -28,8 +29,10 @@ export default function Hero() {
                 scale: 1.15,
             });
 
-            // Text fades and drifts out on scroll
-            gsap.to(textRef.current, {
+            // Text fades and drifts out on scroll. The brand mark has to be
+            // in the same tween: when only the text drifted up, it slid into
+            // the pinned logo and the eyebrow overlapped "Orchards of Shimla".
+            gsap.to([brandRef.current, textRef.current], {
                 scrollTrigger: {
                     trigger: containerRef.current,
                     start: "top top",
@@ -83,13 +86,14 @@ export default function Hero() {
                 Sits in normal flow above the headline so it can never
                 overlap the text on any screen size. The inner div carries
                 the GSAP reveal (which animates transform). */}
-            <div className="hero-brand" style={{
+            <div ref={brandRef} className="hero-brand" style={{
                 display: 'flex',
                 justifyContent: 'center',
                 zIndex: 3,
                 color: '#F7F4EC',
                 pointerEvents: 'none',
-                marginBottom: 'clamp(18px, 3.5vh, 38px)'
+                marginBottom: 'clamp(18px, 3.5vh, 38px)',
+                willChange: 'transform, opacity'
             }}>
                 <div className="hero-reveal" style={{ filter: 'drop-shadow(0 3px 14px rgba(0, 0, 0, 0.35))' }}>
                     <Logo variant="full" size={104} stacked dark />
@@ -102,7 +106,8 @@ export default function Hero() {
                     fontWeight: 600,
                     textTransform: 'uppercase',
                     marginBottom: '28px',
-                    opacity: 0.85
+                    opacity: 0.92,
+                    textShadow: '0 1px 10px rgba(0, 0, 0, 0.5)'
                 }}>
                     {t('hero.eyebrow')}
                 </p>
@@ -111,39 +116,48 @@ export default function Hero() {
                     fontWeight: 400,
                     lineHeight: '1.02',
                     letterSpacing: '-0.02em',
-                    color: 'var(--gold-bright, #E0B028)',
+                    color: 'var(--gold-hero, #FFC53D)',
+                    // The photo behind is a pale hazy sky, so the gold needs
+                    // its own shadow to separate — brightening alone wasn't
+                    // enough to make it read.
+                    textShadow: '0 2px 4px rgba(28, 20, 0, 0.28), 0 6px 34px rgba(0, 0, 0, 0.42)',
                     margin: 0
                 }}>
                     {t('hero.title1')}
                     <br />
                     <em style={{ fontWeight: 300 }}>{t('hero.title2')}</em>
                 </h1>
-                <p className="hero-reveal" style={{
-                    fontSize: 'clamp(1rem, 1.6vw, 1.15rem)',
+                <p className="hero-reveal hero-sub" style={{
+                    fontSize: 'clamp(1.02rem, 1.5vw, 1.18rem)',
                     marginTop: '32px',
-                    fontWeight: 300,
-                    lineHeight: 1.7,
-                    maxWidth: '620px',
+                    // Was 300. Light weight over a photo reads as grey mush;
+                    // 400 with a shadow holds its edges.
+                    fontWeight: 400,
+                    lineHeight: 1.68,
+                    letterSpacing: '0.005em',
+                    maxWidth: '600px',
                     marginLeft: 'auto',
                     marginRight: 'auto',
-                    opacity: 0.92
+                    opacity: 1,
+                    textShadow: '0 1px 3px rgba(0, 0, 0, 0.4), 0 2px 18px rgba(0, 0, 0, 0.35)'
                 }}>
                     {t('hero.sub')}
                 </p>
-                <p className="hero-reveal" style={{
-                    fontSize: 'clamp(0.82rem, 1.2vw, 0.92rem)',
+                <p className="hero-reveal hero-sub2" style={{
+                    fontSize: 'clamp(0.84rem, 1.15vw, 0.94rem)',
                     marginTop: '16px',
-                    fontWeight: 300,
+                    fontWeight: 400,
                     lineHeight: 1.7,
-                    letterSpacing: '0.04em',
+                    letterSpacing: '0.035em',
                     maxWidth: '540px',
                     marginLeft: 'auto',
                     marginRight: 'auto',
-                    opacity: 0.7
+                    opacity: 0.86,
+                    textShadow: '0 1px 3px rgba(0, 0, 0, 0.4)'
                 }}>
                     {t('hero.sub2')}
                 </p>
-                <div className="hero-reveal" style={{
+                <div className="hero-reveal hero-cta" style={{
                     marginTop: '44px',
                     display: 'flex',
                     justifyContent: 'center'

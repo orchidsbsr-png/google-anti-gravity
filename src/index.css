@@ -21,6 +21,8 @@
   --gold: #D4A017;
   --gold-bright: #E0B028;  /* display headings on dark/photo surfaces */
   --gold-deep: #B8860B;    /* display headings on cream surfaces */
+  --gold-hero: #FFC53D;    /* hero only — the orchard photo is a pale hazy
+                              sky, and --gold-bright disappeared into it */
   --ink: #1C2313;
   --ink-soft: #4A4F3E;
   --ink-faint: #83866F;
@@ -301,9 +303,15 @@ input, textarea, select {
 }
 
 /* Responsive hero typography — sizes live here (not inline) so phones
-   can shrink them without anything escaping its box. */
+   can shrink them without anything escaping its box.
+
+   The size tracks the SHORTER of width and height. Sizing on vw alone
+   is what broke Windows laptops: they are wide and short, so 9.5vw gave
+   a 120px headline that pushed the hero to ~1050px inside a ~700px
+   window. You then had to scroll to reach the CTA, and scrolling is
+   what drove the hero text up into the brand mark. */
 .hero-title {
-  font-size: clamp(2.5rem, 9.5vw, 7.5rem);
+  font-size: clamp(2.5rem, min(9.5vw, 10.5vh), 7.5rem);
 }
 
 .hero-eyebrow {
@@ -314,6 +322,91 @@ input, textarea, select {
 /* display lives here (not inline) so the phone media query can hide it */
 .hero-cue {
   display: flex;
+}
+
+/* Nothing in the hero column may be squeezed into its neighbour when the
+   content is taller than the viewport. */
+.hero-brand,
+.hero-text,
+.hero-cue {
+  flex-shrink: 0;
+}
+
+/* The wordmark takes the hero gold too, so the brand mark and the
+   headline are the same colour. !important because Logo sets the
+   colour inline. */
+.hero-brand .brand-logo > span > span {
+  color: var(--gold-hero, #FFC53D) !important;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45);
+}
+
+.hero-brand .brand-logo > span > span:last-child {
+  opacity: 0.95;
+}
+
+/* ---- Laptop screens: wide but short ----------------------------------
+   Everything above the fold has to fit ~700-870px of height, so the
+   brand mark, the vertical rhythm and the scroll cue all step down.
+   Sizes (not transforms) so the space is genuinely reclaimed. */
+/* The brand mark scales with the window height at every desktop size, so
+   there is no jump at the breakpoint below — it is simply smaller on a
+   laptop than on a 27" monitor. */
+@media (min-width: 769px) {
+  .hero-brand svg {
+    width: clamp(62px, 9vh, 104px);
+    height: clamp(62px, 9vh, 104px);
+  }
+
+  .hero-brand .brand-logo > span > span:first-child {
+    font-size: clamp(29px, 4.2vh, 46px);
+  }
+
+  .hero-brand .brand-logo > span > span:last-child {
+    font-size: clamp(10px, 1.5vh, 17px);
+  }
+}
+
+@media (min-width: 769px) and (max-height: 900px) {
+  .hero-viewport {
+    padding-top: 46px !important;
+    padding-bottom: 38px !important;
+  }
+
+  .hero-brand {
+    margin-bottom: 20px !important;
+  }
+
+  .hero-brand .brand-logo {
+    gap: 9px;
+  }
+
+  .hero-eyebrow {
+    margin-bottom: 18px !important;
+  }
+
+  .hero-sub {
+    margin-top: 20px !important;
+  }
+
+  .hero-sub2 {
+    margin-top: 10px !important;
+  }
+
+  .hero-cta {
+    margin-top: 26px !important;
+  }
+
+  .hero-cue {
+    margin-top: 22px !important;
+  }
+}
+
+/* Really short windows — the scroll cue is the one thing that can go,
+   since the gradient seam below already signals there is more. */
+@media (min-width: 769px) and (max-height: 780px) {
+  .hero-cue {
+    display: none;
+  }
 }
 
 /* Gradient seams between homepage sections — no hard colour cuts */
@@ -345,14 +438,23 @@ input, textarea, select {
     min-height: calc(100svh - var(--mobile-nav-h, 81px));
   }
 
+  /* Sized down, not transform-scaled: the scroll-fade tween writes an
+     inline transform on this element and would wipe a CSS scale out. */
   .hero-brand {
-    transform: scale(0.82);
-    transform-origin: top center;
     margin: 0 0 4px;
   }
 
   .hero-brand svg {
     display: none;
+  }
+
+  .hero-brand .brand-logo > span > span:first-child {
+    font-size: 38px;
+  }
+
+  .hero-brand .brand-logo > span > span:last-child {
+    font-size: 13px;
+    margin-top: 5px;
   }
 
   .hero-text {
