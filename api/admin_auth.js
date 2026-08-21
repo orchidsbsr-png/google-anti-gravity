@@ -5,9 +5,9 @@
 // old default so the portal doesn't lock the owner out before those are set.
 
 import crypto from 'crypto';
+import { signAdminToken } from './_lib/admin_token.js';
 
 const ADMIN_PIN = process.env.ADMIN_PIN || '1234';
-const ADMIN_SECRET = process.env.ADMIN_SECRET || 'naliban-farms-dev-secret-change-me';
 const SESSION_MS = 12 * 60 * 60 * 1000; // 12h admin session
 
 if (!process.env.ADMIN_PIN || !process.env.ADMIN_SECRET) {
@@ -20,10 +20,6 @@ if (!process.env.ADMIN_PIN || !process.env.ADMIN_SECRET) {
 const attempts = new Map(); // ip -> { count, lockUntil }
 const MAX_ATTEMPTS = 6;
 const LOCK_MS = 5 * 60 * 1000;
-
-function sign(exp) {
-    return crypto.createHmac('sha256', ADMIN_SECRET).update(String(exp)).digest('hex');
-}
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -60,6 +56,6 @@ export default async function handler(req, res) {
 
     attempts.delete(ip);
     const exp = Date.now() + SESSION_MS;
-    const token = `${exp}.${sign(exp)}`;
+    const token = `${exp}.${signAdminToken(exp)}`;
     return res.status(200).json({ success: true, token, exp });
 }

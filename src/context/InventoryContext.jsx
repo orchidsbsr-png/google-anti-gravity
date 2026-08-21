@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from '../supabase';
+import { adminWrite } from '../utils/adminApi';
 
 const InventoryContext = createContext();
 
@@ -72,16 +73,15 @@ export const InventoryProvider = ({ children }) => {
                 is_bestseller: Boolean(isBestseller ?? false),
                 price_per_kg: Number(pricePerKg) || 0,
                 pack_sizes: packSizes, // [{weight, stock, price}]
-                updated_at: new Date().toISOString()
             };
             // Only sent when explicitly toggled, so databases without the
             // is_preorder column keep working until it's added.
             if (isPreorder !== null && isPreorder !== undefined) {
                 row.is_preorder = Boolean(isPreorder);
             }
-            const { error } = await supabase.from('inventory').upsert(row);
-
-            if (error) throw error;
+            // Written server-side: the browser's anon key is read-only on
+            // inventory (row-level security), the PIN session is the authority.
+            await adminWrite('inventory_upsert', row);
             await fetchInventory();
             return true;
         } catch (err) {
@@ -96,10 +96,7 @@ export const InventoryProvider = ({ children }) => {
         // Optimistic: flip the UI immediately, revert if the write fails
         setSettings(s => ({ ...s, shop_open: isOpen }));
         try {
-            const { error } = await supabase
-                .from('settings')
-                .upsert({ id: 1, shop_open: isOpen, updated_at: new Date().toISOString() });
-            if (error) throw error;
+            await adminWrite('settings_upsert', { shop_open: isOpen });
             await fetchSettings();
             return true;
         } catch (err) {
@@ -116,10 +113,7 @@ export const InventoryProvider = ({ children }) => {
 
     const updateCodEnabled = async (enabled) => {
         try {
-            const { error } = await supabase
-                .from('settings')
-                .upsert({ id: 1, cod_enabled: Boolean(enabled), updated_at: new Date().toISOString() });
-            if (error) throw error;
+            await adminWrite('settings_upsert', { cod_enabled: Boolean(enabled) });
             await fetchSettings();
             return true;
         } catch (err) {
@@ -138,10 +132,7 @@ export const InventoryProvider = ({ children }) => {
     const updateSellingFastThreshold = async (n) => {
         const value = Math.max(1, parseInt(n) || 10);
         try {
-            const { error } = await supabase
-                .from('settings')
-                .upsert({ id: 1, selling_fast_threshold: value, updated_at: new Date().toISOString() });
-            if (error) throw error;
+            await adminWrite('settings_upsert', { selling_fast_threshold: value });
             await fetchSettings();
             return true;
         } catch (err) {
@@ -154,10 +145,7 @@ export const InventoryProvider = ({ children }) => {
     // Drives the homepage ticker's "Now picking — …" line
     const updateNowPicking = async (text) => {
         try {
-            const { error } = await supabase
-                .from('settings')
-                .upsert({ id: 1, now_picking: text, updated_at: new Date().toISOString() });
-            if (error) throw error;
+            await adminWrite('settings_upsert', { now_picking: text });
             await fetchSettings();
             return true;
         } catch (err) {

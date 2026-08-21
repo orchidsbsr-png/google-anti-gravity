@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useInventory } from '../context/InventoryContext';
 import { useProduct } from '../context/ProductContext';
 import { supabase } from '../supabase';
+import { adminWrite } from '../utils/adminApi';
 import AdminLogin from '../components/AdminLogin';
 import AdminComposedChart from '../components/AdminComposedChart';
 import { LogoMark } from '../components/Logo';
@@ -238,11 +239,7 @@ const Admin = () => {
 
     const handleStatusUpdate = async (orderId, newStatus) => {
         try {
-            const { error } = await supabase.from('orders').update({
-                status: newStatus,
-                updated_at: new Date().toISOString()
-            }).eq('id', orderId);
-            if (error) throw error;
+            await adminWrite('order_update', { id: orderId, patch: { status: newStatus } });
             fetch('/api/update_sheet_status', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -250,7 +247,7 @@ const Admin = () => {
             }).catch(err => console.error('Sheet Status Sync Failed:', err));
         } catch (error) {
             console.error('Error updating status:', error);
-            alert('Failed to update status');
+            alert(`Failed to update status: ${error.message}`);
         }
     };
 
@@ -259,23 +256,12 @@ const Admin = () => {
         const confirm2 = window.prompt("Type 'DELETE' to confirm clearing all orders:");
         if (confirm2 !== 'DELETE') return;
         try {
-            // .select() returns the deleted rows — without it a permission
-            // block deletes nothing yet reports no error.
-            const { data, error } = await supabase
-                .from('orders')
-                .delete()
-                .not('id', 'is', null)
-                .select('id');
-            if (error) throw error;
-            if (!data || data.length === 0) {
-                alert(
-                    'Nothing was deleted — the database refused silently.\n\n' +
-                    'Your orders table is missing the DELETE permission. Run this once in Supabase → SQL Editor:\n\n' +
-                    'CREATE POLICY "delete orders" ON orders FOR DELETE USING (true);'
-                );
+            const { deleted } = await adminWrite('orders_delete_all');
+            if (!deleted) {
+                alert('Nothing was deleted — there were no orders to clear.');
                 return;
             }
-            alert(`Deleted ${data.length} order${data.length !== 1 ? 's' : ''}.`);
+            alert(`Deleted ${deleted} order${deleted !== 1 ? 's' : ''}.`);
         } catch (error) {
             console.error('Error clearing orders:', error);
             alert(`Failed to clear orders: ${error.message}`);
@@ -381,7 +367,7 @@ const Admin = () => {
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.error);
-            await supabase.from('orders').update({ awb_number: null, status: 'confirmed' }).eq('id', order.id);
+            await adminWrite('order_update', { id: order.id, patch: { awb_number: null, status: 'confirmed' } });
             alert('✅ Shipment cancelled. Order reset to confirmed — you can re-ship it.');
         } catch (e) {
             alert(`Cancel Failed: ${e.message}`);
@@ -389,7 +375,11 @@ const Admin = () => {
     };
 
     const handleRejectCancellation = async (orderId) => {
-        await supabase.from('orders').update({ cancellation_requested: false }).eq('id', orderId);
+        try {
+            await adminWrite('order_update', { id: orderId, patch: { cancellation_requested: false } });
+        } catch (e) {
+            alert(`Could not reject the cancellation: ${e.message}`);
+        }
     };
 
     const handleSaveNowPicking = async () => {
