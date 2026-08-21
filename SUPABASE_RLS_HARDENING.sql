@@ -32,7 +32,7 @@ $$;
 --
 -- NOTE ON THE ADMIN PANEL: it signs in with a PIN, not with Supabase Auth,
 -- so its browser session is anonymous to the database and is_admin() is
--- false there. Its writes therefore go through /api/admin_db (service role,
+-- false there. Its writes therefore go through /api/admin_auth (service role,
 -- PIN token verified server-side) instead of writing to Supabase directly.
 -- is_admin() below still matters for anything the panel READS — see the
 -- orders SELECT policy in Section B.

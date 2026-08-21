@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/check-function-count.mjs",
     "build": "vite build",
     "preview": "vite preview"
   },

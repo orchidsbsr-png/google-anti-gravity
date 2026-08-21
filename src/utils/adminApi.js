@@ -1,6 +1,10 @@
-// Client side of /api/admin_db — every write the admin panel makes goes
-// through here, carrying the PIN session token. Direct Supabase writes from
+// Client side of /api/admin_auth — every write the admin panel makes goes
+// through there, carrying the PIN session token. Direct Supabase writes from
 // the browser are blocked by row-level security by design.
+//
+// The writes share the sign-in endpoint deliberately: Vercel's Hobby plan
+// caps this project at 12 Functions per deployment and api/ is already at 12.
+// A separate route fails the build. See the header of api/admin_auth.js.
 
 export function getAdminToken() {
     const token = sessionStorage.getItem('admin_token');
@@ -15,7 +19,7 @@ export async function adminWrite(action, payload = {}) {
         throw new Error('Admin session expired — sign in with your PIN again.');
     }
 
-    const res = await fetch('/api/admin_db', {
+    const res = await fetch('/api/admin_auth', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
